@@ -19,7 +19,6 @@ function App() {
           <Route path='faq' element={<FAQ />} />
           <Route path="calculator" element={<CustomsPage />} />
           <Route path="auth" element={<AuthForm />} />
-          {/* <Route path="auth" element={<AuthForm />} /> */}
           <Route path="*" element={<h1>404: Страница не найдена</h1>} />
         </Route>
       </Routes >
@@ -28,7 +27,6 @@ function App() {
       {/* //3 Авто из Кореи и Грузии, Дубай, Америка + Рассчетный калькулятор  */}
       {/* //3 Язык местоположение с выбором */}
       {/* //3 Контакт */}
-
     </>
   )
 }

@@ -203,6 +203,7 @@
 /* Убираем верхний отступ у первого заголовка */
 .cityGroupTitle:first-child {
     padding-top: 10px;
+    /* // adafwe */
 }
 
 /* --- КНОПКА --- */

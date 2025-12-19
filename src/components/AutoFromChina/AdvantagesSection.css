@@ -1,0 +1,129 @@
+/* AdvantagesSection.css */
+
+.advantagesSection {
+    max-width: 1200px;
+    margin: 0 auto;
+    /* padding: 60px 20px; */
+}
+
+.sectionTitle {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.advantagesGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 колонки для ПК */
+    gap: 20px;
+}
+
+.advantageItem {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 25px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.251);
+    /* Сделали тень мягче */
+    text-align: left;
+    transition: transform 0.3s ease;
+}
+
+.advantageItem:hover {
+    transform: translateY(-5px);
+}
+
+.titleBlock {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    /* Добавили отступ под заголовком */
+}
+
+.iconWrapper {
+    background-color: #f5f7f6;
+    /* Легкий оттенок серо-зеленого */
+    padding: 12px;
+    border-radius: 10px;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.advantageIcon {
+    font-size: 24px;
+    color: #387b64;
+    /* Твой фирменный зеленый */
+}
+
+.advantageTitle {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: #1a1a1a;
+}
+
+.advantageDescription {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* --- АДАПТИВНОСТЬ ДЛЯ МОБИЛОК --- */
+@media (max-width: 992px) {
+    .advantagesGrid {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 колонки для планшетов и больших телефонов */
+    }
+
+    .advantagesSection {
+        padding: 40px 20px;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .advantagesSection {
+        padding: 40px 20px;
+    }
+
+    .sectionTitle {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+
+    .advantagesGrid {
+        grid-template-columns: repeat(2, 1fr);
+        /* Оставляем 2 колонки, как на фото-референсе */
+        gap: 15px;
+        /* Чуть меньше расстояние между карточками */
+    }
+
+    .advantageItem {
+        padding: 20px 15px;
+    }
+
+    .titleBlock {
+        flex-direction: column;
+        /* Иконка над заголовком для экономии места */
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .iconWrapper {
+        margin-right: 0;
+        padding: 10px;
+    }
+
+    .advantageTitle {
+        font-size: 16px;
+    }
+
+    .advantageDescription {
+        font-size: 13px;
+        line-height: 1.4;
+    }
+}

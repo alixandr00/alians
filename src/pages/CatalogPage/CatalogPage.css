@@ -1,0 +1,49 @@
+.catalogContainer {
+    max-width: 1200px;
+    margin: 40px auto;
+    display: flex;
+    gap: 30px;
+}
+
+.filterSidebar {
+    width: 280px;
+    flex-shrink: 0;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.catalogContent {
+    flex-grow: 1;
+}
+
+.carsGrid {
+    display: flex;
+    flex-direction: column;
+    /* Машины в столбик, как на твоем макете */
+    gap: 20px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.pagination button {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background: #387b64;
+    color: white;
+    border-color: #387b64;
+}

@@ -1,0 +1,224 @@
+.quickSearchSection {
+    margin: 0 auto;
+    padding: 0;
+}
+
+.sectionTitle {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.searchContainer {
+    position: relative;
+    min-height: 250px;
+    overflow: hidden;
+    padding: 0 0 0 5rem;
+}
+
+.searchForm {
+    position: absolute;
+    z-index: 3;
+    top: 60%;
+    left: 6%;
+    transform: translateY(-50%);
+    background-color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    width: 60%;
+    min-width: 650px;
+}
+
+.formRow {
+    display: flex;
+}
+
+.topRowInputs {
+    margin-bottom: 15px;
+}
+
+.inputGroup {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    border-radius: 6px;
+    padding: 10px 0;
+}
+
+.searchModel {
+    margin-right: 15px;
+}
+
+.inputIcon,
+.dollarSign {
+    color: #999;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.inputField {
+    border: none;
+    outline: none;
+    padding: 5px 0;
+    flex-grow: 1;
+    background: transparent;
+    font-size: 16px;
+}
+
+.bottomRowFilters {
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.buttonShowCar {
+    background-color: #387b64;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.filterTags {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.filterTag {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.tagIcon {
+    margin-right: 5px;
+    font-size: 18px;
+    color: #00a854;
+}
+
+.searchBackground {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: 100% center;
+    z-index: -1;
+}
+
+.searchBackground::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #fff 30%, transparent 70%);
+    z-index: 2;
+}
+
+/* --- МОБИЛЬНАЯ ВЕРСИЯ (КАК НА ФОТО) --- */
+@media (max-width: 900px) {
+    .quickSearchSection {
+        padding: 20px;
+        /* Убираем левый отступ 5rem */
+    }
+
+    .sectionTitle {
+        font-size: 22px;
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    .searchContainer {
+        margin: 0;
+        min-height: auto;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .searchForm {
+        position: static;
+        transform: none;
+        width: 90%;
+        min-width: 0;
+        /* padding: 20px 15px; */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .formRow {
+        flex-direction: column;
+        /* Все инпуты в колонку */
+        gap: 12px;
+    }
+
+    .searchModel {
+        margin-right: 0;
+        /* Убираем правый отступ */
+    }
+
+    .inputGroup {
+        width: 100%;
+    }
+
+    /* Блок с фильтрами и кнопкой */
+    .bottomRowFilters {
+        margin-top: 15px;
+        flex-direction: column;
+        /* Кнопка и теги друг под другом */
+        align-items: stretch;
+    }
+
+    .filterTags {
+        display: grid;
+        /* Делаем сетку как на фото */
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 колонки */
+        gap: 8px;
+        margin-bottom: 20px;
+        order: 1;
+        /* Теги сверху */
+    }
+
+    /* Третий тег (пробег) растягиваем на всю ширину, если их три */
+    .filterTag:nth-child(3) {
+        grid-column: span 2;
+    }
+
+    .filterTag {
+        justify-content: center;
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .buttonShowCar {
+        order: 2;
+        /* Кнопка в самом низу */
+        margin-right: 0;
+        width: 100%;
+        padding: 14px;
+        text-align: center;
+    }
+
+    /* Скрываем картинку-фон на мобилках, чтобы не мешала форме */
+    .searchBackground {
+        display: none;
+    }
+}

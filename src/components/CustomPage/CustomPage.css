@@ -1,0 +1,458 @@
+.customsPage {
+    padding: 120px 20px;
+    background: #f8faf9;
+    min-height: 100vh;
+}
+
+.customsContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.mainTitle {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 40px;
+    color: #1a1a1a;
+}
+
+/* --- Табы (Переключатель) --- */
+.typeTabsContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.typeTabs {
+    background: #e9ecef;
+    padding: 6px;
+    border-radius: 15px;
+    display: flex;
+    gap: 5px;
+}
+
+.typeTabs button {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    background: transparent;
+    color: #666;
+    font-size: 15px;
+}
+
+.typeTabs button.active {
+    background: #387b64;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(56, 123, 100, 0.2);
+}
+
+/* --- Сетка калькулятора (Инпуты и Результат) --- */
+.calcGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 80px;
+}
+
+.calcCard {
+    background: #fff;
+    padding: 45px;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+}
+
+/* Инпуты */
+.inputField {
+    margin-bottom: 25px;
+}
+
+.inputField label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #555;
+    font-size: 15px;
+}
+
+.inputField select,
+.inputField input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    border: 2px solid #f0f0f0;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    background: #fff;
+}
+
+.inputField select:focus,
+.inputField input:focus {
+    border-color: #387b64;
+}
+
+/* Кнопка */
+.calculateBtn {
+    width: 100%;
+    padding: 18px;
+    background: #387b64;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+}
+
+.calculateBtn:hover {
+    background: #2d6350;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(56, 123, 100, 0.2);
+}
+
+/* Результат (карточка справа) */
+.resultContent {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.resLine {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+    font-size: 18px;
+    color: #444;
+}
+
+.resLine span {
+    font-weight: 500;
+}
+
+/* Глобальный зеленый текст для результата */
+.resultContent .greenText {
+    color: #387b64;
+    font-weight: 800;
+    font-size: 24px;
+}
+
+.divider {
+    height: 1px;
+    background: #eee;
+    margin: 25px 0;
+}
+
+.totalValue {
+    font-size: 40px;
+    color: #1a1a1a;
+    font-weight: 900;
+}
+
+.disclaimer {
+    font-size: 13px;
+    color: #999;
+    margin-top: 20px;
+    line-height: 1.4;
+}
+
+.emptyMsg {
+    text-align: center;
+    color: #999;
+    font-size: 18px;
+}
+
+/* ... (Остальной код выше остается без изменений) ... */
+
+/* --- Стили Таблиц (Обновленные для скролла) --- */
+.tablesSection {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.tableBlock h2 {
+    font-size: 24px;
+    margin-bottom: 25px;
+    padding-left: 15px;
+    border-left: 6px solid #387b64;
+    color: #1a1a1a;
+}
+
+.tableWrapper {
+    background: #fff;
+    border-radius: 20px;
+    padding: 0;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    /* ВАЖНО: Включаем горизонтальный скролл */
+    overflow-x: auto;
+    border: 1px solid #eee;
+    /* Для плавной прокрутки на iOS */
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /* Таблица растянется настолько, насколько нужно контенту */
+    min-width: max-content;
+}
+
+/* Заголовки (Шапка) */
+th {
+    padding: 18px 15px;
+    text-align: center;
+    background: #387b64;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    /* Запрещаем перенос текста, чтобы колонки были ровными */
+    white-space: nowrap;
+}
+
+th:last-child {
+    border-right: none;
+}
+
+/* --- Sticky Column (Залипающая первая колонка с годом) --- */
+
+/* Для заголовка "Год" */
+th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    /* Поверх остальных ячеек при скролле */
+    background: #387b64;
+    /* Цвет фона такой же, чтобы не просвечивало */
+    border-right: 2px solid rgba(255, 255, 255, 0.3);
+    /* Разделитель поярче */
+}
+
+/* Для ячеек с годами (2025, 2024...) */
+td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 9;
+    /* Чуть ниже заголовка, но выше контента */
+    background: #eef6f3;
+    /* Цвет фона первой колонки */
+    color: #387b64;
+    font-weight: 800;
+    text-align: center;
+    border-right: 2px solid #dcece5;
+    /* Тень/граница при скролле */
+}
+
+/* Ячейки */
+td {
+    padding: 16px 20px;
+    /* Чуть больше отступы */
+    border-bottom: 1px solid #f0f0f0;
+    border-right: 1px solid #f9f9f9;
+    text-align: center;
+    font-size: 15px;
+    vertical-align: middle;
+    white-space: nowrap;
+    /* Чтобы цена и налог не прыгали */
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Ховер эффект для строки */
+tr:hover td {
+    background: #fcfdfd;
+}
+
+/* При наведении на строку, залипающая колонка тоже меняет цвет */
+tr:hover td:first-child {
+    background: #e0ece8;
+}
+
+/* Стилизация содержимого ячейки */
+.compositeCell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    line-height: 1.2;
+}
+
+.priceGray {
+    color: #999;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+td .greenText {
+    color: #387b64;
+    font-weight: 700;
+    font-size: 15px;
+    background: rgba(56, 123, 100, 0.08);
+    padding: 4px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    min-width: 60px;
+    /* Чтобы зеленые плашки были одной ширины */
+}
+
+.tableNote {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    font-style: italic;
+    margin-top: -30px;
+}
+
+/* Добавь это к своему существующему CSS */
+
+.legend {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+    padding-left: 15px;
+}
+
+.legItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #666;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.gray {
+    background: #999;
+}
+
+.dot.green {
+    background: #387b64;
+}
+
+.grayValue {
+    color: #777;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+/* Фикс для селекта объемов в зависимости от типа топлива */
+.inputField select {
+    cursor: pointer;
+}
+
+/* Стилизация скроллбара для таблиц */
+.tableWrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.tableWrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.tableWrapper::-webkit-scrollbar-thumb {
+    background: #387b64;
+    border-radius: 10px;
+}
+
+/* Чтобы подсказка под калькулятором выглядела лучше */
+.disclaimer {
+    background: #fdf8e6;
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #f1c40f;
+    color: #856404 !important;
+}
+
+/* --- Адаптив для мобильных устройств --- */
+
+@media (max-width: 992px) {
+    .calcGrid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .customsPage {
+        padding: 80px 15px 40px;
+    }
+
+    .mainTitle {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 600px) {
+    .calcCard {
+        padding: 25px 20px;
+        border-radius: 20px;
+    }
+
+    .typeTabs button {
+        padding: 10px 15px;
+        font-size: 14px;
+        flex: 1;
+    }
+
+    .typeTabs {
+        width: 100%;
+        display: flex;
+    }
+
+    .totalValue {
+        font-size: 32px;
+    }
+
+    .resLine {
+        font-size: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .resLine b {
+        font-size: 20px;
+    }
+
+    .legend {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .tableBlock h2 {
+        font-size: 20px;
+    }
+
+    th,
+    td {
+        padding: 12px 10px;
+        font-size: 13px;
+    }
+
+    td:first-child,
+    th:first-child {
+        min-width: 60px;
+    }
+
+    .tableNote {
+        margin-top: 15px;
+        font-size: 12px;
+    }
+}

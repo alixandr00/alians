@@ -1,0 +1,245 @@
+/* --- СТИЛИ ДЛЯ СЛАЙДЕРА (Маленькие карточки) --- */
+.carCard_slider {
+    background: #fff;
+    border-radius: 15px;
+    border: 1px solid #f0f0f0;
+    width: 300px;
+    margin: 10px;
+    padding-bottom: 15px;
+}
+
+.carCard_slider .carCard_imageBox {
+    height: 180px;
+    padding: 8px;
+}
+
+.carCard_slider .carCard_imageBox img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.carCard_slider .carCard_info {
+    padding: 0 15px;
+}
+
+.carCard_slider .carCard_row1 {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.carCard_slider .carCard_name {
+    font-size: 16px;
+    margin: 0;
+}
+
+.carCard_slider .carCard_priceMain {
+    color: #387b64;
+    font-weight: 700;
+}
+
+.carCard_slider .carCard_footer {
+    display: flex;
+    flex-direction: column;
+    /* В слайдере кнопки под параметрами */
+    gap: 10px;
+}
+
+.carCard_slider .carCard_params {
+    background: #f7f7f7;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.carCard_catalog {
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid #f0f0f0;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1000px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.carCard_catalog .carCard_imageBox {
+    width: 100%;
+    height: 320px;
+    padding: 15px;
+    /* Вот тот самый отступ, чтобы фото было "внутри" */
+    box-sizing: border-box;
+    /* Чтобы padding не увеличивал общую высоту */
+}
+
+.carCard_catalog .carCard_imageBox img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.carCard_catalog .carCard_info {
+    padding: 20px 24px 24px 24px;
+}
+
+.carCard_catalog .carCard_row1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.carCard_catalog .carCard_name {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.carCard_catalog .carCard_priceMain {
+    font-size: 22px;
+    color: #387b64;
+    font-weight: 700;
+}
+
+.carCard_catalog .carCard_priceSub {
+    color: #387b64;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0px 0 5px 0;
+}
+
+.carCard_catalog .carCard_footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.carCard_catalog .carCard_params {
+    flex: 1;
+    /* РАСТЯГИВАЕМ СЕРУЮ ПОЛОСУ */
+    background: #f8f8f8;
+    padding: 14px 20px;
+    border-radius: 12px;
+    display: flex;
+    gap: 15px;
+    color: #888;
+}
+
+/* ОБЩИЕ КНОПКИ */
+.carCard_btns {
+    display: flex;
+    gap: 10px;
+}
+
+.carCard_btnDetail {
+    background: #387b64;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.carCard_btnOrder {
+    background: #fff;
+    color: #387b64;
+    border: 1px solid #387b64;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.carCard_btnOrder:hover {
+    background: #f0f7f4;
+}
+
+
+.carCard_btnDots {
+    background: #f5f5f5;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.carCard_sep {
+    color: #ddd;
+}
+
+/* --- МОБИЛЬНАЯ ВЕРСИЯ --- */
+@media (max-width: 768px) {
+
+    /* Контейнер каталога */
+    .carCard_catalog .carCard_priceSub {
+        display: none;
+    }
+
+    /* Уменьшаем высоту картинки для мобилок */
+    .carCard_catalog .carCard_imageBox {
+        height: 220px;
+        padding: 10px;
+    }
+
+    .carCard_catalog .carCard_info {
+        padding: 15px;
+    }
+
+    /* Название и цена теперь в колонку */
+    .carCard_catalog .carCard_row1 {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        margin-bottom: 10px;
+    }
+
+    .carCard_catalog .carCard_name {
+        font-size: 18px;
+    }
+
+    .carCard_catalog .carCard_priceMain {
+        font-size: 18px;
+    }
+
+    /* Футер (параметры и кнопки) в стек */
+    .carCard_catalog .carCard_footer {
+        flex-direction: column;
+        align-items: stretch;
+        /* Кнопки растянутся на всю ширину */
+        gap: 15px;
+    }
+
+    .carCard_catalog .carCard_params {
+        padding: 10px;
+        justify-content: space-between;
+        font-size: 13px;
+    }
+
+    /* Кнопки в ряд или в столбик */
+    .carCard_catalog .carCard_btns {
+        width: 100%;
+    }
+
+    .carCard_catalog .carCard_btnDetail {
+        flex: 1;
+        /* Кнопка "Подробнее" забирает всё свободное место */
+    }
+}
+
+@media (max-width: 350px) {
+    .carCard_slider {
+        width: 280px;
+        margin: 10px auto;
+    }
+
+    .carCard_slider .carCard_params {
+        font-size: 11px;
+    }
+}

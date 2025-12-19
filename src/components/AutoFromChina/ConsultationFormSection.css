@@ -197,13 +197,10 @@
     background-color: #f0f7f4;
     color: #387b64;
     padding-left: 25px;
-    /* Эффект смещения при наведении */
 }
 
-/* Убираем верхний отступ у первого заголовка */
 .cityGroupTitle:first-child {
     padding-top: 10px;
-    /* // adafwe */
 }
 
 /* --- КНОПКА --- */

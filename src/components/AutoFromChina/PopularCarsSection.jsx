@@ -16,7 +16,7 @@ export const PopularCarsSection = () => {
 
     return (
         <section className="popularCarsSection">
-            <h2 className="sectionTitle">Популярные авто</h2>
+            <h2 className="sectionTitlee">Популярные авто</h2>
             <div className="sliderWrapper">
                 <button className="navBtn prev-el"><IoChevronBack /></button>
                 <button className="navBtn next-el"><IoChevronForward /></button>

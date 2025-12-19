@@ -19,6 +19,7 @@ function App() {
           <Route path='faq' element={<FAQ />} />
           <Route path="calculator" element={<CustomsPage />} />
           <Route path="auth" element={<AuthForm />} />
+          {/* <Route path="auth" element={<AuthForm />} ali /> */}
           <Route path="*" element={<h1>404: Страница не найдена</h1>} />
         </Route>
       </Routes >

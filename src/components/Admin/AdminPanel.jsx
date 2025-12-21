@@ -85,6 +85,9 @@ export const AdminPanel = () => {
     };
     if (loading) return <div className="admin-loader">Загрузка данных и проверка доступа...</div>;
 
+    // fepofiw
+    // gitfjpwjfwe
+
     return (
         <div className="admin-panel">
             <header className="admin-header">

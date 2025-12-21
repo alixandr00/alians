@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useRef } from 'react';
-import { carsData } from '../../data/CarsData';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { supabase } from '../../api/supabaseClient'; // ПРОВЕРЬ ПУТЬ
 import { CarCard } from '../AutoFromChina/CarCard';
 import './CustomOrder.css';
 
@@ -25,6 +25,8 @@ const row2Brands = [
 
 export const CustomOrder = () => {
     const catalogContentRef = useRef(null);
+    const [dbCars, setDbCars] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 100000]);
     const [yearRange, setYearRange] = useState([2010, 2025]);
@@ -32,13 +34,54 @@ export const CustomOrder = () => {
     const [transmission, setTransmission] = useState('Все');
     const [fuelType, setFuelType] = useState('Все');
     const [currentMainImage, setCurrentMainImage] = useState(null);
-
-
-
-    // Новое состояние для выбранной машины
     const [selectedCar, setSelectedCar] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const carsPerPage = 3;
 
-    const [appliedFilters, setAppliedFilters] = useState({
+    const handleDeleteCar = async (car) => {
+        try {
+            // 1. Собираем все пути к файлам из ссылок
+            // Нам нужно извлечь только имя файла из полного URL
+            const getFilePath = (url) => {
+                if (!url) return null;
+                const parts = url.split('/');
+                return parts[parts.length - 1]; // Берем последнюю часть (имя файла)
+            };
+
+            const mainImagePath = getFilePath(car.image);
+            const galleryPaths = (car.images || []).map(url => getFilePath(url)).filter(p => p !== null);
+
+            const allPathsToDelete = [mainImagePath, ...galleryPaths];
+
+            // 2. Удаляем файлы из Storage
+            if (allPathsToDelete.length > 0) {
+                const { error: storageError } = await supabase
+                    .storage
+                    .from('car-images') // Твой бакет
+                    .remove(allPathsToDelete);
+
+                if (storageError) console.error("Ошибка удаления файлов из Storage:", storageError);
+            }
+
+            // 3. Удаляем саму запись из таблицы БД
+            const { error: dbError } = await supabase
+                .from('car-cards')
+                .delete()
+                .eq('id', car.id);
+
+            if (dbError) throw dbError;
+
+            // 4. Обновляем интерфейс
+            setDbCars(prev => prev.filter(c => c.id !== car.id));
+            alert("Автомобиль и все фото успешно удалены!");
+
+        } catch (error) {
+            console.error("Ошибка при полном удалении:", error);
+            alert("Произошла ошибка при удалении");
+        }
+    };
+
+    const [, setAppliedFilters] = useState({
         brands: [],
         price: [0, 100000],
         year: [2010, 2025],
@@ -47,9 +90,27 @@ export const CustomOrder = () => {
         fuel: 'Все'
     });
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const carsPerPage = 3;
+    // 1. ЗАГРУЗКА ДАННЫХ (ТОЛЬКО ЭТО В useEffect)
+    useEffect(() => {
+        // Внутри useEffect
+        const fetchAllCars = async () => {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('car-cards')
+                .select('*');
 
+            if (error) {
+                console.error("Ошибка загрузки:", error);
+            } else {
+                console.log("Загружено машин из БД:", data.length); // Проверь лог в консоли браузера
+                setDbCars(data || []);
+            }
+            setLoading(false);
+        };
+        fetchAllCars();
+    }, []);
+
+    // 2. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (ВНЕ useEffect)
     const toggleBrand = (brandName) => {
         setSelectedBrands(prev =>
             prev.includes(brandName) ? prev.filter(b => b !== brandName) : [...prev, brandName]
@@ -73,7 +134,7 @@ export const CustomOrder = () => {
             transmission: transmission,
             fuel: fuelType
         });
-        setSelectedCar(null); // Закрываем детали при поиске
+        setSelectedCar(null);
         setCurrentPage(1);
     };
 
@@ -97,21 +158,6 @@ export const CustomOrder = () => {
         setCurrentPage(1);
     };
 
-    const filteredCars = useMemo(() => {
-        return carsData.filter(car => {
-            const matchBrand = appliedFilters.brands.length === 0 || appliedFilters.brands.includes(car.brand);
-            const matchPrice = car.price >= appliedFilters.price[0] && car.price <= appliedFilters.price[1];
-            const matchYear = car.year >= appliedFilters.year[0] && car.year <= appliedFilters.year[1];
-            const matchMileage = car.mileage >= appliedFilters.mileage[0] && car.mileage <= appliedFilters.mileage[1];
-            const matchTrans = appliedFilters.transmission === 'Все' || car.transmission === appliedFilters.transmission;
-            const matchFuel = appliedFilters.fuel === 'Все' || car.fuel === appliedFilters.fuel;
-            return matchBrand && matchPrice && matchYear && matchMileage && matchTrans && matchFuel;
-        });
-    }, [appliedFilters]);
-
-    const totalPages = Math.ceil(filteredCars.length / carsPerPage);
-    const currentCars = filteredCars.slice((currentPage - 1) * carsPerPage, currentPage * carsPerPage);
-
     const scrollToContent = () => {
         if (catalogContentRef.current) {
             const yOffset = -80;
@@ -120,6 +166,43 @@ export const CustomOrder = () => {
             window.scrollTo({ top: y, behavior: 'smooth' });
         }
     };
+
+    const filteredCars = useMemo(() => {
+        return dbCars.filter(car => {
+            // 1. Фильтр по бренду (Строгое соответствие)
+            // Если бренды не выбраны — показываем всё.
+            // Если выбраны — проверяем, совпадает ли car.brand с одним из выбранных.
+            const matchBrand = selectedBrands.length === 0 || selectedBrands.some(selected => {
+                const brandInDb = String(car.brand || '').trim().toLowerCase();
+                const selectedLow = selected.trim().toLowerCase();
+                return brandInDb === selectedLow; // Точное совпадение бренда
+            });
+
+            // 2. Фильтр по цене
+            const carPrice = Number(car.price) || 0;
+            const matchPrice = carPrice >= priceRange[0] && carPrice <= priceRange[1];
+
+            // 3. Фильтр по году
+            const carYear = Number(car.year) || 0;
+            const matchYear = carYear >= yearRange[0] && carYear <= yearRange[1];
+
+            // 4. Фильтр по пробегу
+            // Проверка пробега: учитываем баг с -1 и корректно обрабатываем 0
+            const carMileage = Number(car.mileage);
+            const matchMileage = (carMileage === -1 || carMileage === 0)
+                ? true // Если пробег -1 или 0, всегда показываем (считаем за новое авто)
+                : (carMileage >= mileageRange[0] && carMileage <= mileageRange[1]);
+
+            // 5. Тип топлива и КПП
+            const matchTrans = transmission === 'Все' || car.transmission === transmission;
+            const matchFuel = fuelType === 'Все' || car.fuel === fuelType;
+
+            return matchBrand && matchPrice && matchYear && matchMileage && matchTrans && matchFuel;
+        });
+    }, [dbCars, selectedBrands, priceRange, yearRange, mileageRange, transmission, fuelType]);
+
+    const totalPages = Math.ceil(filteredCars.length / carsPerPage);
+    const currentCars = filteredCars.slice((currentPage - 1) * carsPerPage, currentPage * carsPerPage);
 
     return (
         <div className="catalogPage">
@@ -214,9 +297,10 @@ export const CustomOrder = () => {
                 </aside>
 
                 <main className="catalogContent" ref={catalogContentRef}>
-                    {/* ЛОГИКА ПЕРЕКЛЮЧЕНИЯ: Список или Детали */}
-                    {selectedCar ? (
-                        <div className="carDetailContainer" >
+                    {loading ? (
+                        <div className="noResults">Загрузка данных...</div>
+                    ) : selectedCar ? (
+                        <div className="carDetailContainer">
                             <button className="backToListBtn" onClick={() => {
                                 setSelectedCar(null);
                                 setCurrentMainImage(null);
@@ -225,7 +309,6 @@ export const CustomOrder = () => {
                             </button>
 
                             <div className="detailContent">
-                                {/* ГАЛЕРЕЯ */}
                                 <div className="gallerySection">
                                     <div className="mainPhotoBox">
                                         <img
@@ -235,38 +318,42 @@ export const CustomOrder = () => {
                                         />
                                     </div>
                                     <div className="thumbnailsGrid">
-                                        {[selectedCar.image, ...(selectedCar.images || [])].map((img, index) => (
-                                            <div
-                                                key={index}
-                                                className={`thumbItem ${(currentMainImage === img || (!currentMainImage && index === 0)) ? 'activeThumb' : ''}`}
-                                                onClick={() => setCurrentMainImage(img)}
-                                            >
-                                                <img src={img} alt={`thumb-${index}`} />
-                                            </div>
-                                        ))}
+                                        {/* Используем useMemo или просто фильтруем, чтобы не было дубликатов */}
+                                        {Array.from(new Set([selectedCar.image, ...(selectedCar.images || [])])).map((img, index) => {
+                                            // Проверяем активность: либо это выбранная картинка, 
+                                            // либо если ничего не выбрано, то подсвечиваем самую первую (индекс 0)
+                                            const isActive = currentMainImage === img || (!currentMainImage && img === selectedCar.image);
+
+                                            return (
+                                                <div
+                                                    key={`${selectedCar.id}-thumb-${index}`}
+                                                    className={`thumbItem ${isActive ? 'activeThumb' : ''}`}
+                                                    onClick={() => setCurrentMainImage(img)}
+                                                >
+                                                    <img src={img} alt={`thumb-${index}`} />
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
 
-                                {/* ОСНОВНАЯ ИНФО */}
                                 <div className="detailHeader">
                                     <h1>{selectedCar.title}</h1>
                                     <div className="detailPriceLarge">${selectedCar.price.toLocaleString()}</div>
                                 </div>
 
                                 <div className="detailMainGrid">
-                                    {/* ТЕХНИЧЕСКИЕ ХАРАКТЕРИСТИКИ */}
                                     <div className="specsCard">
                                         <h3>Технические характеристики</h3>
                                         <div className="specsList">
                                             <div className="specRow"><span>Год выпуска</span> <b>{selectedCar.year}</b></div>
-                                            <div className="specRow"><span>Пробег</span> <b>{selectedCar.mileage.toLocaleString()} км</b></div>
+                                            <div className="specRow"><span>Пробег</span> <b>{selectedCar.mileage?.toLocaleString()} км</b></div>
                                             <div className="specRow"><span>Тип топлива</span> <b>{selectedCar.fuel}</b></div>
                                             <div className="specRow"><span>Коробка</span> <b>{selectedCar.transmission}</b></div>
                                             <div className="specRow"><span>Марка</span> <b>{selectedCar.brand}</b></div>
                                         </div>
                                     </div>
 
-                                    {/* КОМПЛЕКТАЦИЯ */}
                                     <div className="specsCard">
                                         <h3>Особенности и опции</h3>
                                         <div className="optionsGrid">
@@ -277,7 +364,6 @@ export const CustomOrder = () => {
                                     </div>
                                 </div>
 
-                                {/* ОПИСАНИЕ */}
                                 <div className="descriptionBox">
                                     <h3>Описание от продавца</h3>
                                     <p>{selectedCar.description}</p>
@@ -302,12 +388,8 @@ export const CustomOrder = () => {
                                                 setSelectedCar(car);
                                                 setCurrentMainImage(car.image);
                                                 setTimeout(scrollToContent, 100);
-                                                // catalogContentRef.current?.scrollIntoView({
-                                                //     behavior: 'smooth',
-                                                //     block: 'start'
-                                                // });
                                             }}
-                                        />
+                                            onDelete={() => handleDeleteCar(car)} />
                                     ))
                                 ) : (
                                     <div className="noResults">К сожалению, таких авто нет</div>
@@ -315,7 +397,7 @@ export const CustomOrder = () => {
                             </div>
 
                             {totalPages > 1 && (
-                                <div className="pagination" >
+                                <div className="pagination">
                                     {[...Array(totalPages)].map((_, i) => (
                                         <button
                                             key={i}
@@ -323,10 +405,6 @@ export const CustomOrder = () => {
                                             onClick={() => {
                                                 setCurrentPage(i + 1);
                                                 scrollToContent();
-                                                // catalogContentRef.current?.scrollIntoView({
-                                                //     behavior: 'smooth',
-                                                //     block: 'start'
-                                                // });
                                             }}
                                         >
                                             {i + 1}

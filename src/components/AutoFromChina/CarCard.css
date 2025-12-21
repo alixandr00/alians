@@ -243,3 +243,30 @@
         font-size: 11px;
     }
 }
+
+.dotsContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.deleteFloatingBtn {
+    position: absolute;
+    bottom: 110%;
+    /* Появится над кнопкой */
+    right: 0;
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.deleteFloatingBtn:hover {
+    background: #cc0000;
+}

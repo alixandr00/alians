@@ -6,6 +6,7 @@
     height: 90vh;
     overflow: hidden;
     background-color: #f0f3ee;
+    /* padding-top: 10rem; */
 }
 
 .heroImageContainer {
@@ -122,7 +123,7 @@
     }
 
     .heroTitle {
-        font-size: 20px;
+        font-size: 26px;
         /* Уменьшаем размер шрифта заголовка */
         max-width: 60%;
         /* Позволяем занимать всю ширину */

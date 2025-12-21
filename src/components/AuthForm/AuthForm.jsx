@@ -1,34 +1,100 @@
 import React, { useState } from 'react';
+import { supabase } from '../../api/supabaseClient'; // ПРОВЕРЬ ПУТЬ К КЛИЕНТУ
+import { useNavigate } from 'react-router-dom';
 import './AuthForm.css';
 
 export const AuthForm = () => {
-    const [isLogin, setIsLogin] = useState(false);
+    const [isLogin, setIsLogin] = useState(true); // По умолчанию лучше ставить вход
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [userName, setUserName] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        if (isLogin) {
+            // ЛОГИКА ВХОДА
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (error) {
+                alert("Ошибка входа: " + error.message);
+            } else {
+                console.log("Успешный вход:", data.user);
+                // Если это админ, перекидываем в админку (создадим ее позже)
+                navigate('/admin-panel');
+            }
+        } else {
+            // ЛОГИКА РЕГИСТРАЦИИ
+            const { error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: userName, // Сохраняем имя в метаданные
+                    },
+                },
+            });
+
+            if (error) {
+                alert("Ошибка регистрации: " + error.message);
+            } else {
+                alert("Регистрация успешна! Проверьте почту для подтверждения (если включено).");
+                setIsLogin(true);
+            }
+        }
+        setLoading(false);
+    };
 
     return (
         <div className="auth-container">
             <div className={`auth-card ${isLogin ? 'login-mode' : 'reg-mode'}`}>
                 <h2>{isLogin ? 'Войти' : 'Регистрация'}</h2>
 
-                <form className="auth-form">
+                <form className="auth-form" onSubmit={handleSubmit}>
                     {!isLogin && (
                         <div className="input-group">
                             <label>Имя</label>
-                            <input type="text" placeholder="Введите имя" />
+                            <input
+                                type="text"
+                                placeholder="Введите имя"
+                                value={userName}
+                                onChange={(e) => setUserName(e.target.value)}
+                                required
+                            />
                         </div>
                     )}
 
                     <div className="input-group">
                         <label>Электронная почта</label>
-                        <input type="email" placeholder="example@mail.com" />
+                        <input
+                            type="email"
+                            placeholder="example@mail.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
                     </div>
 
                     <div className="input-group">
                         <label>Пароль</label>
-                        <input type="password" placeholder="••••••••" />
+                        <input
+                            type="password"
+                            placeholder="••••••••"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
                     </div>
 
-                    <button type="submit" className="main-button">
-                        {isLogin ? 'Войти' : 'Создать аккаунт'}
+                    <button type="submit" className="main-button" disabled={loading}>
+                        {loading ? 'Загрузка...' : (isLogin ? 'Войти' : 'Создать аккаунт')}
                     </button>
                 </form>
 

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react'; // Добавили useState
 import './CarCard.css';
 
-// Добавляем onClick в деструктуризацию пропсов
 export const CarCard = ({ car, isCatalog = false, viewType = 'dots', onClick }) => {
-    // Выбираем главный класс контейнера
+    // Состояние для показа кнопки удаления
+    const [showDelete, setShowDelete] = useState(false);
+
     const cardClass = isCatalog ? "carCard_catalog" : "carCard_slider";
 
     return (
@@ -31,7 +32,7 @@ export const CarCard = ({ car, isCatalog = false, viewType = 'dots', onClick }) 
                         <span>{car.mileage?.toLocaleString()} км</span>
                     </div>
 
-                    <div className="carCard_btns">
+                    <div className="carCard_btns" style={{ position: 'relative' }}>
                         <button className="carCard_btnDetail" onClick={onClick}>
                             Подробнее
                         </button>
@@ -39,7 +40,16 @@ export const CarCard = ({ car, isCatalog = false, viewType = 'dots', onClick }) 
                         {viewType === 'order' ? (
                             <button className="carCard_btnOrder">Под заказ</button>
                         ) : (
-                            <button className="carCard_btnDots">...</button>
+                            <div className="dotsContainer">
+                                <button
+                                    className="carCard_btnDots"
+                                    onClick={() => setShowDelete(!showDelete)}
+                                >
+                                    ...
+                                </button>
+
+
+                            </div>
                         )}
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import CarImage from '../../assets/SOK6363-762x456.jpg'; // Ваш файл с изображением
+import CarImage from '../../assets/Audi Q5 2021 3.webp'; // Ваш файл с изображением
 import './HeroSection.css';
 import { Link } from 'react-router-dom';
 import { RiWhatsappFill } from "react-icons/ri";

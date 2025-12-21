@@ -1,0 +1,192 @@
+/* AddCarForm.css */
+
+.admin-form-container {
+    max-width: 750px;
+    width: 95%;
+    /* Чуть меньше 100%, чтобы были отступы по бокам на мобилках */
+    margin: 20px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    font-family: 'Inter', system-ui, sans-serif;
+    box-sizing: border-box;
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #1a1a1a;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* Сетка для полей */
+.form-row {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+/* По умолчанию (для ПК) */
+.form-row.two-col {
+    grid-template-columns: 1fr 1fr;
+}
+
+.form-row.three-col {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #444;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    font-size: 16px;
+    /* 16px лучше для мобилок, чтобы браузер не зумил при вводе */
+    outline: none;
+    background-color: #f9f9f9;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    border-color: #28a745;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+/* Скрываем стрелочки у чисел */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Фото секция */
+.photo-upload-section {
+    border: 2px dashed #28a745;
+    background-color: #f0fff4;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.main-photo-preview {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    /* Позволяет картинке и инпуту встать друг под друга на узких экранах */
+}
+
+.preview-thumb {
+    width: 100px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    /* Авто-подбор колонок */
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.gallery-item {
+    position: relative;
+    aspect-ratio: 1/1;
+}
+
+.gallery-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.remove-photo-btn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.submit-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 16px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* =================================768px АДАПТИВКА (Планшеты и телефоны) ================================= */
+
+@media (max-width: 768px) {
+    .admin-form-container {
+        padding: 20px;
+        margin: 10px auto;
+    }
+
+    .form-row.two-col,
+    .form-row.three-col {
+        grid-template-columns: 1fr;
+        /* Всё в одну колонку */
+        gap: 10px;
+    }
+
+    .form-title {
+        font-size: 20px;
+    }
+
+    .submit-btn {
+        padding: 14px;
+        font-size: 15px;
+    }
+}
+
+/* Для совсем маленьких экранов (iPhone SE и т.д.) */
+@media (max-width: 480px) {
+    .preview-thumb {
+        width: 100%;
+        /* Фото обложки на всю ширину */
+        height: 150px;
+    }
+
+    .photo-upload-section {
+        padding: 15px;
+    }
+}

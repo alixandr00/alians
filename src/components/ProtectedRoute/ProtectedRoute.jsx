@@ -11,7 +11,6 @@ export const ProtectedRoute = () => {
             setSession(session);
         });
 
-        // Слушаем изменения (если нажмем Выход, сессия станет null)
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session);
         });

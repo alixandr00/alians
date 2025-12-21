@@ -17,36 +17,40 @@ export const AuthForm = () => {
         setLoading(true);
 
         if (isLogin) {
-            // ЛОГИКА ВХОДА
-            const { data, error } = await supabase.auth.signInWithPassword({
+            // 1. Пытаемся войти
+            const { error } = await supabase.auth.signInWithPassword({
                 email,
                 password,
             });
 
             if (error) {
                 alert("Ошибка входа: " + error.message);
-            } else {
-                console.log("Успешный вход:", data.user);
-                // Если это админ, перекидываем в админку (создадим ее позже)
-                navigate('/admin-panel');
+                setLoading(false);
+                return;
             }
+
+            // 2. Проверяем, кто зашел
+            if (email === 'admin_cabinet@alians.com') {
+                alert("Добро пожаловать, Босс! Переходим в админку.");
+                navigate('/admin-panel'); // Админа — в панель
+            } else {
+                alert("Успешный вход! Рады вас видеть.");
+                navigate('/'); // Обычного юзера — на главную
+            }
+
         } else {
             // ЛОГИКА РЕГИСТРАЦИИ
             const { error } = await supabase.auth.signUp({
                 email,
                 password,
-                options: {
-                    data: {
-                        full_name: userName, // Сохраняем имя в метаданные
-                    },
-                },
+                options: { data: { full_name: userName } },
             });
 
             if (error) {
                 alert("Ошибка регистрации: " + error.message);
             } else {
-                alert("Регистрация успешна! Проверьте почту для подтверждения (если включено).");
-                setIsLogin(true);
+                alert("Регистрация успешна! Теперь вы можете войти в свой аккаунт.");
+                setIsLogin(true); // Переключаем на вход, чтобы юзер залогинился
             }
         }
         setLoading(false);

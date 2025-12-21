@@ -16,19 +16,22 @@ export const AdminPanel = () => {
     const fetchCars = async () => {
         setLoading(true);
 
-        // Проверяем, залогинен ли админ
         const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-            navigate('/auth'); // Если не вошел — отправляем на логин
+
+        // Если не залогинен ВООБЩЕ или почта НЕ админская
+        if (!session || session.user.email !== 'admin_cabinet@alians.com') {
+            alert("У вас нет прав доступа к этой странице!");
+            navigate('/'); // Выкидываем на главную
             return;
         }
 
+        // Если всё ок — грузим машины
         const { data, error } = await supabase
             .from('car-cards')
             .select('*')
             .order('created_at', { ascending: false });
 
-        if (error) console.error('Ошибка загрузки:', error);
+        if (error) console.error('Ошибка:', error);
         else setCars(data);
         setLoading(false);
     };

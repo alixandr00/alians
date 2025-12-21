@@ -1,7 +1,7 @@
 /* AdminPanel.css */
 
 .admin-panel {
-    padding: 20px;
+    padding: 10px;
     max-width: 1200px;
     margin: 0 auto;
     font-family: 'Inter', sans-serif;
@@ -12,7 +12,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin: 30px 0;
     flex-wrap: wrap;
     /* Чтобы кнопки переносились на мобилках */
     gap: 15px;
@@ -127,38 +127,47 @@
     color: #fff;
 }
 
-/* ================================= МОБИЛЬНАЯ АДАПТАЦИЯ ТАБЛИЦЫ ================================= */
-
-/* ================================= УЛУЧШЕННАЯ МОБИЛЬНАЯ ТАБЛИЦА ================================= */
+/* ================================= ПОЛНАЯ МОБИЛЬНАЯ АДАПТАЦИЯ ================================= */
 
 @media (max-width: 768px) {
     .admin-header {
         flex-direction: column;
         align-items: center;
-        /* Центрируем заголовок */
         text-align: center;
-        gap: 20px;
+        gap: 15px;
     }
 
     .admin-header-actions {
         width: 100%;
+        display: flex;
+        gap: 10px;
         justify-content: center;
     }
 
-    .admin-table thead {
-        display: none;
+    /* Кнопки в шапке на всю ширину */
+    .add-car-btn,
+    .logout-btn {
+        flex: 1;
+        padding: 12px;
+        font-size: 14px;
     }
 
+    /* Скрываем заголовки таблицы */
+    .admin-table thead {
+        display: none !important;
+    }
+
+    /* Превращаем таблицу в блок */
     .admin-table,
     .admin-table tbody,
     .admin-table tr,
     .admin-table td {
-        display: block;
-        width: 100%;
+        display: block !important;
+        width: 100% !important;
     }
 
     .admin-table tr {
-        margin-bottom: 25px;
+        /* margin-bottom: 25px; */
         background: #fff;
         border: 1px solid #eee;
         border-radius: 12px;
@@ -167,27 +176,20 @@
     }
 
     .admin-table td {
-        display: flex;
-        justify-content: flex-start;
-        /* Изменили с space-between на flex-start */
+        display: flex !important;
+        justify-content: flex-start !important;
+        /* Данные прижаты к левой части */
         align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid #f9f9f9;
+        padding: 10px 0 !important;
+        border-bottom: 1px solid #f9f9f9 !important;
         text-align: left;
     }
 
-    .admin-table td:last-child {
-        border-bottom: none;
-        padding-top: 15px;
-        justify-content: center;
-        /* Кнопки действий по центру */
-    }
-
-    /* Стили для подписи (левая часть) */
+    /* Стили для подписей (Фото, Авто, Цена и т.д.) */
     .admin-table td::before {
         content: attr(data-label);
         min-width: 100px;
-        /* Фиксированная ширина для выравнивания колонок внутри карточки */
+        /* Фиксированная ширина колонки заголовков */
         font-weight: 700;
         color: #888;
         font-size: 11px;
@@ -195,24 +197,42 @@
         letter-spacing: 0.5px;
     }
 
-    /* Увеличиваем превью фото на мобилке */
+    /* Фотография в карточке */
     .admin-thumb {
-        width: 120px;
-        height: 80px;
+        width: 100px;
+        height: 65px;
+        object-fit: cover;
         border-radius: 6px;
     }
 
+    /* СЕКЦИЯ КНОПОК ДЕЙСТВИЯ (Изменить / Удалить) */
+    .admin-table td:last-child {
+        border-bottom: none !important;
+        padding-top: 15px !important;
+        display: block !important;
+        /* Убираем flex, чтобы кнопки заняли всю ширину */
+    }
+
+    .admin-table td:last-child::before {
+        display: none !important;
+        /* Скрываем надпись "ДЕЙСТВИЯ" */
+    }
+
     .admin-actions {
-        width: 100%;
-        gap: 10px;
+        display: flex !important;
+        width: 100% !important;
+        gap: 10px !important;
     }
 
     .edit-btn,
     .del-btn {
-        flex: 1;
-        /* Кнопки растягиваются на всю ширину карточки */
-        padding: 12px;
-        font-size: 14px;
+        flex: 1 !important;
+        padding: 14px;
+        /* font-size: 14px !important; */
+        max-width: 150px;
+        font-weight: 700;
         text-align: center;
+        border-radius: 8px !important;
+        justify-content: center;
     }
 }

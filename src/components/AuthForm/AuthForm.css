@@ -15,9 +15,7 @@
 
 .auth-card {
     background: #ffffff;
-    margin-top: 5.3rem;
-
-    padding: 40px;
+    padding: 40px 60px 40px 40px;
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
     width: 100%;

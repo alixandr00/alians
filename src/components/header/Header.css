@@ -3,8 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
-    /* max-width: 1200px; */
+    padding: 20px;
     width: 100%;
     box-sizing: border-box;
     position: fixed;
@@ -107,13 +106,13 @@
     display: none;
 }
 
-/* --- АДАПТИВНОСТЬ (Мобильная версия) --- */
 @media (max-width: 900px) {
     .headerContainer {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
-        /* Три колонки */
         align-items: center;
+        /* Уменьшаем паддинги на мобилке, чтобы не тесниться */
+        padding: 15px 20px;
     }
 
     .burgerButton {
@@ -130,8 +129,7 @@
         position: fixed;
         top: 0;
         left: -100%;
-        /* Скрыто слева */
-        width: 280px;
+        width: 250px;
         height: 100vh;
         background-color: #fff;
         flex-direction: column;
@@ -139,16 +137,12 @@
         align-items: flex-start;
         padding: 20px;
         transition: left 0.4s ease;
-        /* Анимация выезда слева */
         box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
         z-index: 1000;
-        order: unset;
-        /* Сбрасываем флекс-порядок для фиксированного окна */
     }
 
     .navWrapper.active {
         left: 0;
-        /* Выезжает на экран */
     }
 
     .mobileMenuHeader {
@@ -172,10 +166,9 @@
         width: 100%;
     }
 
+    /* Прячем блок контактов на мобилке в хедере (как в твоем коде) */
     .contactSearchBlock {
-        margin-top: 30px;
-        width: 100%;
-        justify-content: space-between;
+        display: none;
     }
 
     /* Затемнение фона */
@@ -187,9 +180,5 @@
         height: 100vh;
         background: rgba(0, 0, 0, 0.5);
         z-index: 999;
-    }
-
-    .contactSearchBlock {
-        display: none;
     }
 }

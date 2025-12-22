@@ -22,12 +22,12 @@
     top: 60%;
     left: 6%;
     transform: translateY(-50%);
-    background-color: #ffffff;
+    background-color: hsl(0, 0%, 100%);
     padding: 25px 30px;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     width: 60%;
-    min-width: 650px;
+    /* min-width: 650px; */
 }
 
 .formRow {
@@ -157,8 +157,10 @@
     .searchForm {
         position: static;
         transform: none;
-        width: 90%;
-        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
+        /* min-width: 0; */
+        padding: 20px;
         /* padding: 20px 15px; */
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }

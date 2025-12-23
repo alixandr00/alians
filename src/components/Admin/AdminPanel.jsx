@@ -174,47 +174,19 @@ export const AdminPanel = () => {
     const [showAddForm, setShowAddForm] = useState(false);
     const navigate = useNavigate();
 
-    // const sendPushNotification = async () => {
-    //     const ANON_KEY = 'sb_publishable_lLPhJB656TOyUp1JzpsjEQ_edX-fZcY'; // Проверь его еще раз
-
-    //     try {
-    //         const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'apikey': ANON_KEY,
-    //                 'Authorization': `Bearer ${ANON_KEY}` // ОБЯЗАТЕЛЬНО ДОБАВЬ ЭТО
-    //             },
-    //             body: JSON.stringify({
-    //                 title: "Alians",
-    //                 body: "Тестовое уведомление"
-    //             }),
-    //         });
-
-    //         if (!response.ok) {
-    //             const errorData = await response.json();
-    //             throw new Error(errorData.error || 'Ошибка сервера');
-    //         }
-
-    //         // eslint-disable-next-line no-unused-vars
-    //         const data = await response.json();
-    //         alert("Ура! Пуш отправлен!");
-    //     } catch (err) {
-    //         console.error("Детальная ошибка:", err);
-    //         alert("Ошибка: " + err.message);
-    //     }
-    // };
 
     const sendPushNotification = async () => {
-        const KEY = 'sb_publishable_lLPhJB656TOyUp1JzpsjEQ_edX-fZcY'; // Твой ключ из Settings -> API
+        // ВНИМАНИЕ: Если ключ sb_publishable..., убедись, что это ANON KEY
+        const KEY = 'sb_publishable_lLPhJB656TOyUp1JzpsjEQ_edX-fZcY';
 
         try {
             const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
                 method: 'POST',
+                mode: 'cors', // Явно указываем режим
                 headers: {
                     'Content-Type': 'application/json',
                     'apikey': KEY,
-                    'Authorization': `Bearer ${KEY}` // Обязательно дублируем
+                    'Authorization': `Bearer ${KEY}`
                 },
                 body: JSON.stringify({
                     title: "Alians",
@@ -222,14 +194,20 @@ export const AdminPanel = () => {
                 }),
             });
 
+            // Если CORS прошел, но есть ошибка сервера, мы ее увидим тут
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.error || `Ошибка сервера: ${response.status}`);
+            }
+
             const data = await response.json();
-            if (response.ok) alert(`Отправлено ${data.count} пользователям!`);
-            else alert("Ошибка сервера: " + data.error);
+            alert(`Отправлено успешно! Число уведомлений: ${data.count}`);
+
         } catch (err) {
+            console.error("Ошибка детально:", err);
             alert("Ошибка: " + err.message);
         }
     };
-
     const fetchCars = async () => {
         setLoading(true);
         const { data: { session } } = await supabase.auth.getSession();

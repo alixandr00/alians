@@ -206,32 +206,26 @@ export const AdminPanel = () => {
     // };
 
     const sendPushNotification = async () => {
-        // Вставь сюда свой длинный ключ из image_009d1f.jpg
-        const PUBLIC_ANON_KEY = 'sb_publishable_llPhJB656T0yUp1JzpsjEQ_edX-f...';
+        const KEY = 'sb_publishable_lLPhJB656TOyUp1JzpsjEQ_edX-fZcY'; // Твой ключ из Settings -> API
 
         try {
             const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': PUBLIC_ANON_KEY,
-                    'Authorization': `Bearer ${PUBLIC_ANON_KEY}`
+                    'apikey': KEY,
+                    'Authorization': `Bearer ${KEY}` // Обязательно дублируем
                 },
                 body: JSON.stringify({
                     title: "Alians",
-                    body: "Проверка: уведомления работают!"
+                    body: "Все работает!"
                 }),
             });
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Сервер ответил: ${response.status} - ${errorText}`);
-            }
-
             const data = await response.json();
-            alert(`Ура! Уведомление отправлено ${data.count} пользователям!`);
+            if (response.ok) alert(`Отправлено ${data.count} пользователям!`);
+            else alert("Ошибка сервера: " + data.error);
         } catch (err) {
-            console.error("Критическая ошибка:", err);
             alert("Ошибка: " + err.message);
         }
     };

@@ -12,20 +12,34 @@ import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import { AdminPanel } from './components/Admin/AdminPanel';
 import { supabase } from './api/supabaseClient'
 
+// --- ФУНКЦИЯ ДЛЯ КОНВЕРТАЦИИ КЛЮЧА (ВАЖНО) ---
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const { i18n } = useTranslation();
 
   // --- ЛОГИКА УВЕДОМЛЕНИЙ (START) ---
   useEffect(() => {
-    // 1. Регистрируем Service Worker при запуске приложения
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
         .then(() => console.log('SW зарегистрирован'))
         .catch(err => console.error('Ошибка SW:', err));
     }
 
-    // 2. Функция запроса разрешения и подписки
     const setupPushSubscription = async () => {
       try {
         const permission = await Notification.requestPermission();
@@ -33,13 +47,15 @@ function App() {
         if (permission === 'granted') {
           const registration = await navigator.serviceWorker.ready;
 
-          // Подписываем пользователя (используем тестовый публичный ключ)
+          // Используем конвертер для ключа, чтобы не было ошибки как на скриншоте
+          const vapidKey = 'BNo6H_t9O-vE7N_uU3vL1X7Z9mU8k-P0Y5X4V3C2B1A';
+          const convertedVapidKey = urlBase64ToUint8Array(vapidKey);
+
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
-            applicationServerKey: 'BNo6H_t9O-vE7N_uU3vL1X7Z9mU8k-P0Y5X4V3C2B1A'
+            applicationServerKey: convertedVapidKey
           });
 
-          // Сохраняем данные подписки в Supabase
           const { error } = await supabase
             .from('push_subscriptions')
             .insert([{ subscription_data: subscription }]);
@@ -55,10 +71,9 @@ function App() {
       }
     };
 
-    // 3. Запускаем таймер: предложим подписаться через 2 минуты (120000 мс)
     const pushTimer = setTimeout(() => {
       setupPushSubscription();
-    }, 60000); // <--- 60000 мс = 1 минута
+    }, 60000);
 
     return () => clearTimeout(pushTimer);
   }, []);

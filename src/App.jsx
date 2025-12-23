@@ -12,7 +12,7 @@ import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import { AdminPanel } from './components/Admin/AdminPanel';
 import { supabase } from './api/supabaseClient';
 
-// --- КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: КОНВЕРТЕР КЛЮЧА ---
+// Функция-конвертер ключа VAPID
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -29,7 +29,7 @@ function App() {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    // Регистрация SW
+    // 1. Регистрация Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
         .then(() => console.log('SW зарегистрирован'))
@@ -39,97 +39,79 @@ function App() {
     const setupPushSubscription = async () => {
       try {
         const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-          const registration = await navigator.serviceWorker.ready;
+        if (permission !== 'granted') return;
 
-          // --- ТЕПЕРЬ КЛЮЧ ПРАВИЛЬНО ОБРАБАТЫВАЕТСЯ ---
-          const publicKey = 'BBAErbwegH7JhG4Dsl2u-E9RqA8dD-dlJNF2EGHpnPjXPWX0mT7CwHZAOCWnADiGNiUuzEzV0MY8BU57VeSkRNg';
-          const convertedKey = urlBase64ToUint8Array(publicKey);
+        const registration = await navigator.serviceWorker.ready;
 
-          const subscription = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: convertedKey // Передаем бинарный формат
-          });
+        // Твой публичный VAPID ключ
+        const publicKey = 'BBAErbwegH7JhG4Dsl2u-E9RqA8dD-dlJNF2EGHpnPjXPWX0mT7CwHZAOCWnADiGNiUuzEzV0MY8BU57VeSkRNg';
+        const convertedKey = urlBase64ToUint8Array(publicKey);
 
-          // Отправка в Supabase
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: convertedKey
+        });
+
+        // --- ПРОВЕРКА: Есть ли уже такая подписка в базе? ---
+        // Это предотвратит ошибки дубликатов и лишние запросы
+        const endpoint = subscription.endpoint;
+        const { data: existing } = await supabase
+          .from('push_subscriptions')
+          .select('id')
+          .eq('subscription_data->>endpoint', endpoint)
+          .maybeSingle();
+
+        if (!existing) {
           const { error } = await supabase
             .from('push_subscriptions')
             .insert([{ subscription_data: subscription }]);
 
-          if (error) {
-            console.error('Ошибка сохранения подписки в Supabase:', error.message);
-          } else {
-            console.log('УСПЕХ: Подписка сохранена для Alians!');
-          }
+          if (error) throw error;
+          console.log('УСПЕХ: Подписка сохранена!');
+        } else {
+          console.log('Подписка уже существует в базе.');
         }
+
       } catch (error) {
         console.error('Ошибка при настройке уведомлений:', error.message);
       }
     };
 
-    // Таймер на 30 секунд для проверки
-    const pushTimer = setTimeout(() => {
-      setupPushSubscription();
-    }, 30000);
-
-    return () => clearTimeout(pushTimer);
+    // Запуск через 5 секунд после загрузки, чтобы не тормозить сайт
+    const timer = setTimeout(setupPushSubscription, 5000);
+    return () => clearTimeout(timer);
   }, []);
 
+  // Определение языка (твой оригинальный код)
   useEffect(() => {
     const detectUserLanguage = () => {
       const savedLang = localStorage.getItem('i18nextLng');
-      if (savedLang && ['ru', 'zh', 'en', 'ko', 'ka', 'ar'].includes(savedLang)) {
-        return;
-      }
+      if (savedLang && ['ru', 'zh', 'en', 'ko', 'ka', 'ar'].includes(savedLang)) return;
 
-      const browserLang = navigator.language || navigator.userLanguage || 'ru';
-      const langCode = browserLang.toLowerCase();
-      let langToSet = 'ru';
-
-      if (langCode.startsWith('zh')) {
-        langToSet = 'zh';
-      } else if (langCode.startsWith('ko')) {
-        langToSet = 'ko';
-      } else if (langCode.startsWith('ka')) {
-        langToSet = 'ka';
-      } else if (langCode.startsWith('ar')) {
-        langToSet = 'ar';
-      } else if (langCode.startsWith('en')) {
-        langToSet = 'en';
-      } else {
-        langToSet = 'ru';
-      }
+      const browserLang = (navigator.language || 'ru').toLowerCase();
+      const langMap = { zh: 'zh', ko: 'ko', ka: 'ka', ar: 'ar', en: 'en' };
+      const langToSet = Object.keys(langMap).find(key => browserLang.startsWith(key)) || 'ru';
 
       i18n.changeLanguage(langToSet);
     };
-
     detectUserLanguage();
   }, [i18n]);
 
   return (
-    <>
-      <Routes>
-        <Route path='/' element={<Layout searchTerm={searchTerm} setSearchTerm={setSearchTerm} />}>
-          <Route index element={<AutoFromChina />} />
-          <Route path="catalog" element={<CustomOrder searchTerm={searchTerm} />} />
-          <Route path='contacts' element={<Contacts />} />
-          <Route path='faq' element={<FAQ />} />
-          <Route path="calculator" element={<CustomsPage />} />
-          <Route path="auth" element={<AuthForm />} />
-
-          <Route path="*" element={
-            <div style={{ padding: '50px', textAlign: 'center' }}>
-              <h1>404</h1>
-              <p>Страница не найдена</p>
-            </div>
-          } />
-
-          <Route element={<ProtectedRoute />}>
-            <Route path="admin-panel" element={<AdminPanel />} />
-          </Route>
+    <Routes>
+      <Route path='/' element={<Layout searchTerm={searchTerm} setSearchTerm={setSearchTerm} />}>
+        <Route index element={<AutoFromChina />} />
+        <Route path="catalog" element={<CustomOrder searchTerm={searchTerm} />} />
+        <Route path='contacts' element={<Contacts />} />
+        <Route path='faq' element={<FAQ />} />
+        <Route path="calculator" element={<CustomsPage />} />
+        <Route path="auth" element={<AuthForm />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="admin-panel" element={<AdminPanel />} />
         </Route>
-      </Routes>
-    </>
+        <Route path="*" element={<div style={{ padding: '50px', textAlign: 'center' }}><h1>404</h1><p>Страница не найдена</p></div>} />
+      </Route>
+    </Routes>
   );
 }
 

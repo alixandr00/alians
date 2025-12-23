@@ -175,25 +175,26 @@ export const AdminPanel = () => {
     const navigate = useNavigate();
 
     const sendPushNotification = async () => {
-        const title = prompt("Заголовок:", "Alians");
-        const body = prompt("Текст:", "Проверка пуша");
-        if (!title || !body) return;
-
         try {
             const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Мы НЕ передаем Authorization, чтобы тумблер JWT не блокировал нас
+                    // Добавь свой ANON_KEY сюда, если тумблер JWT все равно капризничает
+                    'apikey': 'BBAErbwegH7JhG4Dsl2u-E9RqA8dD-dlJNF2EGHpnPjXPWX0mT7CwHZAOCWnADiGNiUuzEzV0MY8BU57VeSkRNg',
                 },
-                body: JSON.stringify({ title, body }),
+                body: JSON.stringify({
+                    title: "Alians",
+                    body: "Тестовое уведомление"
+                }),
             });
 
-            const result = await response.json();
-            if (result.success) alert(`Отправлено! Получателей: ${result.count}`);
-            else alert("Ошибка сервера: " + result.error);
+            const data = await response.json();
+            if (data.success) alert("Ура! Пуш отправлен!");
+            else alert("Ошибка: " + data.error);
+            // eslint-disable-next-line no-unused-vars
         } catch (err) {
-            alert("Ошибка сети (CORS): " + err.message);
+            alert("Все еще CORS ошибка. Проверь тумблер в Dashboard!");
         }
     };
 

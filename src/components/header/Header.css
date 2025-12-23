@@ -12,6 +12,12 @@
     border: 1px solid #e0e0e0;
 }
 
+.contactSearchBlock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .logoBlock {
     display: flex;
     align-items: center;
@@ -36,7 +42,6 @@
 .navWrapper {
     display: flex;
     align-items: center;
-    gap: 30px;
     order: 2;
 }
 
@@ -168,6 +173,116 @@
     white-space: nowrap;
 }
 
+@media (max-width: 900px) {
+    .headerContainer {
+        display: flex;
+        /* Переключаемся обратно на flex для простоты */
+        justify-content: space-between;
+        padding: 10px 15px;
+    }
+
+    .burgerButton {
+        display: block;
+        order: 1;
+    }
+
+    .logoBlock {
+        order: 2;
+        font-size: 20px;
+    }
+
+    /* Навигационная панель (выезжающая) */
+    .navWrapper {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 85%;
+        /* Увеличили ширину для удобства */
+        max-width: 320px;
+        height: 100vh;
+        background-color: #fff;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        /* Растягиваем элементы во всю ширину */
+        padding: 0;
+        /* Внутренние отступы дадим элементам */
+        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 10px 0 25px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        overflow-y: auto;
+        /* Если пунктов много — можно скроллить */
+    }
+
+    .navWrapper.active {
+        left: 0;
+    }
+
+    .mobileMenuHeader {
+        display: flex;
+        /* padding: 20px; */
+        background: #fcfcfc;
+        border-bottom: 1px solid #eee;
+    }
+
+    .navMenu {
+        flex-direction: column;
+        width: 100%;
+        gap: 0;
+        /* Убираем отступы между ссылками, заменим на padding */
+        background-color: transparent;
+        /* УБРАЛИ ЗЕЛЕНЫЙ ФОН */
+    }
+
+    .navLink {
+        font-size: 16px;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f9f9f9;
+        display: block;
+    }
+
+    /* Блок поиска и языка внутри мобильного меню */
+    .contactSearchBlock,
+    .customLangWrapper {
+        margin: 15px 20px;
+    }
+
+    /* Поиск */
+    .contactSearchBlock {
+        order: 3;
+    }
+
+    .phoneNumberInput {
+        width: 100%;
+        /* На мобилке поле должно быть широким */
+        font-size: 14px;
+    }
+
+    /* Селект языка */
+    .customLangWrapper {
+        order: 4;
+        /* Затем язык */
+        position: relative;
+        /* Возвращаем relative, чтобы список открывался ПОВЕРХ */
+    }
+
+    .langSelectBtn {
+        height: 48px;
+        background: #f9f9f9;
+    }
+
+    /* Чтобы выпадающий список языков не раздвигал меню, а выпадал вниз */
+    .langDropdownList {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ddd;
+        background: white;
+    }
+}
+
 /* АДАПТИВ ДЛЯ МОБИЛОК */
 @media (max-width: 768px) {
     .navWrapper.active {
@@ -177,7 +292,6 @@
     }
 
     .langDropdownList {
-        position: static;
         width: 100%;
         box-shadow: none;
         border: 1px solid #eee;
@@ -186,8 +300,6 @@
 
     .customLangWrapper {
         width: 80%;
-        margin-top: auto;
-        /* Прижать к низу меню */
     }
 
     .langSelectBtn {
@@ -200,6 +312,7 @@
 .contactSearchBlock {
     display: flex;
     align-items: center;
+    justify-content: center;
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
     border-radius: 50px;
@@ -364,7 +477,8 @@
     .navMenu {
         flex-direction: column;
         width: 100%;
-        gap: 20px;
+        gap: 10px;
+        padding: 0;
     }
 
     .navLink {

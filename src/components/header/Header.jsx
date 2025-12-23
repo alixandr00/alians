@@ -173,7 +173,6 @@ export const Header = ({ searchTerm, setSearchTerm }) => {
                             </div>
                         )}
                     </div>
-                    <IoCheckmarkCircle className="statusIcon" />
                 </div>
             </div>
 

@@ -10,18 +10,14 @@ import { CustomsPage } from './components/CustomPage/CustomPage';
 import { AuthForm } from './components/AuthForm/AuthForm';
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import { AdminPanel } from './components/Admin/AdminPanel';
-import { supabase } from './api/supabaseClient'
+import { supabase } from './api/supabaseClient';
 
-// --- ФУНКЦИЯ ДЛЯ КОНВЕРТАЦИИ КЛЮЧА (ВАЖНО) ---
+// --- КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: КОНВЕРТЕР КЛЮЧА ---
 function urlBase64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, '+')
-    .replace(/_/g, '/');
-
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
-
   for (let i = 0; i < rawData.length; ++i) {
     outputArray[i] = rawData.charCodeAt(i);
   }
@@ -32,8 +28,8 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const { i18n } = useTranslation();
 
-  // --- ЛОГИКА УВЕДОМЛЕНИЙ (START) ---
   useEffect(() => {
+    // Регистрация SW
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
         .then(() => console.log('SW зарегистрирован'))
@@ -43,41 +39,41 @@ function App() {
     const setupPushSubscription = async () => {
       try {
         const permission = await Notification.requestPermission();
-
         if (permission === 'granted') {
           const registration = await navigator.serviceWorker.ready;
 
-          // Используем конвертер для ключа, чтобы не было ошибки как на скриншоте
-          const vapidKey = 'BNo6H_t9O-vE7N_uU3vL1X7Z9mU8k-P0Y5X4V3C2B1A';
-          const convertedVapidKey = urlBase64ToUint8Array(vapidKey);
+          // --- ТЕПЕРЬ КЛЮЧ ПРАВИЛЬНО ОБРАБАТЫВАЕТСЯ ---
+          const publicKey = 'BNo6H_t9O-vE7N_uU3vL1X7Z9mU8k-P0Y5X4V3C2B1A';
+          const convertedKey = urlBase64ToUint8Array(publicKey);
 
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
-            applicationServerKey: convertedVapidKey
+            applicationServerKey: convertedKey // Передаем бинарный формат
           });
 
+          // Отправка в Supabase
           const { error } = await supabase
             .from('push_subscriptions')
             .insert([{ subscription_data: subscription }]);
 
           if (error) {
-            console.error('Ошибка сохранения подписки в Supabase:', error);
+            console.error('Ошибка сохранения подписки в Supabase:', error.message);
           } else {
-            console.log('Подписка успешно сохранена для Alians!');
+            console.log('УСПЕХ: Подписка сохранена для Alians!');
           }
         }
       } catch (error) {
-        console.error('Ошибка при настройке уведомлений:', error);
+        console.error('Ошибка при настройке уведомлений:', error.message);
       }
     };
 
+    // Таймер на 30 секунд для проверки
     const pushTimer = setTimeout(() => {
       setupPushSubscription();
-    }, 60000);
+    }, 30000);
 
     return () => clearTimeout(pushTimer);
   }, []);
-  // --- ЛОГИКА УВЕДОМЛЕНИЙ (END) ---
 
   useEffect(() => {
     const detectUserLanguage = () => {

@@ -115,15 +115,12 @@ export const Header = ({ searchTerm, setSearchTerm }) => {
                     <NavLink to="/calculator" className="navLink" onClick={() => setIsMenuOpen(false)}>{t('nav_calc')}</NavLink>
                     <NavLink to="/auth" className="navLink" onClick={() => setIsMenuOpen(false)}>{t('nav_login')}</NavLink>
                 </nav>
-
-
-                {/* КРАСИВЫЙ СЕЛЕКТ ЯЗЫКА */}
                 <div className="customLangWrapper" ref={langRef}>
                     <div
                         className={`langSelectBtn ${isLangOpen ? 'active' : ''}`}
                         onClick={() => setIsLangOpen(!isLangOpen)}
                     >
-                        <Flag code={currentLanguage.country} className="selectedFlagImg" style={{ width: 20, marginRight: 8 }} />
+                        <Flag code={currentLanguage.country} className="selectedFlagImg" />
                         <span className="selectedText">{currentLanguage.code.toUpperCase()}</span>
                         <IoChevronDownOutline className={`arrowIcon ${isLangOpen ? 'rotate' : ''}`} />
                     </div>
@@ -136,8 +133,11 @@ export const Header = ({ searchTerm, setSearchTerm }) => {
                                     className={`langOptionItem ${i18n.language === lang.code ? 'current' : ''}`}
                                     onClick={() => changeLanguage(lang.code)}
                                 >
-                                    <span className="optionFlagIcon">{lang.flag}</span>
-                                    <span className="optionLabelText">{lang.label}</span>
+                                    <div className="langOptionContent">
+                                        <Flag code={lang.country} className="optionFlagImg" />
+                                        <span className="optionLabelText">{lang.label}</span>
+                                    </div>
+                                    <span className="langCodeShort">{lang.code.toUpperCase()}</span>
                                 </div>
                             ))}
                         </div>

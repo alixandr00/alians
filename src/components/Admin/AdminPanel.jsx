@@ -182,12 +182,9 @@ export const AdminPanel = () => {
         try {
             const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
                 method: 'POST',
-                // mode: 'cors' убираем, fetch ставит его сам при наличии headers
                 headers: {
                     'Content-Type': 'application/json',
                     'apikey': KEY,
-                    // Важно: для anon key иногда лучше НЕ передавать Authorization Bearer, 
-                    // если функция настроена как публичная или требует только apikey
                     'Authorization': `Bearer ${KEY}`
                 },
                 body: JSON.stringify({

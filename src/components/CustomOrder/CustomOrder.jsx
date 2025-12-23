@@ -212,7 +212,7 @@ export const CustomOrder = ({ searchTerm }) => {
                     <h3 className="filterMainTitle">{t('filter_title')}</h3>
 
                     <div className="brandSwipeRow">
-                        {[row1Brands, row2Brands].map((row, i) => (
+                        {[row1Brands].map((row, i) => (
                             <div key={i} className="brandSwipeRow">
                                 {row.map(brand => (
                                     <div key={brand.name} className={`brandIconCard ${selectedBrands.includes(brand.name) ? 'active' : ''}`} onClick={() => toggleBrand(brand.name)}>

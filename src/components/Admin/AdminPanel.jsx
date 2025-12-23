@@ -175,13 +175,15 @@ export const AdminPanel = () => {
     const navigate = useNavigate();
 
     const sendPushNotification = async () => {
+        const ANON_KEY = 'sb_publishable_lLPhJB656TOyUp1JzpsjEQ_edX-fZcY'; // Проверь его еще раз
+
         try {
             const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Добавь свой ANON_KEY сюда, если тумблер JWT все равно капризничает
-                    'apikey': 'BBAErbwegH7JhG4Dsl2u-E9RqA8dD-dlJNF2EGHpnPjXPWX0mT7CwHZAOCWnADiGNiUuzEzV0MY8BU57VeSkRNg',
+                    'apikey': ANON_KEY,
+                    'Authorization': `Bearer ${ANON_KEY}` // ОБЯЗАТЕЛЬНО ДОБАВЬ ЭТО
                 },
                 body: JSON.stringify({
                     title: "Alians",
@@ -189,12 +191,17 @@ export const AdminPanel = () => {
                 }),
             });
 
-            const data = await response.json();
-            if (data.success) alert("Ура! Пуш отправлен!");
-            else alert("Ошибка: " + data.error);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Ошибка сервера');
+            }
+
             // eslint-disable-next-line no-unused-vars
+            const data = await response.json();
+            alert("Ура! Пуш отправлен!");
         } catch (err) {
-            alert("Все еще CORS ошибка. Проверь тумблер в Dashboard!");
+            console.error("Детальная ошибка:", err);
+            alert("Ошибка: " + err.message);
         }
     };
 

@@ -1,8 +1,9 @@
-import React, { useState } from 'react'; // Добавили useState
+import React, { useState } from 'react';
 import './CarCard.css';
+import { useTranslation } from 'react-i18next'; // Импорт хука
 
 export const CarCard = ({ car, isCatalog = false, viewType = 'dots', onClick }) => {
-    // Состояние для показа кнопки удаления
+    const { t } = useTranslation(); // Инициализация
     const [showDelete, setShowDelete] = useState(false);
 
     const cardClass = isCatalog ? "carCard_catalog" : "carCard_slider";
@@ -25,20 +26,28 @@ export const CarCard = ({ car, isCatalog = false, viewType = 'dots', onClick }) 
 
                 <div className="carCard_footer">
                     <div className="carCard_params">
-                        <span>{car.year} г.</span>
+                        {/* Год */}
+                        <span>{car.year} {t('unit_year')}</span>
                         <span className="carCard_sep">|</span>
-                        <span>{car.transmission}</span>
+
+                        {/* Трансмиссия (переводится динамически) */}
+                        <span>{t(car.transmission?.toLowerCase())}</span>
+
                         <span className="carCard_sep">|</span>
-                        <span>{car.mileage?.toLocaleString()} км</span>
+
+                        {/* Пробег */}
+                        <span>{car.mileage?.toLocaleString()} {t('unit_km')}</span>
                     </div>
 
                     <div className="carCard_btns" style={{ position: 'relative' }}>
                         <button className="carCard_btnDetail" onClick={onClick}>
-                            Подробнее
+                            {t('details')}
                         </button>
 
                         {viewType === 'order' ? (
-                            <button className="carCard_btnOrder">Под заказ</button>
+                            <button className="carCard_btnOrder">
+                                {t('nav_catalog')}
+                            </button>
                         ) : (
                             <div className="dotsContainer">
                                 <button
@@ -47,8 +56,6 @@ export const CarCard = ({ car, isCatalog = false, viewType = 'dots', onClick }) 
                                 >
                                     ...
                                 </button>
-
-
                             </div>
                         )}
                     </div>

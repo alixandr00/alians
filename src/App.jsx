@@ -8,41 +8,21 @@ import { CustomsPage } from './components/CustomPage/CustomPage'
 import { AuthForm } from './components/AuthForm/AuthForm'
 import AddCarForm from './components/addCarForm/AddCarForm'
 import CarList from './components/cars/CarList'
-// import { useEffect, useState } from 'react'
-// import { supabase } from './api/supabaseClient'
 import { AdminPanel } from './components/Admin/AdminPanel'
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute'
+import { useState } from 'react'
 
 function App() {
 
-  // const [cars, setCars] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // // 1. Единая функция получения данных
-  // const fetchCars = async () => {
-  //   const { data, error } = await supabase
-  //     .from('car-cards')
-  //     .select('*')
-  //     .order('created_at', { ascending: false });
-
-  //   if (!error) {
-  //     setCars(data);
-  //   } else {
-  //     console.error('Ошибка:', error.message);
-  //   }
-  // };
-
-  // // 2. Загружаем данные при старте приложения
-  // useEffect(() => {
-  //   // eslint-disable-next-line react-hooks/set-state-in-effect
-  //   fetchCars();
-  // }, []);
 
   return (
     <>
       <Routes>
-        <Route path='/' element={<Layout />}>
+        <Route path='/' element={<Layout searchTerm={searchTerm} setSearchTerm={setSearchTerm} />}>
           <Route index element={<AutoFromChina />} />
-          <Route path="catalog" element={<CustomOrder />} />
+          <Route path="catalog" element={<CustomOrder searchTerm={searchTerm} />} />
           <Route path='contacts' element={<Contacts />} />
           <Route path='faq' element={<FAQ />} />
           <Route path="calculator" element={<CustomsPage />} />

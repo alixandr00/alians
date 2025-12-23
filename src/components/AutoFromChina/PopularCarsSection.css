@@ -157,11 +157,25 @@
     font-style: italic;
 }
 
-/* --- МОБИЛЬНАЯ ВЕРСИЯ --- */
+.mySwiper .swiper-slide {
+    max-width: 380px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.mySwiper .swiper-wrapper {
+    display: flex;
+    align-items: center;
+}
+
 @media (max-width: 768px) {
     .popularCarsSection {
         padding: 0 0 40px 0;
-        /* Убираем падинги, чтобы слайды были на весь экран */
+    }
+
+    .mySwiper .swiper-slide {
+        width: 85%;
     }
 
     .sectionTitlee {

@@ -2,28 +2,15 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { supabase } from '../../api/supabaseClient'; // ПРОВЕРЬ ПУТЬ
 import { CarCard } from '../AutoFromChina/CarCard';
 import './CustomOrder.css';
+import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { row1Brands, row2Brands } from '../../data/CarsData';
 
-const row1Brands = [
-    { name: 'Audi', icon: 'https://www.carlogos.org/car-logos/audi-logo.png' },
-    { name: 'BMW', icon: 'https://www.carlogos.org/car-logos/bmw-logo.png' },
-    { name: 'BYD', icon: 'https://www.carlogos.org/car-logos/byd-logo.png' },
-    { name: 'Tesla', icon: 'https://www.carlogos.org/car-logos/tesla-logo.png' },
-    { name: 'Mercedes', icon: 'https://www.carlogos.org/car-logos/mercedes-benz-logo.png' },
-    { name: 'Mazda', icon: 'https://www.carlogos.org/car-logos/mazda-logo.png' },
-    { name: 'Chevrolet', icon: 'https://www.carlogos.org/car-logos/chevrolet-logo.png' }
-];
 
-const row2Brands = [
-    { name: 'JAC', icon: 'https://www.carlogos.org/car-logos/jac-motors-logo.png' },
-    { name: 'Subaru', icon: 'https://www.carlogos.org/car-logos/subaru-logo.png' },
-    { name: 'Geely', icon: 'https://www.carlogos.org/car-logos/geely-logo.png' },
-    { name: 'Chery', icon: 'https://www.carlogos.org/car-logos/chery-logo.png' },
-    { name: 'Zeekr', icon: 'https://www.carlogos.org/car-logos/zeekr-logo.png' },
-    { name: 'Lada', icon: 'https://www.carlogos.org/car-logos/lada-logo.png' },
-    { name: 'Hyundai', icon: 'https://www.carlogos.org/car-logos/hyundai-logo.png' }
-];
 
-export const CustomOrder = () => {
+export const CustomOrder = ({ searchTerm }) => {
+    const { t } = useTranslation();
+    const location = useLocation();
     const catalogContentRef = useRef(null);
     const [dbCars, setDbCars] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -40,8 +27,6 @@ export const CustomOrder = () => {
 
     const handleDeleteCar = async (car) => {
         try {
-            // 1. Собираем все пути к файлам из ссылок
-            // Нам нужно извлечь только имя файла из полного URL
             const getFilePath = (url) => {
                 if (!url) return null;
                 const parts = url.split('/');
@@ -90,9 +75,7 @@ export const CustomOrder = () => {
         fuel: 'Все'
     });
 
-    // 1. ЗАГРУЗКА ДАННЫХ (ТОЛЬКО ЭТО В useEffect)
     useEffect(() => {
-        // Внутри useEffect
         const fetchAllCars = async () => {
             setLoading(true);
             const { data, error } = await supabase
@@ -100,15 +83,34 @@ export const CustomOrder = () => {
                 .select('*');
 
             if (error) {
-                console.error("Ошибка загрузки:", error);
+                console.error("Ошибка:", error);
             } else {
-                console.log("Загружено машин из БД:", data.length); // Проверь лог в консоли браузера
                 setDbCars(data || []);
+
+                // 4. ПРОВЕРКА: Если мы пришли из поиска (есть ID в state)
+                if (location.state && location.state.selectedCarId) {
+                    const foundCar = data.find(c => c.id === location.state.selectedCarId);
+
+                    if (foundCar) {
+                        setSelectedCar(foundCar); // Сразу открываем карточку
+                        setCurrentMainImage(foundCar.image); // Ставим фото
+
+                        // Прокручиваем экран к машине
+                        setTimeout(() => {
+                            if (catalogContentRef.current) {
+                                catalogContentRef.current.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }, 100);
+
+                        // Очищаем state, чтобы при обновлении страницы она не открывалась снова
+                        window.history.replaceState({}, document.title);
+                    }
+                }
             }
             setLoading(false);
         };
         fetchAllCars();
-    }, []);
+    }, [location.state]); // Добавляем
 
     // 2. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (ВНЕ useEffect)
     const toggleBrand = (brandName) => {
@@ -169,25 +171,19 @@ export const CustomOrder = () => {
 
     const filteredCars = useMemo(() => {
         return dbCars.filter(car => {
-            // 1. Фильтр по бренду (Строгое соответствие)
-            // Если бренды не выбраны — показываем всё.
-            // Если выбраны — проверяем, совпадает ли car.brand с одним из выбранных.
             const matchBrand = selectedBrands.length === 0 || selectedBrands.some(selected => {
                 const brandInDb = String(car.brand || '').trim().toLowerCase();
                 const selectedLow = selected.trim().toLowerCase();
                 return brandInDb === selectedLow; // Точное совпадение бренда
             });
-
             // 2. Фильтр по цене
             const carPrice = Number(car.price) || 0;
             const matchPrice = carPrice >= priceRange[0] && carPrice <= priceRange[1];
-
             // 3. Фильтр по году
             const carYear = Number(car.year) || 0;
             const matchYear = carYear >= yearRange[0] && carYear <= yearRange[1];
 
             // 4. Фильтр по пробегу
-            // Проверка пробега: учитываем баг с -1 и корректно обрабатываем 0
             const carMileage = Number(car.mileage);
             const matchMileage = (carMileage === -1 || carMileage === 0)
                 ? true // Если пробег -1 или 0, всегда показываем (считаем за новое авто)
@@ -197,9 +193,14 @@ export const CustomOrder = () => {
             const matchTrans = transmission === 'Все' || car.transmission === transmission;
             const matchFuel = fuelType === 'Все' || car.fuel === fuelType;
 
-            return matchBrand && matchPrice && matchYear && matchMileage && matchTrans && matchFuel;
+            const searchLower = (searchTerm || '').toLowerCase();
+            const matchSearch =
+                String(car.title || '').toLowerCase().includes(searchLower) ||
+                String(car.brand || '').toLowerCase().includes(searchLower);
+
+            return matchBrand && matchPrice && matchYear && matchMileage && matchTrans && matchFuel && matchSearch;
         });
-    }, [dbCars, selectedBrands, priceRange, yearRange, mileageRange, transmission, fuelType]);
+    }, [dbCars, selectedBrands, priceRange, yearRange, mileageRange, transmission, fuelType, searchTerm]);
 
     const totalPages = Math.ceil(filteredCars.length / carsPerPage);
     const currentCars = filteredCars.slice((currentPage - 1) * carsPerPage, currentPage * carsPerPage);
@@ -208,17 +209,17 @@ export const CustomOrder = () => {
         <div className="catalogPage">
             <div className="catalogContainer">
                 <aside className="filterSidebar">
-                    <h3 className="filterMainTitle">Фильтр</h3>
+                    <h3 className="filterMainTitle">{t('filter_title')}</h3>
 
                     <div className="brandSwipeRow">
-                        {row1Brands.map(brand => (
-                            <div
-                                key={brand.name}
-                                className={`brandIconCard ${selectedBrands.includes(brand.name) ? 'active' : ''}`}
-                                onClick={() => toggleBrand(brand.name)}
-                            >
-                                <img src={brand.icon} alt={brand.name} />
-                                <span>{brand.name}</span>
+                        {[row1Brands, row2Brands].map((row, i) => (
+                            <div key={i} className="brandSwipeRow">
+                                {row.map(brand => (
+                                    <div key={brand.name} className={`brandIconCard ${selectedBrands.includes(brand.name) ? 'active' : ''}`} onClick={() => toggleBrand(brand.name)}>
+                                        <img src={brand.icon} alt={brand.name} />
+                                        <span>{brand.name}</span>
+                                    </div>
+                                ))}
                             </div>
                         ))}
                     </div>
@@ -237,7 +238,7 @@ export const CustomOrder = () => {
                     </div>
 
                     <div className="filterBlockWhite">
-                        <label>Цена ($)</label>
+                        <label>{t('filter_price')} ($)</label>
                         <div className="rangeLabelsGreen">
                             <span>{priceRange[0].toLocaleString()}</span> — <span>{priceRange[1].toLocaleString()}</span>
                         </div>
@@ -249,7 +250,7 @@ export const CustomOrder = () => {
                     </div>
 
                     <div className="filterBlockWhite">
-                        <label>Год выпуска</label>
+                        <label>{t('filter_year')}</label>
                         <div className="rangeLabelsGreen">
                             <span>{yearRange[0]}</span> — <span>{yearRange[1]}</span>
                         </div>
@@ -261,7 +262,7 @@ export const CustomOrder = () => {
                     </div>
 
                     <div className="filterBlockWhite">
-                        <label>Пробег (км)</label>
+                        <label>{t('filter_mileage')} (km)</label>
                         <div className="rangeLabelsGreen">
                             <span>{mileageRange[0].toLocaleString()}</span> — <span>{mileageRange[1].toLocaleString()}</span>
                         </div>
@@ -273,7 +274,7 @@ export const CustomOrder = () => {
                     </div>
 
                     <div className="filterBlockWhite">
-                        <label>Тип топлива</label>
+                        <label>{t('filter_fuel')}</label>
                         <div className="fuelGrid">
                             {['Все', 'Бензин', 'Электро', 'Гибрид'].map(type => (
                                 <button key={type} className={`fuelBtn ${fuelType === type ? 'active' : ''}`} onClick={() => setFuelType(type)}>{type}</button>
@@ -282,7 +283,7 @@ export const CustomOrder = () => {
                     </div>
 
                     <div className="filterBlockWhite">
-                        <label>КПП</label>
+                        <label>{t('filter_transmission')}</label>
                         <div className="toggleGroup">
                             {['Все', 'Автомат', 'Механика'].map(t => (
                                 <button key={t} className={transmission === t ? 'active' : ''} onClick={() => setTransmission(t)}>{t}</button>
@@ -291,21 +292,21 @@ export const CustomOrder = () => {
                     </div>
 
                     <div className="filterFooterRow">
-                        <button className="mainApplyBtn" onClick={handleApplyFilters}>Показать</button>
-                        <button className="resetBtnSimple" onClick={resetFilters}>Сбросить</button>
+                        <button className="mainApplyBtn" onClick={handleApplyFilters}>{t('btn_show')}</button>
+                        <button className="resetBtnSimple" onClick={resetFilters}>{t('btn_reset')}</button>
                     </div>
                 </aside>
 
                 <main className="catalogContent" ref={catalogContentRef}>
                     {loading ? (
-                        <div className="noResults">Загрузка данных...</div>
+                        <div className="noResults">{t('loading')}</div>
                     ) : selectedCar ? (
                         <div className="carDetailContainer">
                             <button className="backToListBtn" onClick={() => {
                                 setSelectedCar(null);
                                 setCurrentMainImage(null);
                             }}>
-                                ← Назад к списку
+                                ← {t('btn_back')}
                             </button>
 
                             <div className="detailContent">
@@ -344,18 +345,18 @@ export const CustomOrder = () => {
 
                                 <div className="detailMainGrid">
                                     <div className="specsCard">
-                                        <h3>Технические характеристики</h3>
+                                        <h3>{t('specs_title')}</h3>
                                         <div className="specsList">
-                                            <div className="specRow"><span>Год выпуска</span> <b>{selectedCar.year}</b></div>
-                                            <div className="specRow"><span>Пробег</span> <b>{selectedCar.mileage?.toLocaleString()} км</b></div>
-                                            <div className="specRow"><span>Тип топлива</span> <b>{selectedCar.fuel}</b></div>
-                                            <div className="specRow"><span>Коробка</span> <b>{selectedCar.transmission}</b></div>
-                                            <div className="specRow"><span>Марка</span> <b>{selectedCar.brand}</b></div>
+                                            <div className="specRow"><span>{t('spec_year')}</span> <b>{selectedCar.year}</b></div>
+                                            <div className="specRow"><span>{t('spec_mileage')}</span> <b>{selectedCar.mileage?.toLocaleString()} {t('unit_km')}</b></div>
+                                            <div className="specRow"><span>{t('spec_fuel')}</span> <b>{t(selectedCar.fuel?.toLowerCase()) || selectedCar.fuel}</b></div>
+                                            <div className="specRow"><span>{t('spec_trans')}</span> <b>{t(selectedCar.transmission?.toLowerCase()) || selectedCar.transmission}</b></div>
+                                            <div className="specRow"><span>{t('spec_brand')}</span> <b>{selectedCar.brand}</b></div>
                                         </div>
                                     </div>
 
                                     <div className="specsCard">
-                                        <h3>Особенности и опции</h3>
+                                        <h3>{t('options_title')}</h3>
                                         <div className="optionsGrid">
                                             {selectedCar.specs?.map((opt, i) => (
                                                 <div key={i} className="optionTag">✓ {opt}</div>
@@ -365,18 +366,18 @@ export const CustomOrder = () => {
                                 </div>
 
                                 <div className="descriptionBox">
-                                    <h3>Описание от продавца</h3>
+                                    <h3>{t('desc_title')}</h3>
                                     <p>{selectedCar.description}</p>
                                 </div>
 
                                 <div className="detailActions">
-                                    <button className="orderMainBtn">Забронировать автомобиль</button>
+                                    <button className="orderMainBtn">{t('btn_book')}</button>
                                 </div>
                             </div>
                         </div>
                     ) : (
                         <>
-                            <div className="resultsHeader">Найдено авто: <span>{filteredCars.length}</span></div>
+                            <div className="resultsHeader">{t('found_cars')} <span>{filteredCars.length}</span></div>
                             <div className="carsList">
                                 {currentCars.length > 0 ? (
                                     currentCars.map(car => (
@@ -392,7 +393,7 @@ export const CustomOrder = () => {
                                             onDelete={() => handleDeleteCar(car)} />
                                     ))
                                 ) : (
-                                    <div className="noResults">К сожалению, таких авто нет</div>
+                                    <div className="noResults">{t('no_results')}</div>
                                 )}
                             </div>
 

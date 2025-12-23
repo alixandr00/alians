@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { supabase } from '../../api/supabaseClient'; // ПРОВЕРЬ ПУТЬ К КЛИЕНТУ
+import { supabase } from '../../api/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import './AuthForm.css';
+import { useTranslation } from 'react-i18next'; // Импорт
 
 export const AuthForm = () => {
-    const [isLogin, setIsLogin] = useState(true); // По умолчанию лучше ставить вход
+    const { t } = useTranslation(); // Инициализация
+    const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [userName, setUserName] = useState('');
@@ -17,29 +19,26 @@ export const AuthForm = () => {
         setLoading(true);
 
         if (isLogin) {
-            // 1. Пытаемся войти
             const { error } = await supabase.auth.signInWithPassword({
                 email,
                 password,
             });
 
             if (error) {
-                alert("Ошибка входа: " + error.message);
+                alert(t('auth_error_login') + ": " + error.message);
                 setLoading(false);
                 return;
             }
 
-            // 2. Проверяем, кто зашел
             if (email === 'admin_cabinet@alians.com') {
-                alert("Добро пожаловать, Босс! Переходим в админку.");
-                navigate('/admin-panel'); // Админа — в панель
+                alert(t('auth_welcome_admin'));
+                navigate('/admin-panel');
             } else {
-                alert("Успешный вход! Рады вас видеть.");
-                navigate('/'); // Обычного юзера — на главную
+                alert(t('auth_welcome_user'));
+                navigate('/');
             }
 
         } else {
-            // ЛОГИКА РЕГИСТРАЦИИ
             const { error } = await supabase.auth.signUp({
                 email,
                 password,
@@ -47,10 +46,10 @@ export const AuthForm = () => {
             });
 
             if (error) {
-                alert("Ошибка регистрации: " + error.message);
+                alert(t('auth_error_reg') + ": " + error.message);
             } else {
-                alert("Регистрация успешна! Теперь вы можете войти в свой аккаунт.");
-                setIsLogin(true); // Переключаем на вход, чтобы юзер залогинился
+                alert(t('auth_success_reg'));
+                setIsLogin(true);
             }
         }
         setLoading(false);
@@ -59,15 +58,15 @@ export const AuthForm = () => {
     return (
         <div className="auth-container">
             <div className={`auth-card ${isLogin ? 'login-mode' : 'reg-mode'}`}>
-                <h2>{isLogin ? 'Войти' : 'Регистрация'}</h2>
+                <h2>{isLogin ? t('auth_login_title') : t('auth_reg_title')}</h2>
 
                 <form className="auth-form" onSubmit={handleSubmit}>
                     {!isLogin && (
                         <div className="input-group">
-                            <label>Имя</label>
+                            <label>{t('form_label_name')}</label>
                             <input
                                 type="text"
-                                placeholder="Введите имя"
+                                placeholder={t('auth_placeholder_name')}
                                 value={userName}
                                 onChange={(e) => setUserName(e.target.value)}
                                 required
@@ -76,7 +75,7 @@ export const AuthForm = () => {
                     )}
 
                     <div className="input-group">
-                        <label>Электронная почта</label>
+                        <label>{t('auth_label_email')}</label>
                         <input
                             type="email"
                             placeholder="example@mail.com"
@@ -87,7 +86,7 @@ export const AuthForm = () => {
                     </div>
 
                     <div className="input-group">
-                        <label>Пароль</label>
+                        <label>{t('auth_label_password')}</label>
                         <input
                             type="password"
                             placeholder="••••••••"
@@ -98,19 +97,19 @@ export const AuthForm = () => {
                     </div>
 
                     <button type="submit" className="main-button" disabled={loading}>
-                        {loading ? 'Загрузка...' : (isLogin ? 'Войти' : 'Создать аккаунт')}
+                        {loading ? t('loading') : (isLogin ? t('auth_btn_login') : t('auth_btn_create'))}
                     </button>
                 </form>
 
                 <div className="toggle-container">
                     <span>
-                        {isLogin ? 'Ещё нет аккаунта?' : 'Уже есть аккаунт?'}
+                        {isLogin ? t('auth_no_account') : t('auth_have_account')}
                     </span>
                     <button
                         className="toggle-button"
                         onClick={() => setIsLogin(!isLogin)}
                     >
-                        {isLogin ? 'Зарегистрироваться' : 'Войти'}
+                        {isLogin ? t('auth_reg_link') : t('auth_login_link')}
                     </button>
                 </div>
             </div>

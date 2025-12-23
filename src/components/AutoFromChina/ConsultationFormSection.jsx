@@ -1,20 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ConsultationFormSection.css';
 import { IoChevronDown } from 'react-icons/io5';
-
-const countries = [
-    { code: '+996', flag: '🇰🇬', name: 'Кыргызстан' },
-    { code: '+7', flag: '🇰🇿', name: 'Казахстан' },
-    { code: '+7', flag: '🇷🇺', name: 'Россия' },
-];
-
-const locations = [
-    { country: "Кыргызстан", cities: ["Бишкек", "Ош", "Чуйская обл.", "Иссык-Кульская обл.", "Нарынская обл.", "Таласская обл.", "Джалал-Абадская обл.", "Баткенская обл."] },
-    { country: "Казахстан", cities: ["Алматы", "Астана", "Шымкент", "Караганда", "Актобе"] },
-    { country: "Россия", cities: ["Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург", "Казань"] }
-];
+import { useTranslation } from 'react-i18next'; // Импорт хука
 
 export const ConsultationFormSection = () => {
+    const { t } = useTranslation();
+
+    // Данные стран и городов теперь динамические
+    const countries = [
+        { code: '+996', flag: '🇰🇬', name: t('country_kg') },
+        { code: '+7', flag: '🇰🇿', name: t('country_kz') },
+        { code: '+7', flag: '🇷🇺', name: t('country_ru') },
+    ];
+
+    const locations = [
+        { country: t('country_kg'), cities: t('cities_kg', { returnObjects: true }) },
+        { country: t('country_kz'), cities: t('cities_kz', { returnObjects: true }) },
+        { country: t('country_ru'), cities: t('cities_ru', { returnObjects: true }) }
+    ];
+
     const [isCityOpen, setIsCityOpen] = useState(false);
     const [selectedCity, setSelectedCity] = useState('');
     const [selectedCountry, setSelectedCountry] = useState(countries[0]);
@@ -35,33 +39,27 @@ export const ConsultationFormSection = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         const fullPhone = `${selectedCountry.code}${phone}`;
-        const message = `Новая заявка!\nИмя: ${name}\nТелефон: ${fullPhone}\nГород: ${selectedCity || 'Не указан'}`;
+        const message = `${t('form_new_lead')}\n${t('form_label_name')}: ${name}\n${t('form_label_phone')}: ${fullPhone}\n${t('form_label_city')}: ${selectedCity || t('not_specified')}`;
 
-        // --- ОТПРАВКА В WHATSAPP ---
-        const whatsappNumber = "996221222125"; // ВПИШИ СВОЙ НОМЕР БЕЗ +
+        const whatsappNumber = "996221222125";
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-
         window.open(whatsappUrl, '_blank');
-
-        // Если нужно в Email, можно использовать:
-        // window.location.href = `mailto:tvoi@email.com?subject=Заявка&body=${encodeURIComponent(message)}`;
     };
 
     return (
         <section className="consultationSection">
             <div className="formContentWrapper">
                 <div className="textBlock">
-                    <h2 className="sectionTitle">Остались вопросы? Получите бесплатную консультацию!</h2>
-                    <p className="subtitle">Наши эксперты помогут подобрать авто и рассчитать стоимость</p>
+                    <h2 className="sectionTitle">{t('consultation_title')}</h2>
+                    <p className="subtitle">{t('consultation_subtitle')}</p>
                 </div>
 
                 <form className="consultationForm" onSubmit={handleSubmit}>
                     <div className="inputRow">
                         <input
                             type="text"
-                            placeholder="Имя"
+                            placeholder={t('form_placeholder_name')}
                             className="formInput"
                             required
                             value={name}
@@ -85,7 +83,7 @@ export const ConsultationFormSection = () => {
                                 className="formInput phoneInput"
                                 required
                                 value={phone}
-                                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} // Только цифры
+                                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                             />
                         </div>
 
@@ -94,7 +92,7 @@ export const ConsultationFormSection = () => {
                                 className={`citySelectTrigger ${isCityOpen ? 'active' : ''} ${selectedCity ? 'selected' : ''}`}
                                 onClick={() => setIsCityOpen(!isCityOpen)}
                             >
-                                {selectedCity || "Выберите город"}
+                                {selectedCity || t('form_placeholder_city')}
                                 <IoChevronDown className={`cityArrow ${isCityOpen ? 'rotate' : ''}`} />
                             </div>
 
@@ -103,7 +101,7 @@ export const ConsultationFormSection = () => {
                                     {locations.map((group, index) => (
                                         <div key={index} className="cityGroup">
                                             <div className="cityGroupTitle">{group.country}</div>
-                                            {group.cities.map((city) => (
+                                            {Array.isArray(group.cities) && group.cities.map((city) => (
                                                 <div key={city} className="cityOption" onClick={() => { setSelectedCity(city); setIsCityOpen(false); }}>
                                                     {city}
                                                 </div>
@@ -113,7 +111,7 @@ export const ConsultationFormSection = () => {
                                 </div>
                             )}
                         </div>
-                        <button type="submit" className="buttonSubmit">Отправить заявку</button>
+                        <button type="submit" className="buttonSubmit">{t('btn_submit_form')}</button>
                     </div>
                 </form>
             </div>

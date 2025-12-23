@@ -367,3 +367,23 @@ export const customsRates = {
         p1000: ['$2 580', '$442'], p1200: ['$3 096', '$530'], p1400: ['$3 612', '$1 251'], p1500: ['$3 870', '$1 341'], p1600: ['$4 128', '$1 432'], p1700: ['$4 386', '$1 521'], p1800: ['$4 644', '$1 610'], p2000: ['$5 160', '$1 788'], p2200: ['$5 676', '$1 969'], p2400: ['$6 192', '$2 147'], p2500: ['$6 450', '$2 236'], p3000: ['$7 740', '$2 682'], p3300: ['$8 514', '$4 283'], p3500: ['$9 030', '$4 542'], p3800: ['$9 804', '$4 866'], p4000: ['$10 320', '$5 190'], p4400: ['$11 352', '$5 715'], p4500: ['$11 610', '$5 841'], p4600: ['$11 868', '$5 975'], p5000: ['$12 900', '$6 490'], p5700: ['$14 706', '$7 405'], p6000: ['$15 480', '$7 788'], p6200: ['$15 996', '$8 055']
     }
 };
+
+export const row1Brands = [
+    { name: 'Audi', icon: 'https://www.carlogos.org/car-logos/audi-logo.png' },
+    { name: 'BMW', icon: 'https://www.carlogos.org/car-logos/bmw-logo.png' },
+    { name: 'BYD', icon: 'https://www.carlogos.org/car-logos/byd-logo.png' },
+    { name: 'Tesla', icon: 'https://www.carlogos.org/car-logos/tesla-logo.png' },
+    { name: 'Mercedes', icon: 'https://www.carlogos.org/car-logos/mercedes-benz-logo.png' },
+    { name: 'Mazda', icon: 'https://www.carlogos.org/car-logos/mazda-logo.png' },
+    { name: 'Chevrolet', icon: 'https://www.carlogos.org/car-logos/chevrolet-logo.png' }
+];
+
+export const row2Brands = [
+    { name: 'JAC', icon: 'https://www.carlogos.org/car-logos/jac-motors-logo.png' },
+    { name: 'Subaru', icon: 'https://www.carlogos.org/car-logos/subaru-logo.png' },
+    { name: 'Geely', icon: 'https://www.carlogos.org/car-logos/geely-logo.png' },
+    { name: 'Chery', icon: 'https://www.carlogos.org/car-logos/chery-logo.png' },
+    { name: 'Zeekr', icon: 'https://www.carlogos.org/car-logos/zeekr-logo.png' },
+    { name: 'Lada', icon: 'https://www.carlogos.org/car-logos/lada-logo.png' },
+    { name: 'Hyundai', icon: 'https://www.carlogos.org/car-logos/hyundai-logo.png' }
+];

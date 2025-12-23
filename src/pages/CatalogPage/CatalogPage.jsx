@@ -20,7 +20,6 @@ export const CatalogPage = () => {
         fetchCars();
     }, []);
 
-    // Логика пагинации работает так же, но на массиве из базы
     const indexOfLastCar = currentPage * carsPerPage;
     const indexOfFirstCar = indexOfLastCar - carsPerPage;
     const currentCars = cars.slice(indexOfFirstCar, indexOfLastCar);
@@ -31,7 +30,6 @@ export const CatalogPage = () => {
         <div className="catalogContainer">
             <aside className="filterSidebar">
                 <h3>Фильтр</h3>
-                {/* Фильтрация пока будет работать по локальному массиву */}
                 <div className="filterGroup">
                     <label>Марка</label>
                     <select>

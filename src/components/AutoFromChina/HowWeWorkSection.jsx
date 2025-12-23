@@ -1,45 +1,44 @@
-// src/components/Home/HowWeWorkSection.jsx
 import React from 'react';
 import './HowWeWorkSection.css';
 import { IoPersonOutline, IoCarOutline, IoDocumentTextOutline } from 'react-icons/io5';
-// Убедитесь, что путь к картинке верный
 import ProcessImage from '../../assets/SOK6363-762x456.jpg';
+import { useTranslation } from 'react-i18next'; // Импорт хука
 
 const processSteps = [
     {
         icon: IoPersonOutline,
-        title: 'Заявка',
-        description: 'Оставьте заявку на подбор авто',
+        titleKey: 'step_request_title',
+        descKey: 'step_request_desc',
     },
     {
         icon: IoCarOutline,
-        title: 'Подбор',
-        description: 'Находим авто в Китае под ваш бюджет',
+        titleKey: 'step_selection_title',
+        descKey: 'step_selection_desc',
     },
     {
         icon: IoDocumentTextOutline,
-        title: 'Договор',
-        description: 'Заключаем договор и влазим в растаможку',
+        titleKey: 'step_contract_title',
+        descKey: 'step_contract_desc',
     },
 ];
 
 export const HowWeWorkSection = () => {
+    const { t } = useTranslation(); // Инициализация
+
     return (
         <section className="howWeWorkSection">
-            <h2 className="sectionTitle">Как мы работаем</h2>
+            <h2 className="sectionTitle">{t('how_we_work_title')}</h2>
 
             <div className="processCardContainer">
-                {/* Изображение идет фоном или абсолютным блоком */}
                 <div className="imageWrapper">
                     <img
                         src={ProcessImage}
-                        alt="Процесс работы"
+                        alt={t('work_process_alt')}
                         className="processImage"
                     />
                     <div className="imageGradientOverlay"></div>
                 </div>
 
-                {/* Контент, который накладывается сверху */}
                 <div className="stepsWrapper">
                     <div className="stepsGrid">
                         {processSteps.map((step, index) => (
@@ -48,9 +47,9 @@ export const HowWeWorkSection = () => {
                                     <div className="stepIconWrapper">
                                         <step.icon className="stepIcon" />
                                     </div>
-                                    <h3 className="stepTitle">{step.title}</h3>
+                                    <h3 className="stepTitle">{t(step.titleKey)}</h3>
                                 </div>
-                                <p className="stepDescription">{step.description}</p>
+                                <p className="stepDescription">{t(step.descKey)}</p>
                             </div>
                         ))}
                     </div>

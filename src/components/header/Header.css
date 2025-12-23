@@ -270,6 +270,7 @@
     .langSelectBtn {
         height: 48px;
         background: #f9f9f9;
+        margin: 0;
     }
 
     /* Чтобы выпадающий список языков не раздвигал меню, а выпадал вниз */

@@ -43,7 +43,7 @@ function App() {
           const registration = await navigator.serviceWorker.ready;
 
           // --- ТЕПЕРЬ КЛЮЧ ПРАВИЛЬНО ОБРАБАТЫВАЕТСЯ ---
-          const publicKey = 'BNo6H_t9O-vE7N_uU3vL1X7Z9mU8k-P0Y5X4V3C2B1A';
+          const publicKey = 'BBAErbwegH7JhG4Dsl2u-E9RqA8dD-dlJNF2EGHpnPjXPWX0mT7CwHZAOCWnADiGNiUuzEzV0MY8BU57VeSkRNg';
           const convertedKey = urlBase64ToUint8Array(publicKey);
 
           const subscription = await registration.pushManager.subscribe({

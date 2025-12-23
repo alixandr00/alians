@@ -174,23 +174,26 @@ export const AdminPanel = () => {
     const [showAddForm, setShowAddForm] = useState(false);
     const navigate = useNavigate();
 
-    // --- НОВАЯ ФУНКЦИЯ: РАССЫЛКА ПУШЕЙ ---
     const sendPushNotification = async () => {
-        const title = prompt("Заголовок уведомления:", "Alians: Новое поступление!");
-        const body = prompt("Текст сообщения:", "Посмотрите свежие автомобили в нашем каталоге.");
-
-        if (!title || !body) return; // Отмена, если поля пустые
+        const title = prompt("Заголовок:", "Alians");
+        const body = prompt("Текст:", "Проверка пуша");
+        if (!title || !body) return;
 
         try {
-            const { data, error } = await supabase.functions.invoke('bright-endpoint', {
-                body: { title, body },
+            const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Мы НЕ передаем Authorization, чтобы тумблер JWT не блокировал нас
+                },
+                body: JSON.stringify({ title, body }),
             });
 
-            if (error) throw error;
-            alert(`Успешно! Уведомление отправлено ${data.count || 0} подписчикам.`);
+            const result = await response.json();
+            if (result.success) alert(`Отправлено! Получателей: ${result.count}`);
+            else alert("Ошибка сервера: " + result.error);
         } catch (err) {
-            console.error('Ошибка пуша:', err);
-            alert('Ошибка при отправке: ' + err.message);
+            alert("Ошибка сети (CORS): " + err.message);
         }
     };
 

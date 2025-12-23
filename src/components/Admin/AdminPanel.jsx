@@ -255,6 +255,7 @@ export const AdminPanel = () => {
         }
     };
 
+    // ali sila
 
     if (loading) return <div className="admin-loader">Загрузка данных...</div>;
 

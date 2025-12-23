@@ -176,16 +176,18 @@ export const AdminPanel = () => {
 
 
     const sendPushNotification = async () => {
-        // ВНИМАНИЕ: Если ключ sb_publishable..., убедись, что это ANON KEY
+        // Используем твой Anon Key (Publishable)
         const KEY = 'sb_publishable_lLPhJB656TOyUp1JzpsjEQ_edX-fZcY';
 
         try {
             const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
                 method: 'POST',
-                mode: 'cors', // Явно указываем режим
+                // mode: 'cors' убираем, fetch ставит его сам при наличии headers
                 headers: {
                     'Content-Type': 'application/json',
                     'apikey': KEY,
+                    // Важно: для anon key иногда лучше НЕ передавать Authorization Bearer, 
+                    // если функция настроена как публичная или требует только apikey
                     'Authorization': `Bearer ${KEY}`
                 },
                 body: JSON.stringify({
@@ -194,17 +196,17 @@ export const AdminPanel = () => {
                 }),
             });
 
-            // Если CORS прошел, но есть ошибка сервера, мы ее увидим тут
             if (!response.ok) {
+                // Если получаем 401 или 403, значит функция ждет Service Role Key
                 const errData = await response.json().catch(() => ({}));
-                throw new Error(errData.error || `Ошибка сервера: ${response.status}`);
+                throw new Error(errData.error || `Ошибка: ${response.status}`);
             }
 
             const data = await response.json();
             alert(`Отправлено успешно! Число уведомлений: ${data.count}`);
 
         } catch (err) {
-            console.error("Ошибка детально:", err);
+            console.error("Детальная ошибка:", err);
             alert("Ошибка: " + err.message);
         }
     };

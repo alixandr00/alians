@@ -58,7 +58,7 @@ function App() {
     // 3. Запускаем таймер: предложим подписаться через 2 минуты (120000 мс)
     const pushTimer = setTimeout(() => {
       setupPushSubscription();
-    }, 120000);
+    }, 60000); // <--- 60000 мс = 1 минута
 
     return () => clearTimeout(pushTimer);
   }, []);

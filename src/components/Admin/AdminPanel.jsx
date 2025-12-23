@@ -174,33 +174,64 @@ export const AdminPanel = () => {
     const [showAddForm, setShowAddForm] = useState(false);
     const navigate = useNavigate();
 
+    // const sendPushNotification = async () => {
+    //     const ANON_KEY = 'sb_publishable_lLPhJB656TOyUp1JzpsjEQ_edX-fZcY'; // Проверь его еще раз
+
+    //     try {
+    //         const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'apikey': ANON_KEY,
+    //                 'Authorization': `Bearer ${ANON_KEY}` // ОБЯЗАТЕЛЬНО ДОБАВЬ ЭТО
+    //             },
+    //             body: JSON.stringify({
+    //                 title: "Alians",
+    //                 body: "Тестовое уведомление"
+    //             }),
+    //         });
+
+    //         if (!response.ok) {
+    //             const errorData = await response.json();
+    //             throw new Error(errorData.error || 'Ошибка сервера');
+    //         }
+
+    //         // eslint-disable-next-line no-unused-vars
+    //         const data = await response.json();
+    //         alert("Ура! Пуш отправлен!");
+    //     } catch (err) {
+    //         console.error("Детальная ошибка:", err);
+    //         alert("Ошибка: " + err.message);
+    //     }
+    // };
+
     const sendPushNotification = async () => {
-        const ANON_KEY = 'sb_publishable_lLPhJB656TOyUp1JzpsjEQ_edX-fZcY'; // Проверь его еще раз
+        // Вставь сюда свой длинный ключ из image_009d1f.jpg
+        const PUBLIC_ANON_KEY = 'sb_publishable_llPhJB656T0yUp1JzpsjEQ_edX-f...';
 
         try {
             const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': ANON_KEY,
-                    'Authorization': `Bearer ${ANON_KEY}` // ОБЯЗАТЕЛЬНО ДОБАВЬ ЭТО
+                    'apikey': PUBLIC_ANON_KEY,
+                    'Authorization': `Bearer ${PUBLIC_ANON_KEY}`
                 },
                 body: JSON.stringify({
                     title: "Alians",
-                    body: "Тестовое уведомление"
+                    body: "Проверка: уведомления работают!"
                 }),
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Ошибка сервера');
+                const errorText = await response.text();
+                throw new Error(`Сервер ответил: ${response.status} - ${errorText}`);
             }
 
-            // eslint-disable-next-line no-unused-vars
             const data = await response.json();
-            alert("Ура! Пуш отправлен!");
+            alert(`Ура! Уведомление отправлено ${data.count} пользователям!`);
         } catch (err) {
-            console.error("Детальная ошибка:", err);
+            console.error("Критическая ошибка:", err);
             alert("Ошибка: " + err.message);
         }
     };

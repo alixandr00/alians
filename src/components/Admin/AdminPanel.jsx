@@ -176,8 +176,14 @@ export const AdminPanel = () => {
 
 
     const sendPushNotification = async () => {
-        // Используем твой Anon Key (Publishable)
+        // Твой Anon Key (Publishable) со скриншота
         const KEY = 'sb_publishable_lLPhJB656TOyUp1JzpsjEQ_edX-fZcY';
+
+        // 1. Спрашиваем у администратора, что отправить
+        const userMessage = window.prompt("Введите текст уведомления для клиентов Alians:", "Все работает!");
+
+        // Если нажали "Отмена" или оставили пустым — ничего не отправляем
+        if (userMessage === null || userMessage.trim() === "") return;
 
         try {
             const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
@@ -189,18 +195,19 @@ export const AdminPanel = () => {
                 },
                 body: JSON.stringify({
                     title: "Alians",
-                    body: "Все работает!"
+                    body: userMessage // Теперь здесь твой текст из prompt
                 }),
             });
 
             if (!response.ok) {
-                // Если получаем 401 или 403, значит функция ждет Service Role Key
                 const errData = await response.json().catch(() => ({}));
-                throw new Error(errData.error || `Ошибка: ${response.status}`);
+                throw new Error(errData.error || `Ошибка сервера: ${response.status}`);
             }
 
             const data = await response.json();
-            alert(`Отправлено успешно! Число уведомлений: ${data.count}`);
+
+            // Выводим красивый отчет
+            alert(`Успешно!\nСообщение: "${userMessage}"\nПолучателей: ${data.count}`);
 
         } catch (err) {
             console.error("Детальная ошибка:", err);

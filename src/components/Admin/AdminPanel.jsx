@@ -205,6 +205,8 @@ export const AdminPanel = () => {
             }
 
             const data = await response.json();
+            // aaa
+
 
             // Выводим красивый отчет
             alert(`Успешно!\nСообщение: "${userMessage}"\nПолучателей: ${data.sent}`);

@@ -45,12 +45,14 @@ function App() {
 
         // Твой публичный VAPID ключ
         const publicKey = 'BBAErbwegH7JhG4Dsl2u-E9RqA8dD-dlJNF2EGHpnPjXPWX0mT7CwHZAOCWnADiGNiUuzEzV0MY8BU57VeSkRNg';
-        const convertedKey = urlBase64ToUint8Array(publicKey);
 
+        // Внутри функции setupPushSubscription в App.jsx
         const subscription = await registration.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: convertedKey
+          applicationServerKey: urlBase64ToUint8Array(publicKey)
         });
+
+        const subscriptionJson = subscription.toJSON();
 
         // --- ПРОВЕРКА: Есть ли уже такая подписка в базе? ---
         // Это предотвратит ошибки дубликатов и лишние запросы
@@ -64,7 +66,12 @@ function App() {
         if (!existing) {
           const { error } = await supabase
             .from('push_subscriptions')
-            .insert([{ subscription_data: subscription }]);
+            .insert([{
+              subscription_data: {
+                endpoint: subscriptionJson.endpoint,
+                keys: subscriptionJson.keys
+              }
+            }]);
 
           if (error) throw error;
           console.log('УСПЕХ: Подписка сохранена!');

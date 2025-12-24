@@ -207,7 +207,7 @@ export const AdminPanel = () => {
             const data = await response.json();
 
             // Выводим красивый отчет
-            alert(`Успешно!\nСообщение: "${userMessage}"\nПолучателей: ${data.count}`);
+            alert(`Успешно!\nСообщение: "${userMessage}"\nПолучателей: ${data.sent}`);
 
         } catch (err) {
             console.error("Детальная ошибка:", err);

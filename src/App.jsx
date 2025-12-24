@@ -40,15 +40,20 @@ function App() {
       try {
         const permission = await Notification.requestPermission();
         if (permission !== 'granted') return;
-        // aa
-
 
         const registration = await navigator.serviceWorker.ready;
 
-        // Твой публичный VAPID ключ
+        // --- ВОТ ЭТОТ КУСОК ПОМОЖЕТ ТЕЛЕФОНУ ---
+        // Сначала находим старую подписку и удаляем её принудительно
+        const oldSubscription = await registration.pushManager.getSubscription();
+        if (oldSubscription) {
+          await oldSubscription.unsubscribe();
+          console.log('Старая подписка удалена');
+        }
+
         const publicKey = 'BBAErbwegH7JhG4Dsl2u-E9RqA8dD-dlJNF2EGHpnPjXPWX0mT7CwHZAOCWnADiGNiUuzEzV0MY8BU57VeSkRNg';
 
-        // Внутри функции setupPushSubscription в App.jsx
+        // Создаем абсолютно новую подписку
         const subscription = await registration.pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(publicKey)
@@ -56,36 +61,23 @@ function App() {
 
         const subscriptionJson = subscription.toJSON();
 
-        // --- ПРОВЕРКА: Есть ли уже такая подписка в базе? ---
-        // Это предотвратит ошибки дубликатов и лишние запросы
-        const endpoint = subscription.endpoint;
-        const { data: existing } = await supabase
+        // Сразу сохраняем в базу (без проверок на existing, чтобы точно залетело)
+        const { error } = await supabase
           .from('push_subscriptions')
-          .select('id')
-          .eq('subscription_data->>endpoint', endpoint)
-          .maybeSingle();
+          .insert([{
+            subscription_data: {
+              endpoint: subscriptionJson.endpoint,
+              keys: subscriptionJson.keys
+            }
+          }]);
 
-        if (!existing) {
-          const { error } = await supabase
-            .from('push_subscriptions')
-            .insert([{
-              subscription_data: {
-                endpoint: subscriptionJson.endpoint,
-                keys: subscriptionJson.keys
-              }
-            }]);
-
-          if (error) throw error;
-          console.log('УСПЕХ: Подписка сохранена!');
-        } else {
-          console.log('Подписка уже существует в базе.');
-        }
+        if (error) console.error('Ошибка записи:', error);
+        else alert('УСПЕХ: Телефон зарегистрирован!');
 
       } catch (error) {
-        console.error('Ошибка при настройке уведомлений:', error.message);
+        console.error('Ошибка:', error.message);
       }
     };
-
     // Запуск через 5 секунд после загрузки, чтобы не тормозить сайт
     const timer = setTimeout(setupPushSubscription, 5000);
     return () => clearTimeout(timer);

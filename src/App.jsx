@@ -12,78 +12,84 @@ import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import { AdminPanel } from './components/Admin/AdminPanel';
 import { supabase } from './api/supabaseClient';
 
-// Функция-конвертер ключа VAPID
-function urlBase64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
+// ИМПОРТЫ FIREBASE
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+
+// КОНФИГ FIREBASE (Твой из консоли)
+const firebaseConfig = {
+  apiKey: "AIzaSyDJciFDRXMa0uJYLvYVxqtyEG7xF3smb2A",
+  authDomain: "my-push-app-577de.firebaseapp.com",
+  projectId: "my-push-app-577de",
+  storageBucket: "my-push-app-577de.firebasestorage.app",
+  messagingSenderId: "450323374994",
+  appId: "1:450323374994:web:da319d4fb607fcd0e9174b"
+};
+
+// Инициализация
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    // 1. Регистрация Service Worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('SW зарегистрирован'))
-        .catch(err => console.error('Ошибка SW:', err));
-    }
-
-    const setupPushSubscription = async () => {
+    const setupCloudMessaging = async () => {
       try {
+        // 1. Запрашиваем разрешение
         const permission = await Notification.requestPermission();
-        if (permission !== 'granted') return;
-
-        const registration = await navigator.serviceWorker.ready;
-
-        // --- ВОТ ЭТОТ КУСОК ПОМОЖЕТ ТЕЛЕФОНУ ---
-        // Сначала находим старую подписку и удаляем её принудительно
-        const oldSubscription = await registration.pushManager.getSubscription();
-        if (oldSubscription) {
-          await oldSubscription.unsubscribe();
-          console.log('Старая подписка удалена');
+        if (permission !== 'granted') {
+          console.log('Пользователь отказал в уведомлениях');
+          return;
         }
 
-        const publicKey = 'BBAErbwegH7JhG4Dsl2u-E9RqA8dD-dlJNF2EGHpnPjXPWX0mT7CwHZAOCWnADiGNiUuzEzV0MY8BU57VeSkRNg';
-
-        // Создаем абсолютно новую подписку
-        const subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(publicKey)
+        // 2. Получаем токен (ВСТАВЬ СЮДА СВОЙ VAPID KEY ИЗ FIREBASE)
+        // Найти тут: Project Settings -> Cloud Messaging -> Web Push certificates
+        const currentToken = await getToken(messaging, {
+          vapidKey: 'BHEmaEkuy9d5KTA78i5BRPBNuEJI3y-y-AVpR6bKybAv1ryrGF48E61Ap-wipEzL1CUnKcQF_788Cz0dZVzJRmk'
         });
 
-        const subscriptionJson = subscription.toJSON();
+        if (currentToken) {
+          console.log('FCM Token получен:', currentToken);
 
-        // Сразу сохраняем в базу (без проверок на existing, чтобы точно залетело)
-        const { error } = await supabase
-          .from('push_subscriptions')
-          .insert([{
-            subscription_data: {
-              endpoint: subscriptionJson.endpoint,
-              keys: subscriptionJson.keys
-            }
-          }]);
+          // 3. Проверяем в Supabase, есть ли такой токен
+          const { data: existing } = await supabase
+            .from('push_subscriptions')
+            .select('id')
+            .eq('token', currentToken) // Предполагаем, что колонка называется 'token'
+            .maybeSingle();
 
-        if (error) console.error('Ошибка записи:', error);
-        else alert('УСПЕХ: Телефон зарегистрирован!');
+          if (!existing) {
+            console.log('Новый токен, сохраняю в базу...');
+            const { error } = await supabase
+              .from('push_subscriptions')
+              .insert([{
+                token: currentToken,
+                subscription_data: { platform: 'firebase' } // для совместимости
+              }]);
 
+            if (error) console.error('Ошибка сохранения в базу:', error);
+            else console.log('УСПЕХ: Токен сохранен!');
+          }
+        }
       } catch (error) {
-        console.error('Ошибка:', error.message);
+        console.error('Ошибка Firebase:', error);
       }
     };
-    // Запуск через 5 секунд после загрузки, чтобы не тормозить сайт
-    const timer = setTimeout(setupPushSubscription, 5000);
+
+    // Слушаем входящие сообщения, когда сайт открыт
+    onMessage(messaging, (payload) => {
+      console.log('Сообщение в фокусе:', payload);
+      alert(`${payload.notification.title}\n${payload.notification.body}`);
+    });
+
+    // Запуск через 5 секунд
+    const timer = setTimeout(setupCloudMessaging, 5000);
     return () => clearTimeout(timer);
   }, []);
 
-  // Определение языка (твой оригинальный код)
+  // Определение языка
   useEffect(() => {
     const detectUserLanguage = () => {
       const savedLang = localStorage.getItem('i18nextLng');

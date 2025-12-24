@@ -176,44 +176,62 @@ export const AdminPanel = () => {
 
 
     const sendPushNotification = async () => {
-        // Твой Anon Key (Publishable) со скриншота
-        const KEY = 'sb_publishable_lLPhJB656TOyUp1JzpsjEQ_edX-fZcY';
+        // 1. ВСТАВЬ СЮДА СВОЙ SERVER KEY ИЗ FIREBASE (Settings -> Cloud Messaging)
+        const FIREBASE_SERVER_KEY = 'AIzaSyDJciFDRXMa0uJYLvYVxqtyEG7xF3smb2A';
 
-        // 1. Спрашиваем у администратора, что отправить
-        const userMessage = window.prompt("Введите текст уведомления для клиентов Alians:", "Все работает!");
-
-        // Если нажали "Отмена" или оставили пустым — ничего не отправляем
-        if (userMessage === null || userMessage.trim() === "") return;
+        // 2. Спрашиваем текст у админа
+        const userMessage = window.prompt("Введите текст уведомления для всех клиентов:", "У нас новое поступление авто!");
+        if (!userMessage || userMessage.trim() === "") return;
 
         try {
-            const response = await fetch('https://yqqanelvkifakndsjujz.supabase.co/functions/v1/bright-endpoint', {
+            // 3. Получаем ВСЕ токены из Supabase
+            const { data: subscribers, error: dbError } = await supabase
+                .from('push_subscriptions')
+                .select('token');
+
+            if (dbError) throw new Error("Ошибка получения подписчиков: " + dbError.message);
+            if (!subscribers || subscribers.length === 0) {
+                alert("В базе еще нет ни одного подписанного устройства!");
+                return;
+            }
+
+            // Вытаскиваем только чистые токены в массив
+            const tokens = subscribers.map(s => s.token).filter(Boolean);
+            console.log(`Найдено получателей: ${tokens.length}`);
+
+            // 4. Отправляем запрос в Firebase (Legacy HTTP протокол для простоты из фронтенда)
+            // ВНИМАНИЕ: Это сработает, если в Firebase включен Legacy API
+            // Добавляем прокси перед ссылкой Google, чтобы обойти CORS
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+            const targetUrl = 'https://fcm.googleapis.com/fcm/send';
+
+            const response = await fetch(proxyUrl + targetUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': KEY,
-                    'Authorization': `Bearer ${KEY}`
+                    'Authorization': `key=${FIREBASE_SERVER_KEY}`,
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({
-                    title: "Alians",
-                    body: userMessage // Теперь здесь твой текст из prompt
-                }),
+                    registration_ids: tokens,
+                    notification: {
+                        title: "Alians Auto",
+                        body: userMessage,
+                        icon: "/logo192.png"
+                    }
+                })
             });
+            const result = await response.json();
 
-            if (!response.ok) {
-                const errData = await response.json().catch(() => ({}));
-                throw new Error(errData.error || `Ошибка сервера: ${response.status}`);
+            if (response.ok) {
+                alert(`Успешно!\nОтправлено: ${result.success}\nОшибок: ${result.failure}`);
+            } else {
+                throw new Error(result.error || "Ошибка при отправке через Firebase");
             }
 
-            const data = await response.json();
-            // aaa
-
-
-            // Выводим красивый отчет
-            alert(`Успешно!\nСообщение: "${userMessage}"\nПолучателей: ${data.sent}`);
-
         } catch (err) {
-            console.error("Детальная ошибка:", err);
-            alert("Ошибка: " + err.message);
+            console.error("Детальная ошибка рассылки:", err);
+            alert("Ошибка рассылки: " + err.message);
         }
     };
     const fetchCars = async () => {

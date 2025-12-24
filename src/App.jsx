@@ -40,6 +40,8 @@ function App() {
       try {
         const permission = await Notification.requestPermission();
         if (permission !== 'granted') return;
+        // aa
+
 
         const registration = await navigator.serviceWorker.ready;
 

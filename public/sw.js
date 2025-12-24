@@ -1,41 +1,54 @@
 /* eslint-disable no-undef */
 // public/sw.js
 
+// Устанавливаем SW и сразу активируем его
+self.addEventListener('install', () => {
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+    event.waitUntil(clients.claim());
+    console.log('[Service Worker] Активирован и готов к работе');
+});
+
 self.addEventListener('push', (event) => {
     console.log('[Service Worker] Push получен');
 
+    // Значения по умолчанию
     let data = {
         title: 'Alians',
-        body: 'Новое уведомление!',
+        body: 'У вас новое уведомление!',
         icon: '/logo192.png'
     };
 
-    // Проверяем, есть ли данные в событии и пытаемся их распарсить
     if (event.data) {
         try {
-            // Пытаемся прочитать как JSON
+            // Пытаемся распарсить JSON от сервера
             const jsonData = event.data.json();
             data.title = jsonData.title || data.title;
             data.body = jsonData.body || data.body;
             // eslint-disable-next-line no-unused-vars
         } catch (e) {
-            // Если не JSON (например, простая строка), берем как текст
-            console.warn('[Service Worker] Данные не в формате JSON, читаем как текст');
-            data.body = event.data.text();
+            // Если сервер прислал просто текст
+            console.warn('[Service Worker] Данные не в JSON, читаем как текст');
+            const textData = event.data.text();
+            if (textData) data.body = textData;
         }
     }
 
     const options = {
         body: data.body,
-        icon: '/logo192.png',   // Убедись, что этот файл есть в папке public
-        badge: '/logo192.png',  // Маленькая иконка в строке состояния
+        icon: '/logo192.png',
+        badge: '/logo192.png',
         vibrate: [200, 100, 200],
+        tag: 'alians-notification', // Группирует уведомления, чтобы не спамить
+        renotify: true,             // Вибрировать даже если есть старое уведомление
         data: {
             dateOfArrival: Date.now(),
             primaryKey: '1'
         },
         actions: [
-            { action: 'explore', title: 'Открыть сайт' },
+            { action: 'explore', title: 'Открыть' },
             { action: 'close', title: 'Закрыть' }
         ]
     };
@@ -49,16 +62,16 @@ self.addEventListener('notificationclick', (event) => {
     console.log('[Service Worker] Клик по уведомлению');
     event.notification.close();
 
+    // Логика открытия сайта
     event.waitUntil(
-        // eslint-disable-next-line no-undef
-        clients.matchAll({ type: 'window' }).then((clientList) => {
-            // Если вкладка уже открыта, переключаемся на нее
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+            // Пытаемся найти уже открытую вкладку нашего сайта
             for (const client of clientList) {
-                if (client.url === '/' && 'focus' in client) {
+                if ('focus' in client) {
                     return client.focus();
                 }
             }
-            // Если закрыта — открываем новую
+            // Если вкладок нет — открываем главную
             if (clients.openWindow) {
                 return clients.openWindow('/');
             }

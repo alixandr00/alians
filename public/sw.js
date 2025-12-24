@@ -29,7 +29,6 @@ self.addEventListener('push', (event) => {
             data.body = jsonData.body || data.body;
             // eslint-disable-next-line no-unused-vars
         } catch (e) {
-            // Если сервер прислал просто текст
             console.warn('[Service Worker] Данные не в JSON, читаем как текст');
             const textData = event.data.text();
             if (textData) data.body = textData;

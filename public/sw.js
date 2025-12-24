@@ -18,6 +18,6 @@ self.addEventListener('notificationclick', (event) => {
     event.notification.close();
     event.waitUntil(
         // eslint-disable-next-line no-undef
-        clients.openWindow('/') // При нажатии откроет главную страницу
+        clients.openWindow('/')
     );
 });

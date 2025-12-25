@@ -3,22 +3,27 @@ import { supabase } from '../../api/supabaseClient';
 import './AddCarForm.css'; // <-- Подключаем наш новый красивый CSS
 
 const BRANDS_MODELS = {
-    'Audi': ['A4', 'A6', 'Q5', 'Q7', 'e-tron'],
-    'BMW': ['3 Series', '5 Series', 'X5', 'X7', 'iX'],
-    'BYD': ['Han', 'Tang', 'Song', 'QinPlus', 'Seal'],
+    'Audi': ['A4', 'A6', 'A8', 'Q5', 'Q7', 'Q8', 'e-tron'],
+    'BMW': ['3 Series', '5 Series', '7 Series', 'X3', 'X5', 'X7', 'iX'],
+    'BYD': ['Han', 'Tang', 'Song', 'Qin Plus', 'Seal', 'Dolphin'],
     'Tesla': ['Model 3', 'Model Y', 'Model S', 'Model X'],
-    'Mercedes': ['C-Class', 'E-Class', 'S-Class', 'GLE', 'EQS'],
-    'Mazda': ['CX-5', 'CX-30', 'CX-9', 'Mazda 6'],
-    'Chevrolet': ['Tahoe', 'Camaro', 'Malibu', 'Equinox'],
-    'JAC': ['JS4', 'JS6', 'T8 Pro'],
-    'Subaru': ['Forester', 'Outback', 'Impreza'],
-    'Geely': ['Monjaro', 'Tugella', 'Coolray', 'Atlas'],
-    'Chery': ['Tiggo 4', 'Tiggo 7 Pro', 'Tiggo 8 Pro'],
-    'Zeekr': ['001', '009', 'X'],
-    'Lada': ['Vesta', 'Granta', 'Niva Travel'],
-    'Hyundai': ['Palisade', 'Santa Fe', 'Tucson', 'Elantra']
+    'Mercedes': ['C-Class', 'E-Class', 'S-Class', 'GLE', 'GLS', 'EQS'],
+    'Mazda': ['CX-5', 'CX-30', 'CX-9', 'Mazda 3', 'Mazda 6'],
+    'Chevrolet': ['Tahoe', 'Camaro', 'Malibu', 'Equinox', 'Monza'],
+    'JAC': ['JS4', 'JS6', 'T8 Pro', 'iEVA50'],
+    'Subaru': ['Forester', 'Outback', 'Impreza', 'XV'],
+    'Geely': ['Monjaro', 'Tugella', 'Coolray', 'Atlas', 'Okavango', 'Preface'],
+    'Chery': ['Tiggo 4 Pro', 'Tiggo 7 Pro', 'Tiggo 8 Pro', 'Arrizo 8'],
+    'Zeekr': ['001', '007', '009', 'X'],
+    'Lada': ['Vesta', 'Granta', 'Niva Travel', 'Niva Legend'],
+    'Hyundai': ['Palisade', 'Santa Fe', 'Tucson', 'Elantra', 'Sonata', 'Staria'],
+    'Kia': ['Sportage', 'Sorento', 'K5', 'Carnival', 'EV6', 'Seltos'],
+    'Toyota': ['Camry', 'RAV4', 'Land Cruiser 300', 'Prado', 'Highlander'],
+    'LiXiang': ['L7', 'L8', 'L9'],
+    'Voyah': ['Free', 'Dreamer', 'Passion'],
+    'Changan': ['UNI-K', 'UNI-V', 'CS55 Plus', 'CS35 Plus'],
+    'Exeed': ['RX', 'VX', 'TXL', 'LX']
 };
-
 const INITIAL_STATE = {
     title: '', brand: '', price: '', year: '',
     transmission: 'Автомат', fuel: 'Бензин',

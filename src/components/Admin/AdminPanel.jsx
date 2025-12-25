@@ -199,9 +199,6 @@ export const AdminPanel = () => {
             const tokens = subscribers.map(s => s.token).filter(Boolean);
             console.log(`Найдено получателей: ${tokens.length}`);
 
-            // 4. Отправляем запрос в Firebase (Legacy HTTP протокол для простоты из фронтенда)
-            // ВНИМАНИЕ: Это сработает, если в Firebase включен Legacy API
-            // Добавляем прокси перед ссылкой Google, чтобы обойти CORS
             const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
             const targetUrl = 'https://fcm.googleapis.com/fcm/send';
 

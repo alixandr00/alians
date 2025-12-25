@@ -22,12 +22,12 @@
     top: 60%;
     left: 6%;
     transform: translateY(-50%);
-    background-color: hsl(0, 0%, 100%);
+    background-color: #fff;
     padding: 25px 30px;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     width: 60%;
-    /* min-width: 650px; */
+    box-sizing: border-box;
 }
 
 .formRow {
@@ -35,6 +35,7 @@
 }
 
 .topRowInputs {
+    gap: 15px;
     margin-bottom: 15px;
 }
 
@@ -43,12 +44,10 @@
     display: flex;
     align-items: center;
     background-color: #f0f0f0;
-    border-radius: 6px;
-    padding: 10px 0;
-}
-
-.searchModel {
-    margin-right: 15px;
+    border-radius: 8px;
+    padding: 10px 15px;
+    position: relative;
+    /* Для позиционирования стрелочки */
 }
 
 .inputIcon,
@@ -56,15 +55,36 @@
     color: #999;
     font-size: 18px;
     margin-right: 10px;
+    flex-shrink: 0;
 }
 
-.inputField {
+/* Стили для Select */
+.selectField {
     border: none;
     outline: none;
-    padding: 5px 0;
-    flex-grow: 1;
     background: transparent;
     font-size: 16px;
+    flex-grow: 1;
+    cursor: pointer;
+    color: #333;
+    appearance: none;
+    /* Убирает стандартную стрелку браузера */
+    -webkit-appearance: none;
+    padding-right: 20px;
+}
+
+/* Цвет плейсхолдера для первого неактивного варианта */
+.selectField option:first-child {
+    color: #999;
+}
+
+/* Иконка шеврона (стрелочка вниз) */
+.chevronIcon {
+    position: absolute;
+    right: 15px;
+    color: #999;
+    font-size: 14px;
+    pointer-events: none;
 }
 
 .bottomRowFilters {
@@ -76,13 +96,18 @@
     background-color: #387b64;
     color: #ffffff;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 25px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
     font-size: 16px;
     margin-right: 20px;
     flex-shrink: 0;
+    transition: background 0.3s;
+}
+
+.buttonShowCar:hover {
+    background-color: #2d6350;
 }
 
 .filterTags {
@@ -132,94 +157,57 @@
     z-index: 2;
 }
 
-/* --- МОБИЛЬНАЯ ВЕРСИЯ (КАК НА ФОТО) --- */
+/* --- МОБИЛЬНАЯ ВЕРСИЯ --- */
 @media (max-width: 900px) {
     .quickSearchSection {
         padding: 20px;
-        /* Убираем левый отступ 5rem */
     }
 
     .sectionTitle {
         font-size: 22px;
-        text-align: left;
         margin-bottom: 20px;
     }
 
     .searchContainer {
-        margin: 0;
-        min-height: auto;
-        overflow: visible;
-        display: flex;
-        flex-direction: column;
         padding: 0;
+        min-height: auto;
     }
 
     .searchForm {
         position: static;
         transform: none;
         width: 100%;
-        box-sizing: border-box;
-        /* min-width: 0; */
         padding: 20px;
-        /* padding: 20px 15px; */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
 
-    .formRow {
+    .topRowInputs {
         flex-direction: column;
-        /* Все инпуты в колонку */
-        gap: 12px;
+        gap: 10px;
     }
 
-    .searchModel {
-        margin-right: 0;
-        /* Убираем правый отступ */
-    }
-
-    .inputGroup {
-        width: 100%;
-    }
-
-    /* Блок с фильтрами и кнопкой */
     .bottomRowFilters {
-        margin-top: 15px;
         flex-direction: column;
-        /* Кнопка и теги друг под другом */
         align-items: stretch;
     }
 
     .filterTags {
         display: grid;
-        /* Делаем сетку как на фото */
         grid-template-columns: repeat(2, 1fr);
-        /* 2 колонки */
         gap: 8px;
         margin-bottom: 20px;
         order: 1;
-        /* Теги сверху */
     }
 
-    /* Третий тег (пробег) растягиваем на всю ширину, если их три */
     .filterTag:nth-child(3) {
         grid-column: span 2;
     }
 
-    .filterTag {
-        justify-content: center;
-        padding: 10px;
-        font-size: 13px;
-    }
-
     .buttonShowCar {
         order: 2;
-        /* Кнопка в самом низу */
         margin-right: 0;
         width: 100%;
-        padding: 14px;
-        text-align: center;
     }
 
-    /* Скрываем картинку-фон на мобилках, чтобы не мешала форме */
     .searchBackground {
         display: none;
     }

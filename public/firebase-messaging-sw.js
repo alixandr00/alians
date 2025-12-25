@@ -20,7 +20,7 @@ messaging.onBackgroundMessage((payload) => {
     const title = payload.notification?.title || "Alians Auto";
     const options = {
         body: payload.notification?.body || "Новое уведомление для вас!",
-        icon: "/favicon.ico" // Используем стандартную иконку, которая точно есть
+        icon: "/favicon.ico"
     };
     return self.registration.showNotification(title, options);
 });

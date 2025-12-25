@@ -3,7 +3,6 @@
 .admin-form-container {
     max-width: 750px;
     width: 95%;
-    /* Чуть меньше 100%, чтобы были отступы по бокам на мобилках */
     margin: 20px auto;
     padding: 30px;
     background: #ffffff;

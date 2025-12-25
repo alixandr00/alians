@@ -644,3 +644,126 @@
     overflow-x: auto;
     scrollbar-width: none;
 }
+
+.modelsFloatingPicker {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.3s ease;
+    position: relative;
+    z-index: 100;
+}
+
+.pickerHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.modelsGridMini {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.modelChip {
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: 1px solid #eee;
+    background: #f8f9fa;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.modelChip.active {
+    background: #387b64;
+    /* Твой зеленый */
+    color: white;
+    border-color: #387b64;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.brandModelGroup {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.brandModelGroup:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.groupBrandTitle {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.groupedModelsContainer {
+    max-height: 400px;
+    /* Если моделей очень много, появится скролл внутри окошка */
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Стили для скроллбара внутри окна */
+.groupedModelsContainer::-webkit-scrollbar {
+    width: 4px;
+}
+
+.groupedModelsContainer::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+    border-radius: 10px;
+}
+
+.pickerActions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.applyModelsBtn {
+    background-color: #387b64;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.clearModelsBtn {
+    border: 1px solid #ccc;
+    color: #888585;
+    background-color: transparent;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}

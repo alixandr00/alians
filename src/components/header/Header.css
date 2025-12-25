@@ -12,10 +12,49 @@
     border: 1px solid #e0e0e0;
 }
 
+.phoneNumberInput {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    width: 180px;
+    /* Ширина на ПК */
+    padding: 0;
+    line-height: normal;
+    /* Убирает скачки текста */
+}
+
 .contactSearchBlock {
     display: flex;
-    justify-content: center;
     align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 50px;
+    padding: 8px 16px;
+    gap: 10px;
+    transition: border-color 0.3s;
+}
+
+.contactSearchBlock:focus-within {
+    border-color: #0dbe5d;
+    /* Подсветка при клике */
+}
+
+.searchWrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+}
+
+.headerIcon.searchIcon {
+    font-size: 18px;
+    color: #888;
+    display: flex;
+    align-items: center;
+    /* Центрируем иконку строго по центру */
 }
 
 .logoBlock {
@@ -276,7 +315,8 @@
     /* Чтобы выпадающий список языков не раздвигал меню, а выпадал вниз */
     .langDropdownList {
         position: absolute;
-        top: 100%;
+        top: auto;
+        bottom: calc(100% + 5px);
         left: 0;
         width: 100%;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);

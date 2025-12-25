@@ -369,21 +369,77 @@ export const customsRates = {
 };
 
 export const row1Brands = [
-    { name: 'Audi', icon: 'https://www.carlogos.org/car-logos/audi-logo.png' },
-    { name: 'BMW', icon: 'https://www.carlogos.org/car-logos/bmw-logo.png' },
-    { name: 'BYD', icon: 'https://www.carlogos.org/car-logos/byd-logo.png' },
-    { name: 'Tesla', icon: 'https://www.carlogos.org/car-logos/tesla-logo.png' },
-    { name: 'Mercedes', icon: 'https://www.carlogos.org/car-logos/mercedes-benz-logo.png' },
-    { name: 'Mazda', icon: 'https://www.carlogos.org/car-logos/mazda-logo.png' },
-    { name: 'Chevrolet', icon: 'https://www.carlogos.org/car-logos/chevrolet-logo.png' }
+    {
+        name: 'Audi',
+        icon: 'https://www.carlogos.org/car-logos/audi-logo.png',
+        models: ['A4', 'A6', 'Q5', 'Q7', 'Q8', 'e-tron', 'A8']
+    },
+    {
+        name: 'BMW',
+        icon: 'https://www.carlogos.org/car-logos/bmw-logo.png',
+        models: ['3 Series', '5 Series', 'X5', 'X7', 'iX', 'M4', 'X3']
+    },
+    {
+        name: 'BYD',
+        icon: 'https://www.carlogos.org/car-logos/byd-logo.png',
+        models: ['Han', 'Tang', 'Song', 'Qin', 'Seal', 'Dolphin', 'Yuan Plus']
+    },
+    {
+        name: 'Tesla',
+        icon: 'https://www.carlogos.org/car-logos/tesla-logo.png',
+        models: ['Model 3', 'Model Y', 'Model S', 'Model X', 'Cybertruck']
+    },
+    {
+        name: 'Mercedes',
+        icon: 'https://www.carlogos.org/car-logos/mercedes-benz-logo.png',
+        models: ['C-Class', 'E-Class', 'S-Class', 'GLE', 'GLS', 'EQS', 'GLC']
+    },
+    {
+        name: 'Mazda',
+        icon: 'https://www.carlogos.org/car-logos/mazda-logo.png',
+        models: ['CX-5', 'CX-9', 'CX-30', 'CX-60', 'Mazda 3', 'Mazda 6']
+    },
+    {
+        name: 'Chevrolet',
+        icon: 'https://www.carlogos.org/car-logos/chevrolet-logo.png',
+        models: ['Tahoe', 'Suburban', 'Camaro', 'Malibu', 'Equinox', 'Trax']
+    }
 ];
 
 export const row2Brands = [
-    { name: 'JAC', icon: 'https://www.carlogos.org/car-logos/jac-motors-logo.png' },
-    { name: 'Subaru', icon: 'https://www.carlogos.org/car-logos/subaru-logo.png' },
-    { name: 'Geely', icon: 'https://www.carlogos.org/car-logos/geely-logo.png' },
-    { name: 'Chery', icon: 'https://www.carlogos.org/car-logos/chery-logo.png' },
-    { name: 'Zeekr', icon: 'https://www.carlogos.org/car-logos/zeekr-logo.png' },
-    { name: 'Lada', icon: 'https://www.carlogos.org/car-logos/lada-logo.png' },
-    { name: 'Hyundai', icon: 'https://www.carlogos.org/car-logos/hyundai-logo.png' }
+    {
+        name: 'JAC',
+        icon: 'https://www.carlogos.org/car-logos/jac-motors-logo.png',
+        models: ['JS4', 'JS6', 'J7', 'T8 Pro', 'iEVA50']
+    },
+    {
+        name: 'Subaru',
+        icon: 'https://www.carlogos.org/car-logos/subaru-logo.png',
+        models: ['Forester', 'Outback', 'XV', 'Ascent', 'WRX']
+    },
+    {
+        name: 'Geely',
+        icon: 'https://www.carlogos.org/car-logos/geely-logo.png',
+        models: ['Coolray', 'Monjaro', 'Tugella', 'Atlas', 'Emgrand']
+    },
+    {
+        name: 'Chery',
+        icon: 'https://www.carlogos.org/car-logos/chery-logo.png',
+        models: ['Tiggo 4 Pro', 'Tiggo 7 Pro', 'Tiggo 8 Pro', 'Arrizo 8']
+    },
+    {
+        name: 'Zeekr',
+        icon: 'https://www.carlogos.org/car-logos/zeekr-logo.png',
+        models: ['001', '009', 'X', '007']
+    },
+    {
+        name: 'Lada',
+        icon: 'https://www.carlogos.org/car-logos/lada-logo.png',
+        models: ['Vesta', 'Granta', 'Niva Travel', 'Largus']
+    },
+    {
+        name: 'Hyundai',
+        icon: 'https://www.carlogos.org/car-logos/hyundai-logo.png',
+        models: ['Tucson', 'Santa Fe', 'Palisade', 'Elantra', 'Sonata', 'Ioniq 5']
+    }
 ];

@@ -48,10 +48,11 @@ export const Header = ({ searchTerm, setSearchTerm }) => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // Логика живого поиска
     useEffect(() => {
         const fetchSuggestions = async () => {
-            if (!searchTerm || searchTerm.length < 1) {
+            const trimmedSearch = searchTerm.trim();
+
+            if (!trimmedSearch) {
                 setSuggestions([]);
                 return;
             }
@@ -59,7 +60,8 @@ export const Header = ({ searchTerm, setSearchTerm }) => {
             const { data, error } = await supabase
                 .from('car-cards')
                 .select('id, title, image, price')
-                .ilike('title', `%${searchTerm}%`)
+                // `${trimmedSearch}%` ищет только с начала строки
+                .ilike('title', `${trimmedSearch}%`)
                 .limit(5);
 
             if (!error && data) {

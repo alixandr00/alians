@@ -1,39 +1,19 @@
 import { useState, useMemo, useEffect } from 'react';
 import { supabase } from '../../api/supabaseClient';
-import './AddCarForm.css'; // <-- Подключаем наш новый красивый CSS
+import './AddCarForm.css';
+import { BRANDS_MODELS } from '../../data/CarsData';
 
-const BRANDS_MODELS = {
-    'Audi': ['A4', 'A6', 'A8', 'Q5', 'Q7', 'Q8', 'e-tron'],
-    'BMW': ['3 Series', '5 Series', '7 Series', 'X3', 'X5', 'X7', 'iX'],
-    'BYD': ['Han', 'Tang', 'Song', 'Qin Plus', 'Seal', 'Dolphin'],
-    'Tesla': ['Model 3', 'Model Y', 'Model S', 'Model X'],
-    'Mercedes': ['C-Class', 'E-Class', 'S-Class', 'GLE', 'GLS', 'EQS'],
-    'Mazda': ['CX-5', 'CX-30', 'CX-9', 'Mazda 3', 'Mazda 6'],
-    'Chevrolet': ['Tahoe', 'Camaro', 'Malibu', 'Equinox', 'Monza'],
-    'JAC': ['JS4', 'JS6', 'T8 Pro', 'iEVA50'],
-    'Subaru': ['Forester', 'Outback', 'Impreza', 'XV'],
-    'Geely': ['Monjaro', 'Tugella', 'Coolray', 'Atlas', 'Okavango', 'Preface'],
-    'Chery': ['Tiggo 4 Pro', 'Tiggo 7 Pro', 'Tiggo 8 Pro', 'Arrizo 8'],
-    'Zeekr': ['001', '007', '009', 'X'],
-    'Lada': ['Vesta', 'Granta', 'Niva Travel', 'Niva Legend'],
-    'Hyundai': ['Palisade', 'Santa Fe', 'Tucson', 'Elantra', 'Sonata', 'Staria'],
-    'Kia': ['Sportage', 'Sorento', 'K5', 'Carnival', 'EV6', 'Seltos'],
-    'Toyota': ['Camry', 'RAV4', 'Land Cruiser 300', 'Prado', 'Highlander'],
-    'LiXiang': ['L7', 'L8', 'L9'],
-    'Voyah': ['Free', 'Dreamer', 'Passion'],
-    'Changan': ['UNI-K', 'UNI-V', 'CS55 Plus', 'CS35 Plus'],
-    'Exeed': ['RX', 'VX', 'TXL', 'LX']
-};
+
 const INITIAL_STATE = {
     title: '', brand: '', price: '', year: '',
     transmission: 'Автомат', fuel: 'Бензин',
-    mileage: '', description: '', specs: ''
+    mileage: '', description: '', specs: '', color: 'white'
 };
 
 export default function AddCarForm({ onCarAdded, editData }) {
     const [loading, setLoading] = useState(false);
     const [car, setCar] = useState(INITIAL_STATE);
-
+    const [isPopular, setIsPopular] = useState(false);
     const [mainImage, setMainImage] = useState(null);
     const [existingMainImage, setExistingMainImage] = useState('');
     const [galleryImages, setGalleryImages] = useState([]);
@@ -53,12 +33,14 @@ export default function AddCarForm({ onCarAdded, editData }) {
                 fuel: editData.fuel || 'Бензин',
                 mileage: editData.mileage || '',
                 description: editData.description || '',
+                color: editData.color || 'white',
                 specs: Array.isArray(editData.specs) ? editData.specs.join(', ') : ''
             });
             setExistingMainImage(editData.image || '');
             setExistingGallery(editData.images || []);
             setMainImage(null);
             setGalleryImages([]);
+            setIsPopular(editData.is_popular || false);
         } else {
             setCar(INITIAL_STATE);
             setExistingMainImage('');
@@ -66,6 +48,7 @@ export default function AddCarForm({ onCarAdded, editData }) {
             setMainImage(null);
             setGalleryImages([]);
             setInputKey(Date.now());
+            setIsPopular(false);
         }
     }, [editData]);
 
@@ -79,13 +62,17 @@ export default function AddCarForm({ onCarAdded, editData }) {
     };
 
     const removeGalleryImage = async (urlToRemove) => {
-        if (!window.confirm('Удалить это фото?')) return;
+        if (!window.confirm('Удалить это фото навсегда?')) return;
         try {
-            const fileName = urlToRemove.split('/').pop();
-            await supabase.storage.from('car-images').remove([fileName]);
+            const fileName = urlToRemove.split('car-images/').pop();
+
+            const { error } = await supabase.storage.from('car-images').remove([fileName]);
+            if (error) throw error;
+
             setExistingGallery(prev => prev.filter(url => url !== urlToRemove));
         } catch (err) {
-            console.error("Ошибка:", err);
+            console.error("Ошибка при удалении фото галереи:", err);
+            alert("Не удалось удалить файл из облака");
         }
     };
 
@@ -96,15 +83,25 @@ export default function AddCarForm({ onCarAdded, editData }) {
         try {
             let finalMainImageUrl = existingMainImage;
 
+            // Если админ выбрал НОВОЕ главное фото
             if (mainImage) {
+                // 1. УДАЛЯЕМ старое фото из Storage, если оно было
+                if (existingMainImage) {
+                    const oldFileName = existingMainImage.split('/').pop();
+                    await supabase.storage.from('car-images').remove([oldFileName]);
+                }
+
+                // 2. Загружаем новое
                 const mainExt = mainImage.name.split('.').pop();
                 const mainPath = `${Date.now()}_main.${mainExt}`;
                 const { error: mainErr } = await supabase.storage.from('car-images').upload(mainPath, mainImage);
                 if (mainErr) throw mainErr;
+
                 const { data: mainUrl } = supabase.storage.from('car-images').getPublicUrl(mainPath);
                 finalMainImageUrl = mainUrl.publicUrl;
             }
 
+            // Загрузка новых фото галереи (твой текущий код)
             const newGalleryUrls = [];
             for (const file of galleryImages) {
                 const ext = file.name.split('.').pop();
@@ -129,7 +126,9 @@ export default function AddCarForm({ onCarAdded, editData }) {
                 description: car.description,
                 image: finalMainImageUrl,
                 specs: car.specs ? car.specs.split(',').map(s => s.trim()) : [],
-                images: totalGallery
+                is_popular: isPopular,
+                images: totalGallery,
+                color: car.color
             };
 
             let result;
@@ -142,16 +141,6 @@ export default function AddCarForm({ onCarAdded, editData }) {
             if (result.error) throw result.error;
 
             alert(editData ? 'Данные обновлены!' : 'Автомобиль добавлен!');
-
-            if (!editData) {
-                setCar(INITIAL_STATE);
-                setMainImage(null);
-                setGalleryImages([]);
-                setExistingMainImage('');
-                setExistingGallery([]);
-                setInputKey(Date.now());
-            }
-
             if (onCarAdded) onCarAdded();
 
         } catch (error) {
@@ -276,6 +265,43 @@ export default function AddCarForm({ onCarAdded, editData }) {
                 />
             </div>
 
+            {/* БЛОК ВЫБОРА ЦВЕТА */}
+            <div className="form-group" style={{ marginBottom: '20px' }}>
+                <label className="form-label">Цвет автомобиля</label>
+                <div style={{ display: 'flex', gap: '12px', marginTop: '10px', flexWrap: 'wrap' }}>
+                    {[
+                        { id: 'white', hex: '#FFFFFF', name: 'Белый' },
+                        { id: 'black', hex: '#000000', name: 'Черный' },
+                        { id: 'silver', hex: '#C0C0C0', name: 'Серебро' },
+                        { id: 'blue', hex: '#2196F3', name: 'Синий' },
+                        { id: 'red', hex: '#F44336', name: 'Красный' },
+                        { id: 'green', hex: '#4CAF50', name: 'Зеленый' }
+                    ].map(c => (
+                        <div
+                            key={c.id}
+                            onClick={() => setCar({ ...car, color: c.id })}
+                            style={{
+                                width: '35px',
+                                height: '35px',
+                                borderRadius: '50%',
+                                backgroundColor: c.hex,
+                                border: car.color === c.id ? '3px solid #007bff' : '1px solid #ddd',
+                                cursor: 'pointer',
+                                transition: '0.2s',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                            title={c.name}
+                        >
+                            {car.color === c.id && (
+                                <span style={{ color: c.id === 'white' ? '#000' : '#fff', fontSize: '14px' }}>✓</span>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             {/* БЛОК ФОТОГРАФИЙ */}
             <div className="photo-upload-section">
                 <h4 className="section-subtitle">Фотографии</h4>
@@ -329,6 +355,14 @@ export default function AddCarForm({ onCarAdded, editData }) {
                     />
                 </div>
             </div>
+            <label className="checkbox-label">
+                <input
+                    type="checkbox"
+                    checked={isPopular}
+                    onChange={(e) => setIsPopular(e.target.checked)}
+                />
+                Добавить в популярные
+            </label>
             {/* // fewwef */}
             <button type="submit" disabled={loading} className="submit-btn">
                 {loading ? 'Сохранение...' : (editData ? 'Сохранить изменения' : 'Опубликовать авто')}

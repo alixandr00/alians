@@ -43,7 +43,6 @@
 .carCard_slider .carCard_footer {
     display: flex;
     flex-direction: column;
-    /* В слайдере кнопки под параметрами */
     gap: 10px;
 }
 
@@ -56,6 +55,7 @@
     justify-content: space-around;
 }
 
+/* --- СТИЛИ ДЛЯ КАТАЛОГА (Большие карточки) --- */
 .carCard_catalog {
     background: #fff;
     border-radius: 20px;
@@ -71,9 +71,7 @@
     width: 100%;
     height: 320px;
     padding: 15px;
-    /* Вот тот самый отступ, чтобы фото было "внутри" */
     box-sizing: border-box;
-    /* Чтобы padding не увеличивал общую высоту */
 }
 
 .carCard_catalog .carCard_imageBox img {
@@ -120,7 +118,6 @@
 
 .carCard_catalog .carCard_params {
     flex: 1;
-    /* РАСТЯГИВАЕМ СЕРУЮ ПОЛОСУ */
     background: #f8f8f8;
     padding: 14px 20px;
     border-radius: 12px;
@@ -129,7 +126,7 @@
     color: #888;
 }
 
-/* ОБЩИЕ КНОПКИ */
+/* --- ОБЩИЕ ЭЛЕМЕНТЫ (Кнопки и разделители) --- */
 .carCard_btns {
     display: flex;
     gap: 10px;
@@ -160,7 +157,6 @@
     background: #f0f7f4;
 }
 
-
 .carCard_btnDots {
     background: #f5f5f5;
     border: none;
@@ -174,25 +170,95 @@
     color: #ddd;
 }
 
+/* --- СТИЛИ СКЕЛЕТОНА (Skeleton Loading) --- */
+.skeleton-card {
+    border-color: #f0f0f0;
+    pointer-events: none;
+    /* Чтобы нельзя было нажать во время загрузки */
+}
+
+.skeleton-item {
+    background: #eee;
+    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+    background-size: 200% 100%;
+    animation: 1.5s shine linear infinite;
+    border-radius: 8px;
+}
+
+@keyframes shine {
+    to {
+        background-position-x: -200%;
+    }
+}
+
+/* Настройки для пустых блоков внутри скелетона */
+.skeleton-title {
+    width: 140px;
+    height: 24px;
+}
+
+.skeleton-price {
+    width: 80px;
+    height: 24px;
+}
+
+.skeleton-params-line {
+    width: 100%;
+    height: 45px;
+    /* Совпадает с высотой .carCard_params */
+    margin: 5px 0;
+}
+
+.skeleton-btn-main {
+    width: 120px;
+    height: 45px;
+    border-radius: 10px;
+}
+
+.skeleton-btn-sq {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+}
+
+/* Адаптация картинки скелетона под контейнеры */
+.carCard_slider.skeleton-card .carCard_imageBox {
+    background: #eee;
+    height: 164px;
+    /* 180px - padding */
+    margin: 8px;
+    border-radius: 10px;
+}
+
+.carCard_catalog.skeleton-card .carCard_imageBox {
+    background: #eee;
+    height: 290px;
+    /* 320px - padding */
+    margin: 15px;
+    border-radius: 12px;
+}
+
 /* --- МОБИЛЬНАЯ ВЕРСИЯ --- */
 @media (max-width: 768px) {
-
-    /* Контейнер каталога */
     .carCard_catalog .carCard_priceSub {
         display: none;
     }
 
-    /* Уменьшаем высоту картинки для мобилок */
     .carCard_catalog .carCard_imageBox {
         height: 220px;
         padding: 10px;
+    }
+
+    /* Для скелетона на мобилке тоже правим высоту картинки */
+    .carCard_catalog.skeleton-card .carCard_imageBox {
+        height: 200px;
+        margin: 10px;
     }
 
     .carCard_catalog .carCard_info {
         padding: 15px;
     }
 
-    /* Название и цена теперь в колонку */
     .carCard_catalog .carCard_row1 {
         flex-direction: column;
         align-items: flex-start;
@@ -200,19 +266,9 @@
         margin-bottom: 10px;
     }
 
-    .carCard_catalog .carCard_name {
-        font-size: 18px;
-    }
-
-    .carCard_catalog .carCard_priceMain {
-        font-size: 18px;
-    }
-
-    /* Футер (параметры и кнопки) в стек */
     .carCard_catalog .carCard_footer {
         flex-direction: column;
         align-items: stretch;
-        /* Кнопки растянутся на всю ширину */
         gap: 15px;
     }
 
@@ -222,51 +278,11 @@
         font-size: 13px;
     }
 
-    /* Кнопки в ряд или в столбик */
     .carCard_catalog .carCard_btns {
         width: 100%;
     }
 
     .carCard_catalog .carCard_btnDetail {
         flex: 1;
-        /* Кнопка "Подробнее" забирает всё свободное место */
     }
-}
-
-@media (max-width: 350px) {
-    .carCard_slider {
-        width: 280px;
-        margin: 10px auto;
-    }
-
-    .carCard_slider .carCard_params {
-        font-size: 11px;
-    }
-}
-
-.dotsContainer {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.deleteFloatingBtn {
-    position: absolute;
-    bottom: 110%;
-    /* Появится над кнопкой */
-    right: 0;
-    background: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    white-space: nowrap;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-}
-
-.deleteFloatingBtn:hover {
-    background: #cc0000;
 }

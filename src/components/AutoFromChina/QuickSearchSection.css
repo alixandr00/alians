@@ -12,13 +12,15 @@
 .searchContainer {
     position: relative;
     min-height: 250px;
-    overflow: hidden;
+    /* overflow: hidden; */
+    /* УБРАНО: чтобы выпадающее меню не скрывалось под контейнером */
     padding: 0 0 0 5rem;
 }
 
 .searchForm {
     position: absolute;
-    z-index: 3;
+    z-index: 10;
+    /* Увеличено */
     top: 60%;
     left: 6%;
     transform: translateY(-50%);
@@ -37,17 +39,48 @@
 .topRowInputs {
     gap: 15px;
     margin-bottom: 15px;
+    position: relative;
+    /* Добавлено */
 }
 
 .inputGroup {
     flex: 1;
     display: flex;
     align-items: center;
-    background-color: #f0f0f0;
-    border-radius: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid transparent;
+    border-radius: 10px;
     padding: 10px 15px;
+    /* Немного уменьшен паддинг для библиотеки */
     position: relative;
-    /* Для позиционирования стрелочки */
+    transition: all 0.3s ease;
+}
+
+/* Расставляем z-index для групп, чтобы выпадающие списки не перекрывались */
+.inputGroup:nth-child(1) {
+    z-index: 10;
+}
+
+.inputGroup:nth-child(2) {
+    z-index: 20;
+}
+
+.inputGroup:nth-child(3) {
+    z-index: 10;
+}
+
+.inputGroup:hover,
+.inputGroup:focus-within {
+    background-color: #fff;
+    border-color: #387b64;
+    box-shadow: 0 4px 12px rgba(56, 123, 100, 0.08);
+}
+
+.selectField {
+    flex-grow: 1;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .inputIcon,
@@ -58,27 +91,6 @@
     flex-shrink: 0;
 }
 
-/* Стили для Select */
-.selectField {
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 16px;
-    flex-grow: 1;
-    cursor: pointer;
-    color: #333;
-    appearance: none;
-    /* Убирает стандартную стрелку браузера */
-    -webkit-appearance: none;
-    padding-right: 20px;
-}
-
-/* Цвет плейсхолдера для первого неактивного варианта */
-.selectField option:first-child {
-    color: #999;
-}
-
-/* Иконка шеврона (стрелочка вниз) */
 .chevronIcon {
     position: absolute;
     right: 15px;
@@ -87,6 +99,7 @@
     pointer-events: none;
 }
 
+/* Все остальные твои стили без изменений */
 .bottomRowFilters {
     align-items: center;
     justify-content: flex-start;
@@ -102,7 +115,6 @@
     font-weight: 600;
     font-size: 16px;
     margin-right: 20px;
-    flex-shrink: 0;
     transition: background 0.3s;
 }
 
@@ -126,13 +138,25 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    flex-shrink: 0;
+}
+
+.filterTag.activeTag {
+    background-color: #e8f3ee;
+    border-color: #387b64;
+    color: #387b64;
+    animation: fadeIn 0.3s ease;
 }
 
 .tagIcon {
     margin-right: 5px;
     font-size: 18px;
     color: #00a854;
+}
+
+.removeTag {
+    margin-left: 8px;
+    font-weight: bold;
+    color: #ff7675;
 }
 
 .searchBackground {
@@ -157,7 +181,7 @@
     z-index: 2;
 }
 
-/* --- МОБИЛЬНАЯ ВЕРСИЯ --- */
+/* МОБИЛЬНАЯ ВЕРСИЯ - ТВОИ ОРИГИНАЛЬНЫЕ СТИЛИ */
 @media (max-width: 900px) {
     .quickSearchSection {
         padding: 20px;
@@ -210,5 +234,17 @@
 
     .searchBackground {
         display: none;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

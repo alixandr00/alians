@@ -1,9 +1,36 @@
 import React, { useState } from 'react';
 import './CarCard.css';
-import { useTranslation } from 'react-i18next'; // Импорт хука
+import { useTranslation } from 'react-i18next';
+
+// --- КОМПОНЕНТ ДЛЯ ЗАГРУЗКИ (СКЕЛЕТОН) ---
+export const CarCardSkeleton = ({ isCatalog = false }) => {
+    const cardClass = isCatalog ? "carCard_catalog skeleton-card" : "carCard_slider skeleton-card";
+
+    return (
+        <div className={cardClass}>
+            <div className="carCard_imageBox skeleton-item"></div>
+
+            <div className="carCard_info">
+                <div className="carCard_row1">
+                    <div className="skeleton-item skeleton-title"></div>
+                    <div className="skeleton-item skeleton-price"></div>
+                </div>
+
+                <div className="carCard_footer">
+                    <div className="carCard_params skeleton-item skeleton-params-line"></div>
+
+                    <div className="carCard_btns">
+                        <div className="skeleton-item skeleton-btn-main"></div>
+                        <div className="skeleton-item skeleton-btn-sq"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export const CarCard = ({ car, isCatalog = false, viewType = 'dots', onClick }) => {
-    const { t } = useTranslation(); // Инициализация
+    const { t } = useTranslation();
     const [showDelete, setShowDelete] = useState(false);
 
     const cardClass = isCatalog ? "carCard_catalog" : "carCard_slider";
@@ -26,16 +53,10 @@ export const CarCard = ({ car, isCatalog = false, viewType = 'dots', onClick }) 
 
                 <div className="carCard_footer">
                     <div className="carCard_params">
-                        {/* Год */}
                         <span>{car.year} {t('unit_year')}</span>
                         <span className="carCard_sep">|</span>
-
-                        {/* Трансмиссия (переводится динамически) */}
                         <span>{t(car.transmission?.toLowerCase())}</span>
-
                         <span className="carCard_sep">|</span>
-
-                        {/* Пробег */}
                         <span>{car.mileage?.toLocaleString()} {t('unit_km')}</span>
                     </div>
 

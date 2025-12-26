@@ -267,27 +267,55 @@ export const AdminPanel = () => {
     };
 
     const handleDelete = async (car) => {
-        if (!window.confirm(`Удалить ${car.title}?`)) return;
+        if (!window.confirm(`Удалить ${car.brand} ${car.title}?`)) return;
+
         try {
-            const getFileName = (url) => {
+            // Функция для вычленения чистого пути к файлу из URL Supabase
+            const getStoragePath = (url) => {
                 if (!url) return null;
-                const parts = url.split('/');
-                return parts[parts.length - 1];
+                // Ссылка выглядит так: .../storage/v1/object/public/car-images/123_main.jpg
+                // Нам нужно все, что идет ПОСЛЕ названия бакета 'car-images/'
+                const parts = url.split('car-images/');
+                return parts.length > 1 ? parts[1] : null;
             };
 
-            const filesToDelete = [
-                getFileName(car.image),
-                ...(car.images || []).map(getFileName)
-            ].filter(Boolean);
+            // Собираем пути всех файлов
+            const mainPath = getStoragePath(car.image);
+            const galleryPaths = (car.images || []).map(getStoragePath);
 
-            if (filesToDelete.length > 0) {
-                await supabase.storage.from('car-images').remove(filesToDelete);
+            // Объединяем в один массив и убираем null
+            const allPathsToDelete = [mainPath, ...galleryPaths].filter(Boolean);
+
+            console.log("Пытаемся удалить файлы из Storage:", allPathsToDelete);
+
+            // 1. Сначала удаляем файлы из Storage
+            if (allPathsToDelete.length > 0) {
+                const { data, error: storageError } = await supabase
+                    .storage
+                    .from('car-images')
+                    .remove(allPathsToDelete);
+
+                if (storageError) {
+                    console.error("Ошибка Storage:", storageError);
+                    // Если не удалилось из облака, лучше остановить процесс
+                    throw new Error("Не удалось удалить изображения из хранилища");
+                }
+                console.log("Результат удаления из Storage:", data);
             }
 
-            const { error } = await supabase.from('car-cards').delete().eq('id', car.id);
-            if (error) throw error;
+            // 2. И только если файлы удалены (или их не было), удаляем запись из базы
+            const { error: dbError } = await supabase
+                .from('car-cards')
+                .delete()
+                .eq('id', car.id);
+
+            if (dbError) throw dbError;
+
             setCars(prev => prev.filter(c => c.id !== car.id));
+            alert('Машина и все её фото успешно удалены!');
+
         } catch (err) {
+            console.error("Полная ошибка удаления:", err);
             alert('Ошибка при удалении: ' + err.message);
         }
     };

@@ -37,15 +37,11 @@ function App() {
   useEffect(() => {
     const setupCloudMessaging = async () => {
       try {
-        // 1. Запрашиваем разрешение
         const permission = await Notification.requestPermission();
         if (permission !== 'granted') {
           console.log('Пользователь отказал в уведомлениях');
           return;
         }
-
-        // 2. Получаем токен (ВСТАВЬ СЮДА СВОЙ VAPID KEY ИЗ FIREBASE)
-        // Найти тут: Project Settings -> Cloud Messaging -> Web Push certificates
         const currentToken = await getToken(messaging, {
           vapidKey: 'BHEmaEkuy9d5KTA78i5BRPBNuEJI3y-y-AVpR6bKybAv1ryrGF48E61Ap-wipEzL1CUnKcQF_788Cz0dZVzJRmk'
         });
@@ -78,7 +74,6 @@ function App() {
       }
     };
 
-    // Слушаем входящие сообщения, когда сайт открыт
     onMessage(messaging, (payload) => {
       console.log('Сообщение в фокусе:', payload);
       alert(`${payload.notification.title}\n${payload.notification.body}`);

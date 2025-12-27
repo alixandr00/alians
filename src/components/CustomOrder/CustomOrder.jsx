@@ -306,13 +306,17 @@ export const CustomOrder = ({ searchTerm }) => {
                                             <div className="specCard">
                                                 <div className="specText">
                                                     <span className="specLabel">{t('filter_transmission')}</span>
-                                                    <span className="specValue">{selectedCar.transmission || '—'}</span>
+                                                    <span className="specValue">
+                                                        {selectedCar.transmission ? t(selectedCar.transmission) : '—'}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="specCard">
                                                 <div className="specText">
                                                     <span className="specLabel">{t('filter_fuel')}</span>
-                                                    <span className="specValue">{selectedCar.fuel || '—'}</span>
+                                                    <span className="specValue">
+                                                        {selectedCar.fuel ? t(selectedCar.fuel) : '—'}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>

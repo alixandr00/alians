@@ -139,12 +139,32 @@ export const FilterSidebar = ({
                         <button
                             key={color.id}
                             className={`colorCircle ${selectedColors.includes(color.id) ? 'active' : ''}`}
-                            style={{ backgroundColor: color.hex }}
+                            style={{
+                                backgroundColor: color.hex,
+                                display: 'flex',          // Добавляем для центровки птички
+                                alignItems: 'center',     // Центровка по вертикали
+                                justifyContent: 'center',    // Центровка по горизонтали
+                                border: color.id === 'white' ? '1px solid #ddd' : 'none', // Чтобы белый не сливался
+                                cursor: 'pointer',
+                                position: 'relative'
+                            }}
                             onClick={() => toggleColor(color.id)}
                             title={color.name}
                         >
+                            {/* ПТИЧКА */}
+                            {selectedColors.includes(color.id) && (
+                                <span style={{
+                                    color: (color.id === 'white' || color.id === 'silver') ? '#000' : '#fff',
+                                    fontSize: '14px',
+                                    fontWeight: 'bold',
+                                    lineHeight: '1'
+                                }}>
+                                    ✓
+                                </span>
+                            )}
                         </button>
                     ))}
+
                 </div>
             </div>
 
@@ -152,8 +172,19 @@ export const FilterSidebar = ({
             <div className="filterBlockWhite">
                 <label>{t('filter_fuel')}</label>
                 <div className="fuelGrid">
-                    {['Все', 'Бензин', 'Электро', 'Гибрид'].map(type => (
-                        <button key={type} className={`fuelBtn ${fuelType === type ? 'active' : ''}`} onClick={() => setFuelType(type)}>{type}</button>
+                    {[
+                        { id: 'Все', label: t('fuel_all') },
+                        { id: 'Бензин', label: t('fuel_petrol') },
+                        { id: 'Электро', label: t('fuel_electric') },
+                        { id: 'Гибрид', label: t('fuel_hybrid') }
+                    ].map(type => (
+                        <button
+                            key={type.id}
+                            className={`fuelBtn ${fuelType === type.id ? 'active' : ''}`}
+                            onClick={() => setFuelType(type.id)}
+                        >
+                            {type.label}
+                        </button>
                     ))}
                 </div>
             </div>

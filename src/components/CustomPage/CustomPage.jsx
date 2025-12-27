@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
+import Select from 'react-select'; // Не забудьте установить: npm install react-select
 import './CustomPage.css';
 import { customsRates } from '../../data/CarsData';
-import { useTranslation } from 'react-i18next'; // Импортируем хук
+import { useTranslation } from 'react-i18next';
+
+// Настройки стоимости доставки по странам (подставьте свои цифры)
+const deliveryRates = {
+    korea: 2500,
+    dubai: 2800,
+    georgia: 1800,
+    china: 1500,
+    usa: 3500
+};
 
 export const CustomsPage = () => {
-    const { t } = useTranslation(); // Инициализируем перевод
+    const { t } = useTranslation();
     const [carType, setCarType] = useState('main');
     const [fuel, setFuel] = useState('petrol');
     const [engine, setEngine] = useState('2000');
@@ -12,6 +22,17 @@ export const CustomsPage = () => {
     const [result, setResult] = useState(null);
     const [brand, setBrand] = useState('');
     const [model, setModel] = useState('');
+
+    // Новое состояние для страны (по умолчанию Корея)
+    const [selectedCountry, setSelectedCountry] = useState(null);
+
+    const countryOptions = [
+        { value: 'korea', label: t('country_korea') },
+        { value: 'china', label: t('country_china') },
+        { value: 'dubai', label: t('country_dubai') },
+        { value: 'georgia', label: t('country_georgia') },
+        { value: 'usa', label: t('country_usa') }
+    ];
 
     const engineOptions = Object.keys(customsRates['2025']).map(key => key.replace('p', ''));
 
@@ -34,11 +55,19 @@ export const CustomsPage = () => {
                 tax = Number(data[1].replace(/[^0-9]/g, ''));
             }
         }
+        if (!selectedCountry) {
+            alert(t('calc_select_country'));
+            return;
+        }
 
+        // Берем стоимость доставки на основе выбранной страны
+        const shipping = deliveryRates[selectedCountry] || 0;
         setResult({
             basePrice: baseAutoPrice,
             tax: tax,
-            total: baseAutoPrice + tax + 1500
+            shipping: shipping,
+            // Итого: Цена + Таможня + Доставка + Ваша комиссия 1500
+            total: baseAutoPrice + tax + shipping + 1500
         });
     };
 
@@ -57,6 +86,18 @@ export const CustomsPage = () => {
     const petrolVolumes = ['1000', '1500', '1600', '1700', '1800', '2000', '2200', '2500', '3000', '3300', '3500', '4000', '4400', '4600', '5700', '6200'];
     const dieselVolumes = ['2000', '2200', '2500', '3000', '3300', '3500', '3800', '4000', '4500'];
 
+    // Стили для React Select, чтобы он вписался в ваш дизайн
+    const customSelectStyles = {
+        control: (base) => ({
+            ...base,
+            borderRadius: '8px',
+            borderColor: '#e0e0e0',
+            minHeight: '45px',
+            boxShadow: 'none',
+            '&:hover': { borderColor: '#10b981' }
+        })
+    };
+
     return (
         <div className="customsPage">
             <div className="customsContainer">
@@ -70,11 +111,26 @@ export const CustomsPage = () => {
                         <button className={carType === 'premium' ? 'active' : ''} onClick={() => { setCarType('premium'); setResult(null); }}>
                             {t('calc_tab_premium')}
                         </button>
+
                     </div>
+
                 </div>
 
                 <div className="calcGrid">
                     <div className="calcCard inputCard">
+                        {/* Выбор страны - теперь он всегда сверху или в ряду */}
+                        <div className="inputField">
+                            <label>{t('calc_country') || 'Страна покупки'}:</label>
+                            <Select
+                                options={countryOptions}
+                                value={countryOptions.find(opt => opt.value === selectedCountry) || null}
+                                onChange={(option) => setSelectedCountry(option ? option.value : null)}
+                                styles={customSelectStyles}
+                                placeholder={t('calc_select_country')}
+                                isSearchable={false}
+                            />
+                        </div>
+
                         <div className="inputField">
                             <label>{t('calc_year')}:</label>
                             <select value={year} onChange={(e) => setYear(e.target.value)}>
@@ -137,6 +193,10 @@ export const CustomsPage = () => {
                                 <div className="resLine">
                                     <span>{t('calc_tax_payment')}:</span>
                                     <b className="greenText">${result.tax.toLocaleString()}</b>
+                                </div>
+                                <div className="resLine">
+                                    <span>{t('calc_shipping') || 'Доставка'}:</span>
+                                    <b className="grayValue">${result.shipping.toLocaleString()}</b>
                                 </div>
                                 <div className="divider"></div>
                                 <div className="resLine total">
@@ -204,6 +264,6 @@ export const CustomsPage = () => {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 };

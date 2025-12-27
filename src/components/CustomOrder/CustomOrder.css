@@ -7,6 +7,7 @@
     min-height: 100vh;
 }
 
+
 .catalogContainer {
     max-width: 1200px;
     margin: 0 auto;
@@ -26,10 +27,19 @@
     background: #f1f3f5;
     padding: 20px;
     border-radius: 30px;
-    height: fit-content;
-    position: relative;
     flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+    max-height: calc(100vh - 50px);
+    overflow-y: auto;
 }
+
+
+/* .filterSidebar {
+    scrollbar-width: thin;
+    scrollbar-color: #10b981;
+} */
 
 .filterMainTitle {
     font-size: 24px;
@@ -662,12 +672,13 @@
         gap: 20px;
     }
 
-    /* Сайдбар */
     .filterSidebar {
         width: 100%;
         margin-top: 10px;
         box-sizing: border-box;
+        position: relative;
     }
+
 
     .brandIconCard {
         min-width: 75px;
@@ -819,4 +830,35 @@
 .colorCircle[style*="background-color: rgb(255, 255, 255)"],
 .colorCircle[style*="background-color: #FFFFFF"] {
     border: 1px solid #ddd;
+}
+
+/* Прячем скроллбар для всех браузеров, но оставляем прокрутку рабочей */
+
+/* Для Chrome, Safari и Opera */
+.filterSidebar::-webkit-scrollbar,
+.brandSwipeRow::-webkit-scrollbar,
+.groupedModelsContainer::-webkit-scrollbar {
+    display: none;
+}
+
+/* Для Firefox и Edge */
+.filterSidebar,
+.brandSwipeRow,
+.groupedModelsContainer {
+    -ms-overflow-style: none;
+    /* Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.filterSidebar {
+    scrollbar-width: none;
+    /* Для Firefox */
+    -ms-overflow-style: none;
+    /* Для IE/Edge */
+}
+
+.filterSidebar::-webkit-scrollbar {
+    display: none;
+    /* Для Chrome/Safari */
 }

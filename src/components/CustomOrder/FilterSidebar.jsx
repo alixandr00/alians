@@ -57,7 +57,7 @@ export const FilterSidebar = ({
                     <div className="pickerHeader">
                         <span>{t('filter_models_title')}</span>
                         <div className="pickerActions">
-                            <button className="applyModelsBtn" onClick={() => setIsPickerOpen(false)}>Применить</button>
+                            <button className="applyModelsBtn" onClick={() => setIsPickerOpen(false)}>{t('btn_apply')}</button>
                             <button className="clearModelsBtn" onClick={() => setSelectedModels([])}>{t('btn_reset')}</button>
                         </div>
                     </div>

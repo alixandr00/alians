@@ -156,7 +156,8 @@ const resources = {
             "fuel_petrol": "Бензин",
             "fuel_electric": "Электро",
             "fuel_hybrid": "Гибрид",
-            "filter_models_title": "Выберите модели"
+            "filter_models_title": "Выберите модели",
+            "btn_apply": "Применить",
         }
     },
     en: {
@@ -323,7 +324,8 @@ const resources = {
             "filter_transmission": "Transmission",
             "filter_fuel": "Fuel type",
             "filter_color": "Color",
-            "filter_models_title": "Models"
+            "filter_models_title": "Models",
+            "btn_apply": "Apply",
 
         }
     },
@@ -491,7 +493,8 @@ const resources = {
             "filter_transmission": "变速箱类型",
             "filter_fuel": "发动机类型",
             "filter_color": "颜色",
-            "filter_models_title": "型号"
+            "filter_models_title": "型号",
+            "btn_apply": "应用",
         }
     },
     ko: {
@@ -658,7 +661,8 @@ const resources = {
             "filter_transmission": "변속기",
             "filter_fuel": "연료 타입",
             "filter_color": "색상",
-            "filter_models_title": "모델"
+            "filter_models_title": "모델",
+            "btn_apply": "적용하기",
         }
     },
     ka: {
@@ -825,7 +829,8 @@ const resources = {
             "filter_transmission": "გადაცემათა კოლოფი",
             "filter_fuel": "საწვავის ტიპი",
             "filter_color": "ფერი",
-            "filter_models_title": "მოდელები"
+            "filter_models_title": "მოდელები",
+            "btn_apply": "გამოყენება",
         }
     },
     ar: {
@@ -992,15 +997,11 @@ const resources = {
             "filter_transmission": "ناقل الحركة",
             "filter_fuel": "نوع الوقود",
             "filter_color": "اللون",
-            "filter_models_title": "الموديلات"
+            "filter_models_title": "الموديلات",
+            "btn_apply": "تطبيق",
         }
     },
-    "Бензин": "Petrol",
-    "Электро": "Electric",
-    "Гибрид": "Hybrid",
-    "Автомат": "Automatic",
-    "Вариатор": "CVT",
-    "Механика": "Manual"
+
 };
 
 i18n

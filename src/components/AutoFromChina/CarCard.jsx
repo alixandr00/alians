@@ -67,7 +67,7 @@ export const CarCard = ({ car, isCatalog = false, viewType = 'dots', onClick }) 
 
                         {viewType === 'order' ? (
                             <button className="carCard_btnOrder">
-                                {t('nav_catalog')}
+                                {t('nav_catalogg')}
                             </button>
                         ) : (
                             <div className="dotsContainer">

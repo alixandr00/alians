@@ -10,7 +10,8 @@ export const FilterSidebar = ({
     yearRange, setYearRange,
     fuelType, setFuelType,
     selectedColors, toggleColor,
-    handleApplyFilters, resetFilters
+    handleApplyFilters, resetFilters,
+    transmission, setTransmission
 }) => {
     const { t } = useTranslation();
 
@@ -87,12 +88,12 @@ export const FilterSidebar = ({
                     <span>{priceRange[0].toLocaleString()}</span> — <span>{priceRange[1].toLocaleString()}</span>
                 </div>
                 <div className="rangeSliderUI">
-                    <input type="range" min="0" max="100000" step="1000" value={priceRange[0]}
+                    <input type="range" min="0" max="300000" step="1000" value={priceRange[0]}
                         onChange={(e) => {
                             const v = Number(e.target.value);
                             if (v <= priceRange[1]) setPriceRange([v, priceRange[1]]);
                         }} className="dualInput" />
-                    <input type="range" min="0" max="100000" step="1000" value={priceRange[1]}
+                    <input type="range" min="0" max="300000" step="1000" value={priceRange[1]}
                         onChange={(e) => {
                             const v = Number(e.target.value);
                             if (v >= priceRange[0]) setPriceRange([priceRange[0], v]);
@@ -108,12 +109,12 @@ export const FilterSidebar = ({
                     <span>{yearRange[0]}</span> — <span>{yearRange[1]}</span>
                 </div>
                 <div className="rangeSliderUI">
-                    <input type="range" min="2010" max="2025" step="1" value={yearRange[0]}
+                    <input type="range" min="2020" max="2026" step="1" value={yearRange[0]}
                         onChange={(e) => {
                             const v = Number(e.target.value);
                             if (v <= yearRange[1]) setYearRange([v, yearRange[1]]);
                         }} className="dualInput" />
-                    <input type="range" min="2010" max="2025" step="1" value={yearRange[1]}
+                    <input type="range" min="2020" max="2026" step="1" value={yearRange[1]}
                         onChange={(e) => {
                             const v = Number(e.target.value);
                             if (v >= yearRange[0]) setYearRange([yearRange[0], v]);
@@ -182,6 +183,27 @@ export const FilterSidebar = ({
                             key={type.id}
                             className={`fuelBtn ${fuelType === type.id ? 'active' : ''}`}
                             onClick={() => setFuelType(type.id)}
+                        >
+                            {type.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Коробка передач (Трансмиссия) */}
+            <div className="filterBlockWhite">
+                <label>{t('filter_transmission') || 'Коробка передач'}</label>
+                <div className="fuelGrid">
+                    {[
+                        { id: 'Все', label: t('trans_all') || 'Все' },
+                        { id: 'Автомат', label: t('trans_automatic') || 'Автомат' },
+                        { id: 'Робот', label: t('trans_robot') || 'Робот' },
+                        { id: 'Вариатор', label: t('trans_cvt') || 'Вариатор' }
+                    ].map(type => (
+                        <button
+                            key={type.id}
+                            className={`fuelBtn ${transmission === type.id ? 'active' : ''}`}
+                            onClick={() => setTransmission(type.id)}
                         >
                             {type.label}
                         </button>

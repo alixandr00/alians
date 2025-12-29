@@ -158,7 +158,20 @@ const resources = {
             "fuel_hybrid": "Гибрид",
             "filter_models_title": "Выберите модели",
             "btn_apply": "Применить",
-        }
+            "nav_catalogg": "Заказать",
+            "trans_all": "Все",
+            "trans_automatic": "Автомат",
+            "trans_robot": "Робот",
+            "trans_cvt": "Вариатор",
+            "countries": {
+                "china": "Авто из Китая",
+                "korea": "Авто из Кореи",
+                "georgia": "Авто из Грузии",
+                "dubai": "Авто из Дубая",
+                "usa": "Авто из Америки"
+            }
+        },
+
     },
     en: {
         translation: {
@@ -326,8 +339,21 @@ const resources = {
             "filter_color": "Color",
             "filter_models_title": "Models",
             "btn_apply": "Apply",
+            "nav_catalogg": "Order",
+            "trans_all": "All",
+            "trans_automatic": "Automatic",
+            "trans_robot": "Robot / DCT",
+            "trans_cvt": "CVT",
+            "countries": {
+                "china": "Cars from China",
+                "korea": "Cars from Korea",
+                "georgia": "Cars from Georgia",
+                "dubai": "Cars from Dubai",
+                "usa": "Cars from USA"
+            }
 
-        }
+        },
+
     },
     zh: {
         translation: {
@@ -495,7 +521,20 @@ const resources = {
             "filter_color": "颜色",
             "filter_models_title": "型号",
             "btn_apply": "应用",
-        }
+            "nav_catalogg": "订购",
+            "trans_all": "全部",
+            "trans_automatic": "自动挡",
+            "trans_robot": "双离合",
+            "trans_cvt": "无级变速",
+            "countries": {
+                "china": "来自中国的车",
+                "korea": "来自韩国的车",
+                "georgia": "来自格鲁吉亚的车",
+                "dubai": "来自迪拜的车",
+                "usa": "来自美国的车"
+            }
+        },
+
     },
     ko: {
         translation: {
@@ -663,7 +702,20 @@ const resources = {
             "filter_color": "색상",
             "filter_models_title": "모델",
             "btn_apply": "적용하기",
-        }
+            "nav_catalogg": "주문하기",
+            "trans_all": "전체",
+            "trans_automatic": "자동",
+            "trans_robot": "듀얼 클러치 (DCT)",
+            "trans_cvt": "무단변속기 (CVT)",
+            "countries": {
+                "china": "중국 자동차",
+                "korea": "한국 자동차",
+                "georgia": "조지아 자동차",
+                "dubai": "두바이 자동차",
+                "usa": "미국 자동차"
+            }
+        },
+
     },
     ka: {
         translation: {
@@ -831,7 +883,20 @@ const resources = {
             "filter_color": "ფერი",
             "filter_models_title": "მოდელები",
             "btn_apply": "გამოყენება",
-        }
+            "nav_catalogg": "შეკვეთა",
+            "trans_all": "ყველა",
+            "trans_automatic": "ავტომატიკა",
+            "trans_robot": "რობოტი",
+            "trans_cvt": "ვარიატორი",
+            "countries": {
+                "china": "ავტომობილები ჩინეთიდან",
+                "korea": "ავტომობილები კორეიდან",
+                "georgia": "ავტომობილები საქართველოდან",
+                "dubai": "ავტომობილები დუბაიდან",
+                "usa": "ავტომობილები ამერიკიდან"
+            }
+        },
+
     },
     ar: {
         translation: {
@@ -999,7 +1064,21 @@ const resources = {
             "filter_color": "اللون",
             "filter_models_title": "الموديلات",
             "btn_apply": "تطبيق",
-        }
+            "nav_catalogg": "طلب",
+            "trans_all": "الكل",
+            "trans_automatic": "أوتوماتيك",
+            "trans_robot": "روبوت",
+            "trans_cvt": "سي في تي",
+            "countries": {
+                "china": "سيارات من الصين",
+                "korea": "سيارات من كوريا",
+                "georgia": "سيارات من جورجيا",
+                "dubai": "سيارات من دبي",
+                "usa": "سيارات من أمريكا"
+            }
+        },
+
+
     },
 
 };

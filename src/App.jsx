@@ -33,7 +33,7 @@ const messaging = getMessaging(app);
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const { i18n } = useTranslation();
-
+  const [selectedCountry, setSelectedCountry] = useState('china');
   useEffect(() => {
     const setupCloudMessaging = async () => {
       try {
@@ -101,8 +101,8 @@ function App() {
 
   return (
     <Routes>
-      <Route path='/' element={<Layout searchTerm={searchTerm} setSearchTerm={setSearchTerm} />}>
-        <Route index element={<AutoFromChina />} />
+      <Route path='/' element={<Layout searchTerm={searchTerm} setSearchTerm={setSearchTerm} onCountrySelect={setSelectedCountry} />}>
+        <Route index element={<AutoFromChina selectedCountry={selectedCountry} />} />
         <Route path="catalog" element={<CustomOrder searchTerm={searchTerm} />} />
         <Route path='contacts' element={<Contacts />} />
         <Route path='faq' element={<FAQ />} />

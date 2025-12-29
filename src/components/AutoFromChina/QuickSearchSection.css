@@ -58,7 +58,7 @@
 
 /* Расставляем z-index для групп, чтобы выпадающие списки не перекрывались */
 .inputGroup:nth-child(1) {
-    z-index: 10;
+    z-index: 30;
 }
 
 .inputGroup:nth-child(2) {

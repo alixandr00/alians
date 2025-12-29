@@ -16,28 +16,52 @@ export const CustomOrder = ({ searchTerm }) => {
     const pickerRef = useRef(null);
     const catalogContentRef = useRef(null);
 
+
     const [dbCars, setDbCars] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedCar, setSelectedCar] = useState(null);
     const [currentMainImage, setCurrentMainImage] = useState(null);
     const [isPickerOpen, setIsPickerOpen] = useState(false);
+    const [touchStart, setTouchStart] = useState(null);
+    const [touchEnd, setTouchEnd] = useState(null);
 
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [selectedModels, setSelectedModels] = useState([]);
-    const [priceRange, setPriceRange] = useState([0, 100000]);
-    const [yearRange, setYearRange] = useState([2010, 2025]);
+    const [priceRange, setPriceRange] = useState([0, 300000]);
+    const [yearRange, setYearRange] = useState([2020, 2026]);
     const [mileageRange, setMileageRange] = useState([0, 300000]);
     const [transmission, setTransmission] = useState('Все');
     const [fuelType, setFuelType] = useState('Все');
     const [selectedColors, setSelectedColors] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(1);
+    const [appliedFilters, setAppliedFilters] = useState({
+        brands: [],
+        models: [],
+        price: [0, 300000],
+        year: [2020, 2026],
+        mileage: [0, 300000],
+        transmission: 'Все',
+        fuel: 'Все',
+        colors: []
+    });
+
     const carsPerPage = 3;
 
-    const [, setAppliedFilters] = useState({
-        brands: [], price: [0, 100000], year: [2010, 2025],
-        mileage: [0, 300000], transmission: 'Все', fuel: 'Все'
-    });
+    const allPhotos = useMemo(() => {
+        if (!selectedCar) return [];
+
+        const mainImg = selectedCar.image;
+        const gallery = selectedCar.images || [];
+
+        if (gallery.includes(mainImg)) {
+            return gallery;
+        } else {
+            return [mainImg, ...gallery];
+        }
+    }, [selectedCar]);
+
+
 
     const [searchParams] = useSearchParams();
 
@@ -160,29 +184,32 @@ export const CustomOrder = ({ searchTerm }) => {
             const carYear = Number(car.year) || 0;
             const carMileage = Number(car.mileage) || 0;
 
-            // --- ЛОГИКА ЦВЕТА ---
-            // Если массив выбранных цветов пуст - показываем все.
-            // Иначе проверяем, есть ли цвет машины в списке выбранных.
-            const matchColor = selectedColors.length === 0 || selectedColors.includes(car.color);
+            // Фильтруем ТОЛЬКО по appliedFilters
+            const matchBrand = appliedFilters.brands.length === 0 ||
+                appliedFilters.brands.some(b => b.toLowerCase() === brandInDb);
 
-            const matchBrand = selectedBrands.length === 0 || selectedBrands.some(b => b.toLowerCase() === brandInDb);
-            const matchModel = selectedModels.length === 0 || selectedModels.some(m => {
-                const mLower = m.toLowerCase().trim();
-                return titleInDb.includes(mLower) || mLower.includes(titleInDb);
-            });
-            const matchPrice = carPrice >= priceRange[0] && carPrice <= priceRange[1];
-            const matchYear = carYear >= yearRange[0] && carYear <= yearRange[1];
-            const matchMileage = (carMileage <= 0) ? true : (carMileage >= mileageRange[0] && carMileage <= mileageRange[1]);
-            const matchTrans = transmission === 'Все' || car.transmission === transmission;
-            const matchFuel = fuelType === 'Все' || car.fuel === fuelType;
+            const matchModel = appliedFilters.models.length === 0 ||
+                appliedFilters.models.some(m => {
+                    const mLower = m.toLowerCase().trim();
+                    return titleInDb.includes(mLower) || mLower.includes(titleInDb);
+                });
+
+            const matchPrice = carPrice >= appliedFilters.price[0] && carPrice <= appliedFilters.price[1];
+            const matchYear = carYear >= appliedFilters.year[0] && carYear <= appliedFilters.year[1];
+            const matchMileage = (carMileage <= 0) ? true : (carMileage >= appliedFilters.mileage[0] && carMileage <= appliedFilters.mileage[1]);
+
+            const matchTrans = appliedFilters.transmission === 'Все' || car.transmission === appliedFilters.transmission;
+            const matchFuel = appliedFilters.fuel === 'Все' || car.fuel === appliedFilters.fuel;
+            const matchColor = appliedFilters.colors.length === 0 || appliedFilters.colors.includes(car.color);
+
+            // Поиск (searchTerm) оставляем «живым», чтобы он работал сразу, либо тоже заносим в applied
             const searchLower = (searchTerm || '').trim().toLowerCase();
             const matchSearch = searchLower === '' || titleInDb.includes(searchLower) || brandInDb.includes(searchLower);
 
-            // НЕ ЗАБУДЬ ДОБАВИТЬ matchColor В ИТОГОВЫЙ RETURN
             return matchBrand && matchModel && matchPrice && matchYear && matchMileage && matchTrans && matchFuel && matchSearch && matchColor;
         });
-        // ДОБАВЬ selectedColors В МАССИВ ЗАВИСИМОСТЕЙ useMemo
-    }, [dbCars, selectedBrands, selectedModels, priceRange, yearRange, mileageRange, transmission, fuelType, searchTerm, selectedColors]);
+        // В зависимостях только база данных, поиск и ПРИМЕНЕННЫЕ фильтры
+    }, [dbCars, searchTerm, appliedFilters]);
 
     const currentCars = filteredCars.slice((currentPage - 1) * carsPerPage, currentPage * carsPerPage);
     const totalPages = Math.ceil(filteredCars.length / carsPerPage);
@@ -191,7 +218,7 @@ export const CustomOrder = ({ searchTerm }) => {
         setSelectedBrands([]);
         setSelectedModels([]);
         setPriceRange([0, 100000]);
-        setYearRange([2010, 2025]);
+        setYearRange([2020, 2026]);
         setMileageRange([0, 300000]);
         setTransmission('Все');
         setFuelType('Все');
@@ -200,9 +227,13 @@ export const CustomOrder = ({ searchTerm }) => {
     };
 
     const handleApplyFilters = () => {
-        setAppliedFilters({ brands: selectedBrands, price: priceRange, year: yearRange, mileage: mileageRange, transmission, fuel: fuelType });
-        setSelectedCar(null);
-        setCurrentPage(1);
+        setAppliedFilters({
+            brands: selectedBrands, models: selectedModels, price: priceRange, year: yearRange, mileage: mileageRange, transmission: transmission, fuel: fuelType, colors: selectedColors
+        }); setSelectedCar(null); setCurrentPage(1);
+
+        if (window.innerWidth < 768) {
+            scrollToContent();
+        }
     };
 
     const scrollToContent = () => {
@@ -219,6 +250,46 @@ export const CustomOrder = ({ searchTerm }) => {
                 ? prev.filter(c => c !== colorId)
                 : [...prev, colorId]
         );
+    };
+
+    // --- ЛОГИКА СВАЙПА ---
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e) => {
+        setTouchEnd(null);
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const onTouchMove = (e) => {
+        setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > minSwipeDistance;
+        const isRightSwipe = distance < -minSwipeDistance;
+
+        // Если фоток мало, свайпать некуда
+        if (allPhotos.length <= 1) return;
+
+        // Определяем, какое фото сейчас активное. 
+        // Если currentMainImage null (при загрузке), берем первое из нашего списка.
+        const activeImg = currentMainImage || allPhotos[0];
+        const currentIndex = allPhotos.findIndex(img => img === activeImg);
+
+        if (isLeftSwipe) {
+            // Листаем вперед
+            const nextIndex = (currentIndex + 1) % allPhotos.length;
+            setCurrentMainImage(allPhotos[nextIndex]);
+        }
+
+        if (isRightSwipe) {
+            // Листаем назад
+            const prevIndex = currentIndex === 0 ? allPhotos.length - 1 : currentIndex - 1;
+            setCurrentMainImage(allPhotos[prevIndex]);
+        }
     };
 
     return (
@@ -245,6 +316,8 @@ export const CustomOrder = ({ searchTerm }) => {
                     toggleColor={toggleColor}
                     handleApplyFilters={handleApplyFilters}
                     resetFilters={resetFilters}
+                    transmission={transmission}
+                    setTransmission={setTransmission}
 
                 />
 
@@ -264,21 +337,38 @@ export const CustomOrder = ({ searchTerm }) => {
                             </button>
                             <div className="detailContent">
                                 <div className="gallerySection">
-                                    <div className="mainPhotoBox">
-                                        <img src={currentMainImage || selectedCar.image} alt="Car" className="detailImageMain" />
+                                    <div
+                                        className="mainPhotoBox"
+                                        onTouchStart={onTouchStart}
+                                        onTouchMove={onTouchMove}
+                                        onTouchEnd={onTouchEnd}
+                                    >
+                                        <img
+                                            src={currentMainImage || allPhotos[0]}
+                                            alt="Car"
+                                            className="detailImageMain"
+                                            draggable="false"
+                                        />
                                     </div>
-                                    {selectedCar.images && selectedCar.images.length > 0 && (
+                                    {allPhotos.length > 1 && (
                                         <div className="thumbnailsRow">
-                                            {!selectedCar.images.includes(selectedCar.image) && (
-                                                <img src={selectedCar.image} alt="thumb-main"
-                                                    className={`thumbImg ${currentMainImage === selectedCar.image ? 'active' : ''}`}
-                                                    onClick={() => setCurrentMainImage(selectedCar.image)} />
-                                            )}
-                                            {selectedCar.images.map((imgUrl, idx) => (
-                                                <img key={idx} src={imgUrl} alt={`thumb-${idx}`}
-                                                    className={`thumbImg ${currentMainImage === imgUrl ? 'active' : ''}`}
-                                                    onClick={() => setCurrentMainImage(imgUrl)} />
-                                            ))}
+                                            {allPhotos.map((imgUrl, idx) => {
+                                                // Проверяем, активно ли это фото
+                                                // Если currentMainImage еще не задан (null), активным считается 0-й элемент
+                                                const isActive = currentMainImage
+                                                    ? currentMainImage === imgUrl
+                                                    : idx === 0;
+
+                                                return (
+                                                    <img
+                                                        key={idx}
+                                                        src={imgUrl}
+                                                        alt={`thumb-${idx}`}
+                                                        className={`thumbImg ${isActive ? 'active' : ''}`}
+                                                        onClick={() => setCurrentMainImage(imgUrl)}
+                                                    />
+                                                );
+                                            })}
                                         </div>
                                     )}
                                 </div>

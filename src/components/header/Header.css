@@ -533,3 +533,64 @@
         cursor: pointer;
     }
 }
+
+.countrySelectWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.countrySelectBtn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.countryDropdownList {
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 150px;
+    padding: 8px 0;
+    margin-top: 10px;
+}
+
+.countryOptionItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 14px;
+    color: #333;
+    font-size: 12px;
+    text-decoration: none;
+
+}
+
+.countryOptionItem:hover {
+    background: #f5f5f5;
+}
+
+.countryOptionItem.current {
+    color: #2b7a64;
+    font-weight: 600;
+}
+
+.optionFlagImg {
+    width: 20px;
+    height: 14px;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+.arrowIcon.rotate {
+    transform: rotate(180deg);
+}

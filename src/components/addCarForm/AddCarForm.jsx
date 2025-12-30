@@ -256,7 +256,6 @@ export default function AddCarForm({ onCarAdded, editData }) {
                         <option value="Бензин">Бензин</option>
                         <option value="Электро">Электро</option>
                         <option value="Гибрид">Гибрид</option>
-                        <option value="Дизель">Дизель</option>
                     </select>
                 </div>
             </div>

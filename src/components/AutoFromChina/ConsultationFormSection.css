@@ -257,3 +257,38 @@
         flex: none;
     }
 }
+
+/* Делаем заголовок группы похожим на кнопку "Назад" */
+.cityGroupTitle.backButton {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #f5f5f5;
+    /* Легкий фон */
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    font-weight: 600;
+    color: #333;
+    transition: background 0.2s;
+}
+
+.cityGroupTitle.backButton:hover {
+    background-color: #e0e0e0;
+}
+
+.dropdownHeader {
+    padding: 8px 15px;
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Опции для стран */
+.cityOption.countryOption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+}

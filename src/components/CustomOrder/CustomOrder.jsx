@@ -390,7 +390,7 @@ export const CustomOrder = ({ searchTerm }) => {
                                             <div className="specCard">
                                                 <div className="specText">
                                                     <span className="specLabel">{t('spec_mileage')}</span>
-                                                    <span className="specValue">{selectedCar.mileage?.toLocaleString()} км</span>
+                                                    <span className="specValue">{selectedCar.mileage?.toLocaleString()} {t('unit_km')}</span>
                                                 </div>
                                             </div>
                                             <div className="specCard">
@@ -413,7 +413,7 @@ export const CustomOrder = ({ searchTerm }) => {
                                     </div>
                                     {selectedCar.description && (
                                         <div className="detailDescription">
-                                            <h3>{t('description_title') || 'Описание'}</h3>
+                                            <h3>{t('desc_title')}</h3>
                                             <p>{selectedCar.description}</p>
                                         </div>
                                     )}

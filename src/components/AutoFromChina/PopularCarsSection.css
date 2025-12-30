@@ -26,7 +26,7 @@
 
 .sliderWrapper {
     position: relative;
-    padding: 0 50px;
+    /* padding: 0 50px; */
 }
 
 .navBtn {
@@ -69,26 +69,18 @@
     right: 0;
 }
 
-.mySwiper .swiper-slide {
-    height: auto;
-    /* Позволяет карточкам быть одинаковой высоты */
-    display: flex;
-    justify-content: center;
-}
 
-/* Очистка конфликтов */
-.mySwiper .swiper-wrapper {
-    display: flex;
-    /* УБРАНО justify-content: center - это ломало прокрутку */
-}
+
 
 @media (max-width: 768px) {
     .popularCarsSection {
-        padding: 0 0 40px 0;
+        padding: 0;
     }
 
+
     .sliderWrapper {
-        padding: 0;
+        padding: 0 !important;
+        overflow: hidden;
     }
 
     .sectionTitlee {
@@ -119,4 +111,6 @@
     .swiper-slide-active {
         opacity: 1;
     }
+
+
 }

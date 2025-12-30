@@ -104,9 +104,22 @@ export const PopularCarsSection = ({ selectedCountry }) => {
                             swiper.params.navigation.nextEl = nextRef.current;
                         }}
                         breakpoints={{
-                            0: { slidesPerView: 1.2, centeredSlides: true },
-                            768: { slidesPerView: 2, centeredSlides: false },
-                            1024: { slidesPerView: 3, centeredSlides: false }
+                            0: {
+                                // На мобилке всегда 1.2 слайда, если машин много, 
+                                // и ровно 1, если машина одна
+                                slidesPerView: popularCars.length === 1 ? 1 : 1.2,
+                                centeredSlides: true
+                            },
+                            768: {
+                                slidesPerView: 2,
+                                centeredSlides: false,
+                                spaceBetween: 20
+                            },
+                            1024: {
+                                slidesPerView: 3,
+                                centeredSlides: false,
+                                spaceBetween: 20
+                            }
                         }}
                         className="mySwiper"
                     >

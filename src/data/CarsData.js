@@ -40,32 +40,32 @@ export const row1Brands = [
     {
         name: 'Audi',
         icon: 'https://www.carlogos.org/car-logos/audi-logo.png',
-        models: ['A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'Q2', 'Q2L', 'Q3', 'Q3 Sportback', 'Q5', 'Q5 Sportback', 'Q7', 'Q8', 'e-tron', '100', '80']
+        models: ['A3', 'A4', 'A5', 'A6', 'A6 e-tron', 'A7', 'A8', 'Q2', 'Q2L', 'Q3', 'Q3 Sportback', 'Q4 e-tron', 'Q5', 'Q5 Sportback', 'Q6 e-tron', 'Q7', 'Q8', 'e-tron', '100', '80']
     },
     {
         name: 'BMW',
         icon: 'https://www.carlogos.org/car-logos/bmw-logo.png',
-        models: ['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', '3 Series', '5 Series', '7 Series', 'M5', 'iX', 'i7']
+        models: ['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', '3 Series', '5 Series', '7 Series', 'M5', 'iX', 'i7', 'iX3 (2026)']
     },
     {
         name: 'BYD',
         icon: 'https://www.carlogos.org/car-logos/byd-logo.png',
-        models: ['Destroyer 05', 'Leopard 5', 'Leopard 8', 'Song L', 'Tang L', 'Yangwang U8', 'Yangwang U9', 'Han', 'Qin Plus', 'Yuan Plus', 'Song Plus', 'Seal', 'Dolphin', 'Chazor']
+        models: ['Destroyer 05', 'Leopard 5', 'Leopard 8', 'Song L', 'Tang L', 'Yangwang U8', 'Yangwang U9', 'Han', 'Qin Plus', 'Yuan Plus', 'Song Plus', 'Seal', 'Dolphin', 'Chazor', 'Seagull']
     },
     {
         name: 'Changan',
         icon: 'https://www.carlogos.org/car-logos/changan-logo.png',
-        models: ['UNI-K', 'UNI-V', 'UNI-T', 'UNI-S', 'UNI-Z', 'Deepal S05', 'Deepal S07', 'Deepal S09', 'CS15', 'CS35', 'CS35 Plus', 'CS55', 'CS55 Plus', 'CS75', 'CS75 Plus', 'CS85', 'CS95', 'CS95 Plus', 'X5 Plus', 'X7 Plus', 'Hunter Plus']
+        models: ['UNI-K', 'UNI-V', 'UNI-T', 'UNI-S', 'UNI-Z', 'Deepal S05', 'Deepal S07', 'Deepal S09', 'CS15', 'CS35', 'CS35 Plus', 'CS55', 'CS55 Plus', 'CS75', 'CS75 Plus', 'CS85', 'CS95', 'CS95 Plus', 'X5 Plus', 'X7 Plus', 'Hunter Plus', 'Avatr 11']
     },
     {
         name: 'Chevrolet',
         icon: 'https://www.carlogos.org/car-logos/chevrolet-logo.png',
-        models: ['Monza', 'Spark', 'Cobalt', 'Malibu', 'Equinox', 'Tahoe', 'Captiva', 'Cruze', 'Aveo', 'Damas']
+        models: ['Monza', 'Spark', 'Cobalt', 'Malibu', 'Equinox EV', 'Tahoe', 'Captiva', 'Cruze', 'Aveo', 'Damas', 'Blazer EV']
     },
     {
         name: 'Chery',
         icon: 'https://www.carlogos.org/car-logos/chery-logo.png',
-        models: ['Tiggo 4 Pro', 'Tiggo 7 Pro', 'Tiggo 8 Pro', 'Arrizo 8', 'Tiggo 2', 'QQ']
+        models: ['Tiggo 4 Pro', 'Tiggo 7 Pro', 'Tiggo 8 Pro', 'Arrizo 8', 'Tiggo 2', 'QQ', 'Tiggo 9']
     },
     {
         name: 'Daewoo',
@@ -75,50 +75,49 @@ export const row1Brands = [
     {
         name: 'Exeed',
         icon: 'https://www.carlogos.org/car-logos/exeed-logo.png',
-        models: ['RX', 'VX', 'TXL', 'LX']
+        models: ['RX', 'VX', 'TXL', 'LX', 'Exlantix ES']
     },
     {
         name: 'Ford',
         icon: 'https://www.carlogos.org/car-logos/ford-logo.png',
-        models: ['Focus', 'Fusion', 'Mondeo', 'Explorer', 'F-150', 'Mustang', 'Transit']
+        models: ['Focus', 'Fusion', 'Mondeo', 'Explorer', 'F-150', 'Mustang', 'Transit', 'Mustang Mach-E']
     },
     {
         name: 'Geely',
         icon: 'https://www.carlogos.org/car-logos/geely-logo.png',
-        models: ['Monjaro', 'Tugella', 'Coolray', 'Atlas', 'Atlas Pro', 'Galaxy M9', 'Galaxy Starship 7', 'Emgrand', 'Okavango', 'Preface']
+        models: ['Monjaro', 'Tugella', 'Coolray', 'Atlas', 'Atlas Pro', 'Galaxy M9', 'Galaxy Starship 7', 'Emgrand', 'Okavango', 'Preface', 'Galaxy E8']
     },
     {
         name: 'Honda',
         icon: 'https://www.carlogos.org/car-logos/honda-logo.png',
-        models: ['CR-V', 'Fit', 'Stepwgn', 'Accord', 'Civic', 'Odyssey', 'Inspire', 'Stream', 'Elysion', 'HR-V', 'e:NS1', 'e:NP1']
+        models: ['CR-V', 'Fit', 'Stepwgn', 'Accord', 'Civic', 'Odyssey', 'Inspire', 'Stream', 'Elysion', 'HR-V', 'e:NS1', 'e:NP1', 'Prelude (2026)']
     },
     {
         name: 'Hyundai',
         icon: 'https://www.carlogos.org/car-logos/hyundai-logo.png',
-        models: ['Elantra', 'Sonata', 'Santa Fe', 'Tucson', 'Palisade', 'Staria', 'Porter', 'Accent', 'Solaris', 'Getz', 'Starex']
+        models: ['Elantra', 'Sonata', 'Santa Fe', 'Tucson', 'Palisade', 'Staria', 'Porter', 'Accent', 'Solaris', 'Getz', 'Starex', 'Ioniq 5', 'Ioniq 9']
     },
     {
         name: 'Jetour',
         icon: 'https://www.carlogos.org/car-logos/jetour-logo.png',
-        models: ['Dashing', 'X70 Plus', 'X90 Plus', 'Traveller (T2)', 'X70']
+        models: ['Dashing', 'X70 Plus', 'X90 Plus', 'Traveller (T2)', 'X70', 'T1']
     }
 ];
-
 export const row2Brands = [
     {
         name: 'Kia',
         icon: 'https://www.carlogos.org/car-logos/kia-logo.png',
-        models: ['K3', 'K5', 'Seltos', 'Sportage', 'Lion Platinum', 'Sorento', 'Carnival', 'Morning', 'Rio', 'Cerato', 'EV6', 'EV9']
+        models: ['K3', 'K4', 'K5', 'Seltos', 'Sportage (2026)', 'Lion Platinum', 'Sorento', 'Carnival', 'Morning', 'Rio', 'Cerato', 'EV6', 'EV9', 'EV3', 'EV5']
     },
     {
         name: 'Lada',
         icon: 'https://www.carlogos.org/car-logos/lada-logo.png',
-        models: ['2107', 'Priora', 'Niva', 'Granta', 'Vesta', 'Largus', '2114', 'Kalina']
+        models: ['2107', 'Priora', 'Niva Legend', 'Niva Travel', 'Granta', 'Vesta', 'Largus', '2114', 'Kalina', 'Aura', 'Iskra (2025)']
     },
     {
         name: 'Lexus',
         icon: 'https://www.carlogos.org/car-logos/lexus-logo.png',
-        models: ['RX 300', 'RX 330', 'RX 350', 'RX 450h', 'ES 200', 'ES 250', 'ES 350', 'LX 470', 'LX 570', 'LX 600', 'GX 470', 'GX 460', 'IS 250', 'GS 300', 'NX']
+        models: ['RX 300', 'RX 350', 'RX 450h', 'RX 500h', 'ES 200', 'ES 250', 'ES 350', 'ES 300h', 'LX 600', 'GX 550', 'NX 350h', 'RZ 450e', 'LM']
     },
     {
         name: 'LiXiang',
@@ -128,82 +127,82 @@ export const row2Brands = [
     {
         name: 'Lynk & Co',
         icon: LincCo,
-        models: ['01', '03', '05', '06', '08', '09', 'Z10']
+        models: ['01', '03', '05', '06', '08', '09', 'Z10', '900 (Flagship)']
     },
     {
         name: 'Mazda',
         icon: 'https://www.carlogos.org/car-logos/mazda-logo.png',
-        models: ['CX-5', 'EZ-60', 'Mazda 6', 'Mazda 3', 'CX-7', 'CX-9', 'Demio', '626', 'MPV']
+        models: ['CX-5', 'CX-60', 'CX-90', 'EZ-60', 'Mazda 6', 'Mazda 3', 'CX-7', 'CX-9', 'Demio', '626', 'MPV']
     },
     {
         name: 'Mercedes-Benz',
         icon: 'https://www.carlogos.org/car-logos/mercedes-benz-logo.png',
-        models: ['E-Class', 'E300', 'S-Class', 'GLS 260', 'GLS 300', 'GLS 450', 'G-Class', 'GLE', 'C-Class', 'ML', 'Sprinter', 'Vito']
+        models: ['E-Class', 'E300', 'S-Class', 'GLS 260', 'GLS 300', 'GLS 450', 'G-Class (Electric)', 'GLE', 'C-Class', 'CLA (2026)', 'ML', 'Sprinter', 'Vito']
     },
     {
         name: 'Mitsubishi',
         icon: 'https://www.carlogos.org/car-logos/mitsubishi-logo.png',
-        models: ['Pajero', 'Pajero Sport', 'Delica', 'Outlander', 'Lancer', 'Galant', 'L200', 'ASX']
+        models: ['Pajero', 'Pajero Sport', 'Delica', 'Outlander', 'Lancer', 'Galant', 'L200', 'ASX', 'Xforce']
     },
     {
         name: 'Nissan',
         icon: 'https://www.carlogos.org/car-logos/nissan-logo.png',
-        models: ['Qashqai', 'X-Trail', 'Patrol', 'Ariya', 'Sylphy', 'Altima', 'Teana', 'Note', 'Tiida', 'Juke', 'Terrano']
+        models: ['Qashqai', 'X-Trail', 'Patrol (2025)', 'Ariya', 'Sylphy', 'Altima', 'Teana', 'Note', 'Tiida', 'Juke', 'Terrano']
     },
     {
         name: 'Omoda',
         icon: Omoda,
-        models: ['C5', 'S5', 'E5']
+        models: ['C5', 'S5', 'E5', 'C7']
     },
     {
         name: 'Skoda',
         icon: 'https://www.carlogos.org/car-logos/skoda-logo.png',
-        models: ['Kamiq', 'Karoq', 'Octavia', 'Superb', 'Kodiaq', 'Rapid']
+        models: ['Kamiq', 'Karoq', 'Octavia', 'Superb (2025)', 'Kodiaq', 'Rapid', 'Elroq']
     },
     {
         name: 'Subaru',
         icon: 'https://www.carlogos.org/car-logos/subaru-logo.png',
-        models: ['Forester', 'Legacy', 'Outback', 'Impreza', 'Tribeca', 'XV']
+        models: ['Forester (2025)', 'Legacy', 'Outback', 'Impreza', 'Tribeca', 'XV', 'Solterra']
     },
     {
         name: 'Tank',
         icon: Tank,
-        models: ['300', '400', '500', '700']
+        models: ['300', '400 Hi4-T', '500', '700 Hi4-T', '800']
     },
     {
         name: 'Tesla',
         icon: 'https://www.carlogos.org/car-logos/tesla-logo.png',
-        models: ['Model 3', 'Model Y', 'Model S', 'Model X', 'Cybertruck']
+        models: ['Model 3 Highland', 'Model Y Juniper', 'Model S', 'Model X', 'Cybertruck']
     },
     {
         name: 'Toyota',
         icon: 'https://www.carlogos.org/car-logos/toyota-logo.png',
-        models: ['Camry', 'Corolla', 'Corolla Cross', 'Highlander', 'RAV4', 'Land Cruiser 100', 'Land Cruiser 200', 'Land Cruiser 300', 'Prado', 'Alphard', 'Sienna', '4Runner', 'Sequoia', 'Prius', 'Ist', 'Vitz', 'Wish', 'Harrier']
+        models: ['Camry (V80)', 'Corolla (2027)', 'Corolla Cross', 'Highlander', 'RAV4 (2026)', 'Land Cruiser 300', 'Prado 250', 'Alphard', 'Sienna', '4Runner', 'Sequoia', 'Prius', 'Harrier', 'bZ4X']
     },
     {
         name: 'Volkswagen',
         icon: 'https://www.carlogos.org/car-logos/volkswagen-logo.png',
-        models: ['Tiguan', 'Lamando', 'Teramont Pro', 'Tharu', 'Tavendor', 'Bora', 'ID.4', 'ID.6', 'Passat', 'Golf', 'Touareg', 'Jetta', 'Polo']
+        models: ['Tiguan (2025)', 'Lamando L', 'Teramont Pro', 'Tharu', 'Tavendor', 'Bora', 'ID.4', 'ID.7', 'Passat B9', 'Golf 8.5', 'Touareg', 'Jetta', 'Polo']
     },
     {
         name: 'Volvo',
         icon: 'https://www.carlogos.org/car-logos/volvo-logo.png',
-        models: ['V60', 'XC60', 'XC40', 'XC90', 'S90', 'S60']
+        models: ['V60', 'XC60', 'XC40', 'XC90', 'EX30', 'EX90', 'S90', 'S60', 'EM90']
     },
     {
         name: 'Voyah',
         icon: Voyah,
-        models: ['Free', 'Dream', 'Passion']
+        models: ['Free', 'Dream', 'Passion', 'Courage']
     },
     {
         name: 'Xiaomi',
         icon: Xiaomi,
-        models: ['SU7', 'SU7 Max', 'SU7 Pro']
+        models: ['SU7', 'SU7 Max', 'SU7 Pro', 'SU7 Ultra (2025)', 'MX11 (SUV)']
     },
     {
         name: 'Zeekr',
         icon: 'https://www.carlogos.org/car-logos/zeekr-logo.png',
-        models: ['001', '007', '009', 'X', '7X']
+        models: ['001', '007', '009', 'X', '7X', 'Mix']
     }
 ];
 

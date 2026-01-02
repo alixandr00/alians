@@ -1,0 +1,29 @@
+.view-360-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    cursor: grab;
+    position: relative;
+    user-select: none;
+    touch-action: none;
+    /* Важно для мобилок, чтобы страница не скроллилась при вращении */
+}
+
+.view-360-container:active {
+    cursor: grabbing;
+}
+
+.view-360-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    background: transparent;
+}
+
+.view-360-hint {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin-top: 10px;
+}

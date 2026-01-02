@@ -8,22 +8,22 @@ import {
     IoSearchOutline,
     IoMenuOutline,
     IoCloseOutline,
-    IoChevronDownOutline
+    IoChevronDownOutline,
+    IoMailOutline // Добавил иконку почты для модалки
 } from 'react-icons/io5';
 
 export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
 
-    // Состояния
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLangOpen, setIsLangOpen] = useState(false);
-    const [isCountryOpen, setIsCountryOpen] = useState(false); // Новое состояние для стран
+    const [isCountryOpen, setIsCountryOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false); // Состояние для модалки
     const [suggestions, setSuggestions] = useState([]);
 
-    // Рефы для клика вне элементов
     const langRef = useRef(null);
-    const countryRef = useRef(null); // Реф для селекта стран
+    const countryRef = useRef(null);
 
     const countries = [
         { id: 'china', countryCode: 'CHN' },
@@ -46,15 +46,10 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
 
     const currentLanguage = languages.find(l => l.code === i18n.language) || languages[0];
 
-    // Закрытие селектов при клике вне
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (langRef.current && !langRef.current.contains(event.target)) {
-                setIsLangOpen(false);
-            }
-            if (countryRef.current && !countryRef.current.contains(event.target)) {
-                setIsCountryOpen(false);
-            }
+            if (langRef.current && !langRef.current.contains(event.target)) setIsLangOpen(false);
+            if (countryRef.current && !countryRef.current.contains(event.target)) setIsCountryOpen(false);
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -91,17 +86,28 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
         setIsLangOpen(false);
     };
 
-    // Функция выбора страны
+    // ОБНОВЛЕННАЯ ФУНКЦИЯ ВЫБОРА СТРАНЫ
     const handleCountrySelect = (country) => {
-        setSelectedCountry(country);
-        setIsCountryOpen(false);
+        setIsCountryOpen(false); // Закрываем выпадающий список стран
 
-        if (onCountrySelect) {
-            onCountrySelect(country.id);
+        if (country.id === 'china') {
+            // Если выбрали Китай:
+            setSelectedCountry(country); // Устанавливаем как активную
+            setIsMenuOpen(false);        // Закрываем мобильное меню, если оно открыто
+            navigate('/');               // Переходим на главную
+
+            if (onCountrySelect) {
+                onCountrySelect(country.id);
+            }
+        } else {
+            // Если выбрали любую другую страну — показываем модалку
+            setIsModalOpen(true);
         }
     };
+
     return (
         <header className="headerContainer">
+            {/* Остальная часть хедера остается без изменений до селекта стран */}
             <div className="burgerButton" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                 {isMenuOpen ? <IoCloseOutline /> : <IoMenuOutline />}
             </div>
@@ -118,7 +124,6 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
                 </div>
 
                 <nav className="navMenu">
-                    {/* --- НОВЫЙ СЕЛЕКТ СТРАН --- */}
                     <div className="countrySelectWrapper" ref={countryRef}>
                         <div
                             className={`countrySelectBtn ${isCountryOpen ? 'active' : ''}`}
@@ -131,19 +136,19 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
                         {isCountryOpen && (
                             <div className="countryDropdownList">
                                 {countries.map((c) => (
-                                    <NavLink to='/'
+                                    <div // Заменил NavLink на div, чтобы клик обрабатывался только нашей функцией
                                         key={c.id}
                                         className={`countryOptionItem ${selectedCountry.id === c.id ? 'current' : ''}`}
                                         onClick={() => handleCountrySelect(c)}
+                                        style={{ cursor: 'pointer' }}
                                     >
                                         <Flag code={c.countryCode} className="optionFlagImg" />
                                         <span>{t(`countries.${c.id}`)}</span>
-                                    </NavLink>
+                                    </div>
                                 ))}
                             </div>
                         )}
                     </div>
-                    {/* ------------------------- */}
 
                     <NavLink to="/catalog" className="navLink" onClick={() => setIsMenuOpen(false)}>{t('nav_catalog')}</NavLink>
                     <NavLink to="/contacts" className="navLink" onClick={() => setIsMenuOpen(false)}>{t('nav_contacts')}</NavLink>
@@ -152,7 +157,7 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
                     <NavLink to="/auth" className="navLink" onClick={() => setIsMenuOpen(false)}>{t('nav_login')}</NavLink>
                 </nav>
 
-                {/* Селект языка */}
+                {/* Селект языка (без изменений) */}
                 <div className="customLangWrapper" ref={langRef}>
                     <div className={`langSelectBtn ${isLangOpen ? 'active' : ''}`} onClick={() => setIsLangOpen(!isLangOpen)}>
                         <Flag code={currentLanguage.country} className="selectedFlagImg" />
@@ -205,6 +210,41 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
                     </div>
                 </div>
             </div>
+
+            {/* --- МОДАЛЬНОЕ ОКНО --- */}
+            {isModalOpen && (
+                <div className={`modalOverlay ${i18n.language === 'ar' ? 'rtl' : ''}`} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+                    <div className="unavailableModal">
+                        <button className="modalCloseX" onClick={() => setIsModalOpen(false)}>
+                            <IoCloseOutline />
+                        </button>
+
+                        <h2 className="modalTitle">{t('modal.title')}</h2>
+
+                        <p className="modalText">
+                            {t('modal.text')}
+                        </p>
+
+                        <p className="modalSubText">
+                            {t('modal.subtext')}
+                        </p>
+
+                        <div className="modalNotifyBlock">
+                            <IoMailOutline className="mailIcon" />
+                            <span>{t('modal.notify')}</span>
+                        </div>
+
+                        <button className="submitRequestBtn" onClick={() => {/* Логика заявки */ }}>
+                            {t('modal.submit')}
+                        </button>
+
+                        <button className="closeModalBtn" onClick={() => setIsModalOpen(false)}>
+                            {t('modal.close')}
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {isMenuOpen && <div className="overlay" onClick={() => setIsMenuOpen(false)}></div>}
         </header>
     );

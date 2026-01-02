@@ -112,3 +112,59 @@
 .rtl .whatsapp-wrapper {
     justify-content: flex-start;
 }
+
+/* --- Стили для плавающей кнопки (добавить в конец файла) --- */
+
+.floating-whatsapp {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background-color: #488e2c;
+    /* Официальный зеленый цвет WhatsApp */
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
+    z-index: 10;
+    /* Чтобы была поверх всего */
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.floating-whatsapp:hover {
+    transform: scale(1.05);
+    background-color: #3d7a25;
+}
+
+/* Если нужно подправить RTL для плавающей кнопки (чтобы была слева для арабов) */
+.rtl .floating-whatsapp {
+    right: auto;
+    left: 24px;
+    flex-direction: row-reverse;
+}
+
+/* --- Опционально: Улучшение существующей кнопки (если она выглядела просто) --- */
+.whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #488e2c;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.whatsapp-btn:hover {
+    background-color: #3d7a25;
+}

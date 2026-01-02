@@ -594,3 +594,111 @@
 .arrowIcon.rotate {
     transform: rotate(180deg);
 }
+
+/* --- Стили для модального окна --- */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    /* Затемнение фона */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.unavailableModal {
+    background: white;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    padding: 32px 24px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.modalCloseX {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.modalTitle {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.modalText {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.modalSubText {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 24px;
+}
+
+.modalNotifyBlock {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    text-align: left;
+    font-size: 13px;
+    color: #777;
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+}
+
+.mailIcon {
+    font-size: 18px;
+    color: #aaa;
+    flex-shrink: 0;
+}
+
+.submitRequestBtn {
+    width: 100%;
+    background-color: #387b64;
+    /* Тот самый серо-зеленый цвет с фото */
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.submitRequestBtn:hover {
+    opacity: 0.9;
+}
+
+.closeModalBtn {
+    width: 100%;
+    background: white;
+    color: #333;
+    border: 1px solid #eee;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+}

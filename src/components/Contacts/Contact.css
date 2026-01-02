@@ -1,0 +1,149 @@
+/* Общий контейнер страницы */
+.contacts-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    position: relative;
+    /* Для позиционирования плавающей кнопки */
+}
+
+/* Секция с заголовком */
+.contacts-header {
+    text-align: center;
+    max-width: 480px;
+    margin-bottom: 32px;
+}
+
+.contacts-header h1 {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    /* Шрифт с засечками как на фото */
+    font-size: 36px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 16px;
+    margin-top: 0;
+}
+
+.contacts-header p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Карточка контактов */
+.contacts-card {
+    background-color: #fff;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    border-radius: 20px;
+    padding: 24px;
+    width: 100%;
+    max-width: 380px;
+    box-sizing: border-box;
+}
+
+/* Большая зеленая кнопка */
+.whatsapp-btn-large {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #488e2c;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 8px rgba(72, 142, 44, 0.2);
+}
+
+.whatsapp-btn-large:hover {
+    background-color: #3d7a25;
+}
+
+/* Блок с номером и почтой */
+.info-block {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.phone-number {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.email-link {
+    color: #555;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.2s;
+}
+
+.email-link:hover {
+    color: #000;
+}
+
+/* Блок с графиком работы */
+.schedule-box {
+    background-color: #f9fafb;
+    /* Очень светло-серый */
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+}
+
+.schedule-days {
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-size: 15px;
+}
+
+.schedule-weekend {
+    color: #777;
+    font-size: 14px;
+}
+
+/* Плавающая кнопка внизу справа */
+.floating-whatsapp {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background-color: #488e2c;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.floating-whatsapp:hover {
+    transform: scale(1.05);
+    background-color: #3d7a25;
+}
+
+/* Иконки SVG */
+.icon-svg {
+    fill: currentColor;
+}

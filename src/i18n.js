@@ -188,12 +188,27 @@ const resources = {
                     "Есть ли гарантия?"
                 ]
             },
+            "contacts": {
+                "title": "Свяжитесь с нами",
+                "subtitle": "Мы всегда готовы ответить на ваши вопросы и помочь с выбором авто.",
+                "whatsapp_btn": "Написать в WhatsApp",
+                "schedule_work": "Пн—Сб: 09:00 — 19:00",
+                "schedule_off": "Вс: выходной"
+            },
             "countries": {
                 "china": "Авто из Китая",
                 "korea": "Авто из Кореи",
                 "georgia": "Авто из Грузии",
                 "dubai": "Авто из Дубая",
                 "usa": "Авто из Америки"
+            },
+            "modal": {
+                "title": "Временно недоступно",
+                "text": "В данный момент мы работаем только с автомобилями из Китая.",
+                "subtext": "Направления Корея, Грузия, Дубай и США находятся в стадии подключения.",
+                "notify": "Оставьте заявку, и мы уведомим вас, как только направление станет доступно.",
+                "submit": "Оставить заявку",
+                "close": "Закрыть"
             },
 
 
@@ -397,12 +412,27 @@ const resources = {
                     "Is there a warranty?"
                 ]
             },
+            "contacts": {
+                "title": "Contact Us",
+                "subtitle": "We are always ready to answer your questions and help with car selection.",
+                "whatsapp_btn": "Message on WhatsApp",
+                "schedule_work": "Mon—Sat: 09:00 — 19:00",
+                "schedule_off": "Sun: Closed"
+            },
             "countries": {
                 "china": "Cars from China",
                 "korea": "Cars from Korea",
                 "georgia": "Cars from Georgia",
                 "dubai": "Cars from Dubai",
                 "usa": "Cars from USA"
+            },
+            "modal": {
+                "title": "Temporarily Unavailable",
+                "text": "Currently, we only operate with cars from China.",
+                "subtext": "Routes for Korea, Georgia, Dubai, and the USA are in the process of being connected.",
+                "notify": "Leave a request, and we will notify you as soon as the direction becomes available.",
+                "submit": "Leave a request",
+                "close": "Close"
             }
 
         },
@@ -604,12 +634,27 @@ const resources = {
                     "有保修吗？"
                 ]
             },
+            "contacts": {
+                "title": "联系我们",
+                "subtitle": "我们随时为您解答疑问并协助您挑选汽车。",
+                "whatsapp_btn": "在 WhatsApp 上写信",
+                "schedule_work": "周一至周六：09:00 — 19:00",
+                "schedule_off": "周日：休息"
+            },
             "countries": {
                 "china": "来自中国的车",
                 "korea": "来自韩国的车",
                 "georgia": "来自格鲁吉亚的车",
                 "dubai": "来自迪拜的车",
                 "usa": "来自美国的车"
+            },
+            "modal": {
+                "title": "暂时不可用",
+                "text": "目前我们仅经营来自中国的汽车。",
+                "subtext": "韩国、格鲁吉亚、迪拜和美国的方向正在连接中。",
+                "notify": "提交申请，一旦该方向可用，我们将立即通知您。",
+                "submit": "提交申请",
+                "close": "关闭"
             }
         },
 
@@ -810,12 +855,27 @@ const resources = {
                     "보증이 있나요?"
                 ]
             },
+            "contacts": {
+                "title": "문의하기",
+                "subtitle": "우리는 항상 귀하의 질문에 답변하고 차량 선택을 도울 준비가 되어 있습니다.",
+                "whatsapp_btn": "WhatsApp으로 메시지 보내기",
+                "schedule_work": "월—토: 09:00 — 19:00",
+                "schedule_off": "일요일: 휴무"
+            },
             "countries": {
                 "china": "중국 자동차",
                 "korea": "한국 자동차",
                 "georgia": "조지아 자동차",
                 "dubai": "두바이 자동차",
                 "usa": "미국 자동차"
+            },
+            "modal": {
+                "title": "일시적으로 사용할 수 없음",
+                "text": "현재 중국산 자동차만 취급하고 있습니다.",
+                "subtext": "한국, 조지아, 두바이, 미국 노선은 연결 준비 중입니다.",
+                "notify": "신청서를 남겨주시면 해당 노선이 이용 가능해지는 대로 알려드리겠습니다.",
+                "submit": "신청하기",
+                "close": "닫기"
             }
         },
 
@@ -1016,12 +1076,27 @@ const resources = {
                     "არის თუ არა გარანტია?"
                 ]
             },
+            "contacts": {
+                "title": "დაგვიკავშირდით",
+                "subtitle": "ჩვენ ყოველთვის მზად ვართ ვუპასუხოთ თქვენს კითხვებს და დაგეხმაროთ ავტომობილის შერჩევაში.",
+                "whatsapp_btn": "მოგვწერეთ WhatsApp-ში",
+                "schedule_work": "ორშ—შაბ: 09:00 — 19:00",
+                "schedule_off": "კვირა: დასვენება"
+            },
             "countries": {
                 "china": "ავტომობილები ჩინეთიდან",
                 "korea": "ავტომობილები კორეიდან",
                 "georgia": "ავტომობილები საქართველოდან",
                 "dubai": "ავტომობილები დუბაიდან",
                 "usa": "ავტომობილები ამერიკიდან"
+            },
+            "modal": {
+                "title": "დროებით მიუწვდომელია",
+                "text": "ამჟამად ჩვენ ვმუშაობთ მხოლოდ ჩინეთიდან ჩამოყვანილ ავტომობილებზე.",
+                "subtext": "კორეის, საქართველოს, დუბაისა და აშშ-ს მიმართულებები ჩართვის პროცესშია.",
+                "notify": "დატოვეთ მოთხოვნა და ჩვენ შეგატყობინებთ, როგორც კი მიმართულება ხელმისაწვდომი გახდება.",
+                "submit": "მოთხოვნის დატოვება",
+                "close": "დახურვა"
             }
         },
 
@@ -1222,12 +1297,27 @@ const resources = {
                     "هل يوجد ضمان؟"
                 ]
             },
+            "contacts": {
+                "title": "اتصل بنا",
+                "subtitle": "نحن مستعدون دائماً للإجابة على أسئلتك ومساعدتك في اختيار السيارة.",
+                "whatsapp_btn": "تواصل عبر واتساب",
+                "schedule_work": "الاثنين—السبت: 09:00 — 19:00",
+                "schedule_off": "الأحد: عطلة"
+            },
             "countries": {
                 "china": "سيارات من الصين",
                 "korea": "سيارات من كوريا",
                 "georgia": "سيارات من جورجيا",
                 "dubai": "سيارات من دبي",
                 "usa": "سيارات من أمريكا"
+            },
+            "modal": {
+                "title": "غير متوفر حالياً",
+                "text": "في الوقت الحالي، نحن نعمل فقط مع السيارات المستوردة من الصين.",
+                "subtext": "وجهات كوريا، جورجيا، دبي، والولايات المتحدة قيد التوصيل حالياً.",
+                "notify": "اترك طلباً وسنقوم بإخطارك بمجرد توفر الوجهة.",
+                "submit": "تقديم طلب",
+                "close": "إغلاق"
             }
         },
 

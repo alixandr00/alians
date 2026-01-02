@@ -177,6 +177,17 @@ const resources = {
             "form_placeholder_select_city": "Выберите город",
             "choose_country": "Страна",
             "no_cities": "Нет списка городов",
+            "faq": {
+                "title": "Частые вопросы",
+                "questions": [
+                    "Откуда автомобили?",
+                    "Новые или с пробегом?",
+                    "Сколько времени занимает доставка?",
+                    "Можно ли заказать авто под индивидуальный запрос",
+                    "Как происходит оплата",
+                    "Есть ли гарантия?"
+                ]
+            },
             "countries": {
                 "china": "Авто из Китая",
                 "korea": "Авто из Кореи",
@@ -184,6 +195,7 @@ const resources = {
                 "dubai": "Авто из Дубая",
                 "usa": "Авто из Америки"
             },
+
 
         },
 
@@ -374,6 +386,17 @@ const resources = {
             "form_placeholder_select_city": "Select city",
             "choose_country": "Country",
             "no_cities": "No cities available",
+            "faq": {
+                "title": "Frequently Asked Questions",
+                "questions": [
+                    "Where do the cars come from?",
+                    "New or with mileage?",
+                    "How long does delivery take?",
+                    "Is it possible to order a car under an individual request",
+                    "How does the payment happen",
+                    "Is there a warranty?"
+                ]
+            },
             "countries": {
                 "china": "Cars from China",
                 "korea": "Cars from Korea",
@@ -570,6 +593,17 @@ const resources = {
             "form_placeholder_select_city": "请选择城市",
             "choose_country": "国家",
             "no_cities": "没有可用的城市",
+            "faq": {
+                "title": "常见问题",
+                "questions": [
+                    "汽车来自哪里？",
+                    "新车还是二手车？",
+                    "送货需要多长时间？",
+                    "是否可以根据个人要求订购汽车",
+                    "付款是如何进行的",
+                    "有保修吗？"
+                ]
+            },
             "countries": {
                 "china": "来自中国的车",
                 "korea": "来自韩国的车",
@@ -765,6 +799,17 @@ const resources = {
             "form_placeholder_select_city": "도시 선택",
             "choose_country": "국가",
             "no_cities": "도시 없음",
+            "faq": {
+                "title": "자주 묻는 질문",
+                "questions": [
+                    "차량은 어디에서 오나요?",
+                    "신차인가요, 중고차인가요?",
+                    "배송 기간은 얼마나 걸리나요?",
+                    "개별 요청에 따라 차량을 주문할 수 있나요",
+                    "결제는 어떻게 진행되나요",
+                    "보증이 있나요?"
+                ]
+            },
             "countries": {
                 "china": "중국 자동차",
                 "korea": "한국 자동차",
@@ -960,6 +1005,17 @@ const resources = {
             "form_placeholder_select_city": "აირჩიეთ ქალაქი",
             "choose_country": "ქვეყანა",
             "no_cities": "ქალაქები არ არის",
+            "faq": {
+                "title": "ხშირად დასმული კითხვები",
+                "questions": [
+                    "საიდან არის ავტომობილები?",
+                    "ახალი თუ გარბენით?",
+                    "რამდენი დრო სჭირდება მიწოდებას?",
+                    "შესაძლებელია თუ არა ავტოს შეკვეთა ინდივიდუალური მოთხოვნით",
+                    "როგორ ხდება გადახდა",
+                    "არის თუ არა გარანტია?"
+                ]
+            },
             "countries": {
                 "china": "ავტომობილები ჩინეთიდან",
                 "korea": "ავტომობილები კორეიდან",
@@ -1155,6 +1211,17 @@ const resources = {
             "form_placeholder_select_city": "اختر المدينة",
             "choose_country": "الدولة",
             "no_cities": "لا توجد مدن متاحة",
+            "faq": {
+                "title": "الأسئلة الشائعة",
+                "questions": [
+                    "من أين تأتي السيارات؟",
+                    "جديدة أم مستعملة؟",
+                    "كم يستغرق الشحن؟",
+                    "هل من الممكن طلب سيارة بناءً على طلب فردي",
+                    "كيف تتم عملية الدفع",
+                    "هل يوجد ضمان؟"
+                ]
+            },
             "countries": {
                 "china": "سيارات من الصين",
                 "korea": "سيارات من كوريا",

@@ -27,10 +27,12 @@ export const QuickSearchSection = () => {
     }, [selectedBrand]);
 
     const priceOptions = [
-        { value: "0-20000", label: "до $20 000" },
-        { value: "20000-40000", label: "$20 000 - $40 000" },
-        { value: "40000-60000", label: "$40 000 - $60 000" },
-        { value: "60000-999999", label: "от $60 000" }
+        { value: "0-20000", label: t('price_up_to_20k') || "до $20 000" },
+        { value: "20000-50000", label: "$20 000 - $50 000" },
+        { value: "50000-100000", label: "$50 000 - $100 000" },
+        { value: "100000-200000", label: "$100 000 - $200 000" },
+        { value: "200000-300000", label: "$200 000 - $300 000" },
+        { value: "300000-9999999", label: t('price_from_300k') || "от $300 000" }
     ];
 
     // Настройки стилей для библиотеки, чтобы они не конфликтовали с твоим CSS
@@ -62,10 +64,13 @@ export const QuickSearchSection = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        let min = 0, max = 100000;
+        // По умолчанию ставим большой диапазон, чтобы в него входили все авто
+        let min = 0, max = 10000000;
+
         if (priceRange) {
             const parts = priceRange.value.split('-');
-            min = parts[0]; max = parts[1];
+            min = parts[0];
+            max = parts[1];
         }
 
         const query = new URLSearchParams({
@@ -74,6 +79,7 @@ export const QuickSearchSection = () => {
             minPrice: min,
             maxPrice: max
         }).toString();
+
         navigate(`/catalog?${query}`);
     };
 
@@ -107,7 +113,7 @@ export const QuickSearchSection = () => {
                                 value={selectedModel}
                                 onChange={(opt) => setSelectedModel(opt)}
                                 isDisabled={!selectedBrand}
-                                placeholder={selectedBrand ? t('placeholder_brand_model') : t('Выберите марку')}
+                                placeholder={t('placeholder_brand_model')}
                                 menuPlacement="bottom"
                             />
                             <IoChevronDownOutline className="chevronIcon" />

@@ -55,7 +55,9 @@ const resources = {
             "quick_search_title": "Быстрый подбор авто",
             "placeholder_brandd": "Марка",
             "placeholder_brand_model": "Модель",
-            "placeholder_price_range": "от 10 000 – до 30 000",
+            "placeholder_price_range": "Выберите цену",
+            "price_up_to_20k": "До $20 000",
+            "price_from_300k": "От $300 000",
             "btn_show_cars": "Показать авто",
             // eslint-disable-next-line no-dupe-keys
             "popular_cars": "Популярные авто",
@@ -70,13 +72,13 @@ const resources = {
             "вариатор": "Вариатор",
             "advantages_main_title": "Почему выбирают Alians",
             "adv_price_title": "Цена",
-            "adv_price_desc": "Оставьте заявку на подбор авто",
+            "adv_price_desc": "Честная и прозрачная стоимость. Мы подбираем авто напрямую в Китае, без лишних посредников. Вы заранее знаете итоговую цену без скрытых платежей.",
             "adv_selection_title": "Подбор",
-            "adv_selection_desc": "Находим авто в Китае под ваш бюджет",
+            "adv_selection_desc": "Авто под ваш бюджет и запрос. Подбираем автомобили по вашим требованиям: марка, год, комплектация, бюджет. Работаем только с проверенными площадками Китая.",
             "adv_contract_title": "Договор",
-            "adv_contract_desc": "Заключаем договор и прописываем все условия",
+            "adv_contract_desc": "Юридическая безопасность сделки. Заключаем официальный договор, где прописаны все условия, сроки и ответственность сторон. Вы защищены на каждом этапе.",
             "adv_delivery_title": "Доставка",
-            "adv_delivery_desc": "Осуществляем доставку и растаможку авто",
+            "adv_delivery_desc": "Доставка и растаможка под ключ. Организуем доставку автомобиля и полностью сопровождаем процесс растаможки. Вы получаете авто без лишних хлопот.",
             "how_we_work_title": "Как мы работаем",
             "work_process_alt": "Процесс работы",
             "step_request_title": "Заявка",
@@ -178,15 +180,25 @@ const resources = {
             "choose_country": "Страна",
             "no_cities": "Нет списка городов",
             "faq": {
-                "title": "Частые вопросы",
+                "title": "Часто задаваемые вопросы",
                 "questions": [
                     "Откуда автомобили?",
                     "Новые или с пробегом?",
                     "Сколько времени занимает доставка?",
-                    "Можно ли заказать авто под индивидуальный запрос",
-                    "Как происходит оплата",
-                    "Есть ли гарантия?"
-                ]
+                    "Можно ли заказать авто под индивидуальный запрос?",
+                    "Как происходит оплата?",
+                    "Есть ли гарантия?",
+                    "В какие страны вы доставляете?"
+                ],
+                "answers": {
+                    "0": "Все автомобили подбираются на официальных площадках и аукционах Китая. Мы работаем напрямую с проверенными поставщиками и дилерами.",
+                    "1": "Доступны новые автомобили и авто с минимальным пробегом. Перед покупкой проводится проверка технического состояния.",
+                    "2": "В среднем доставка занимает от 14 дней (в зависимости от модели, региона и логистики).",
+                    "3": "Да. Вы можете заказать автомобиль под ваш бюджет и требования (марка, год, комплектация, цвет и т.д.).",
+                    "4": "Работаем по договору. Оплата производится поэтапно, максимально прозрачно и безопасно.",
+                    "5": "Мы сопровождаем сделку от подбора до получения автомобиля и всегда остаёмся на связи с клиентом.",
+                    "6": "На данный момент доставка осуществляется в страны СНГ. Подробности уточняйте у менеджера."
+                }
             },
             "contacts": {
                 "title": "Свяжитесь с нами",
@@ -266,7 +278,9 @@ const resources = {
             "quick_search_title": "Quick Car Selection",
             "placeholder_brandd": "Make",
             "placeholder_brand_model": "Model",
-            "placeholder_price_range": "from 10,000 – to 30,000",
+            "placeholder_price_range": "Select Price Range",
+            "price_up_to_20k": "Up to $20,000",
+            "price_from_300k": "From $300,000",
             "btn_show_cars": "Show Cars",
             "popular_cars": "Popular Cars",
             "loading_cars": "Loading cars...",
@@ -280,13 +294,13 @@ const resources = {
             "вариатор": "CVT",
             "advantages_main_title": "Why Choose Alians",
             "adv_price_title": "Price",
-            "adv_price_desc": "Submit a request for car selection",
+            "adv_price_desc": "Fair and transparent cost. We source cars directly from China, without unnecessary intermediaries. You know the final price in advance with no hidden fees.",
             "adv_selection_title": "Selection",
-            "adv_selection_desc": "We find cars in China within your budget",
+            "adv_selection_desc": "Cars for your budget and request. We select vehicles according to your requirements: make, year, options, budget. We work only with verified Chinese platforms.",
             "adv_contract_title": "Contract",
-            "adv_contract_desc": "We sign a contract and specify all terms",
+            "adv_contract_desc": "Legal security of the transaction. We sign an official contract where all conditions, deadlines, and responsibilities are specified. You are protected at every stage.",
             "adv_delivery_title": "Delivery",
-            "adv_delivery_desc": "We handle delivery and customs clearance",
+            "adv_delivery_desc": "Turnkey delivery and customs clearance. We organize the car delivery and fully support the customs process. You receive your car without any hassle.",
             "how_we_work_title": "How We Work",
             "work_process_alt": "Work process",
             "step_request_title": "Application",
@@ -405,12 +419,22 @@ const resources = {
                 "title": "Frequently Asked Questions",
                 "questions": [
                     "Where do the cars come from?",
-                    "New or with mileage?",
+                    "New or used?",
                     "How long does delivery take?",
-                    "Is it possible to order a car under an individual request",
-                    "How does the payment happen",
-                    "Is there a warranty?"
-                ]
+                    "Can I order a car with custom specifications?",
+                    "How does the payment process work?",
+                    "Is there a warranty?",
+                    "Which countries do you deliver to?"
+                ],
+                "answers": {
+                    "0": "All cars are selected from official platforms and auctions in China. We work directly with verified suppliers and dealers.",
+                    "1": "Both new and low-mileage used cars are available. A technical inspection is performed before purchase.",
+                    "2": "On average, delivery takes from 14 days (depending on the model, region, and logistics).",
+                    "3": "Yes. You can order a car based on your budget and requirements (make, year, features, color, etc.).",
+                    "4": "We work under a contract. Payment is made in stages, ensuring maximum transparency and security.",
+                    "5": "We provide full support from selection to delivery and always stay in touch with the client.",
+                    "6": "Currently, we deliver to CIS countries. Please check with our manager for details."
+                }
             },
             "contacts": {
                 "title": "Contact Us",
@@ -488,7 +512,9 @@ const resources = {
             "quick_search_title": "快速选车",
             "placeholder_brandd": "品牌",
             "placeholder_brand_model": "型号",
-            "placeholder_price_range": "10,000 – 30,000 起",
+            "placeholder_price_range": "选择价格范围",
+            "price_up_to_20k": "$20,000 以下",
+            "price_from_300k": "$300,000 起",
             "btn_show_cars": "显示车辆",
             "popular_cars": "热门车型",
             "loading_cars": "汽车加载中...",
@@ -502,13 +528,13 @@ const resources = {
             "вариатор": "无级变速",
             "advantages_main_title": "为什么选择 Alians",
             "adv_price_title": "价格",
-            "adv_price_desc": "提交选车申请",
-            "adv_selection_title": "挑选",
-            "adv_selection_desc": "在您的预算范围内寻找中国汽车",
+            "adv_price_desc": "公平透明的成本。我们直接从中国采购车辆，无需不必要的中间环节。您提前知道最终价格，无任何隐藏费用。",
+            "adv_selection_title": "选车",
+            "adv_selection_desc": "符合您的预算和需求。我们根据您的要求选择车辆：品牌、年份、配置、预算。我们只与经过验证的中国平台合作。",
             "adv_contract_title": "合同",
-            "adv_contract_desc": "签署合同并明确所有条款",
+            "adv_contract_desc": "交易的法律保障。我们签署正式合同，明确所有条件、期限和双方责任。您在每个阶段都受到保护。",
             "adv_delivery_title": "交付",
-            "adv_delivery_desc": "我们负责运输和清关",
+            "adv_delivery_desc": "一站式交付和清关。我们负责车辆运输并全程协助清关过程。让您毫无烦恼地收到爱车。",
             "how_we_work_title": "我们的工作流程",
             "work_process_alt": "工作流程",
             "step_request_title": "申请",
@@ -626,13 +652,23 @@ const resources = {
             "faq": {
                 "title": "常见问题",
                 "questions": [
-                    "汽车来自哪里？",
+                    "汽车来源哪里？",
                     "新车还是二手车？",
-                    "送货需要多长时间？",
-                    "是否可以根据个人要求订购汽车",
-                    "付款是如何进行的",
-                    "有保修吗？"
-                ]
+                    "运输需要多长时间？",
+                    "可以根据个人需求定制订单吗？",
+                    "如何付款？",
+                    "有保证吗？",
+                    "你们配送到哪些国家？"
+                ],
+                "answers": {
+                    "0": "所有车辆均选自中国官方平台和拍卖会。我们直接与经过验证的供应商和经销商合作。",
+                    "1": "提供新车和极低里程的准新车。购买前均经过严格的技术检测。",
+                    "2": "平均运输时间为 14 天起（取决于车型、地区和物流情况）。",
+                    "3": "可以。您可以根据预算和要求（品牌、年份、配置、颜色等）订购汽车。",
+                    "4": "我们按合同办事。分阶段付款，确保流程透明安全。",
+                    "5": "我们提供从选车到交付的全程随访服务，并始终与客户保持联系。",
+                    "6": "目前配送范围涵盖独联体国家。详情请咨询客户经理。"
+                }
             },
             "contacts": {
                 "title": "联系我们",
@@ -709,7 +745,9 @@ const resources = {
             "quick_search_title": "빠른 차량 매칭",
             "placeholder_brandd": "브랜드",
             "placeholder_brand_model": "모델",
-            "placeholder_price_range": "10,000 – 30,000 부터",
+            "placeholder_price_range": "가격 선택",
+            "price_up_to_20k": "$20,000 미만",
+            "price_from_300k": "$300,000 이상",
             "btn_show_cars": "차량 보기",
             "popular_cars": "인기 차량",
             "loading_cars": "차량 로딩 중...",
@@ -723,13 +761,13 @@ const resources = {
             "вариатор": "무단변속기",
             "advantages_main_title": "Alians를 선택해야 하는 이유",
             "adv_price_title": "가격",
-            "adv_price_desc": "차량 매칭 신청서를 작성하세요",
-            "adv_selection_title": "매칭",
-            "adv_selection_desc": "귀하의 예산에 맞는 중국 차량을 찾아드립니다",
+            "adv_price_desc": "공정하고 투명한 비용. 불필요한 중개인 없이 중국에서 직접 차량을 소싱합니다. 숨겨진 수수료 없이 최종 가격을 사전에 알 수 있습니다.",
+            "adv_selection_title": "맞춤 선택",
+            "adv_selection_desc": "귀하의 예산과 요청에 맞는 차량. 브랜드, 연식, 옵션, 예산 등 귀하의 요구 사항에 따라 차량을 선정합니다. 검증된 중국 플랫폼하고만 협력합니다.",
             "adv_contract_title": "계약",
-            "adv_contract_desc": "모든 조건을 명시하여 계약을 체결합니다",
+            "adv_contract_desc": "거래의 법적 안전성. 모든 조건, 기한 및 책임이 명시된 공식 계약을 체결합니다. 모든 단계에서 귀하는 보호받습니다.",
             "adv_delivery_title": "배송",
-            "adv_delivery_desc": "차량 배송 및 통관을 대행합니다",
+            "adv_delivery_desc": "일괄 배송 및 통관 서비스. 차량 배송을 조직하고 통관 과정을 전적으로 지원합니다. 번거로움 없이 차량을 받으실 수 있습니다.",
             "how_we_work_title": "이용 방법",
             "work_process_alt": "작업 프로세스",
             "step_request_title": "신청",
@@ -847,13 +885,23 @@ const resources = {
             "faq": {
                 "title": "자주 묻는 질문",
                 "questions": [
-                    "차량은 어디에서 오나요?",
+                    "자동차는 어디에서 오나요?",
                     "신차인가요, 중고차인가요?",
                     "배송 기간은 얼마나 걸리나요?",
-                    "개별 요청에 따라 차량을 주문할 수 있나요",
-                    "결제는 어떻게 진행되나요",
-                    "보증이 있나요?"
-                ]
+                    "개별 맞춤 주문이 가능한가요?",
+                    "결제는 어떻게 진행되나요?",
+                    "보증이 있나요?",
+                    "어느 나라로 배송되나요?"
+                ],
+                "answers": {
+                    "0": "모든 차량은 중국의 공식 플랫폼과 경매를 통해 선정됩니다. 검증된 공급업체 및 딜러와 직접 협력합니다.",
+                    "1": "신차와 주행거리가 짧은 중고차 모두 가능합니다. 구매 전 철저한 기술 점검을 실시합니다.",
+                    "2": "배송은 평균 14일 정도 소요됩니다 (모델, 지역 및 물류 상황에 따라 다름).",
+                    "3": "네. 예산과 요구 사항(브랜드, 연식, 옵션, 색상 등)에 맞춰 차량을 주문하실 수 있습니다.",
+                    "4": "계약에 따라 진행됩니다. 결제는 단계별로 이루어지며 매우 투명하고 안전합니다.",
+                    "5": "차량 선정부터 인도까지 거래를 동행하며 고객님과 항상 소통합니다.",
+                    "6": "현재 CIS 국가로 배송이 가능합니다. 자세한 내용은 매니저에게 문의해 주세요."
+                }
             },
             "contacts": {
                 "title": "문의하기",
@@ -930,7 +978,9 @@ const resources = {
             "quick_search_title": "ავტომობილის სწრაფი შერჩევა",
             "placeholder_brandd": "მარკა",
             "placeholder_brand_model": "მოდელი",
-            "placeholder_price_range": "10 000 -დან – 30 000 -მდე",
+            "placeholder_price_range": "აირჩიეთ ფასების დიაპაზონი",
+            "price_up_to_20k": "$20 000-მდე",
+            "price_from_300k": "$300 000-დან",
             "btn_show_cars": "ავტომობილების ჩვენება",
             "popular_cars": "პოპულარული ავტომობილები",
             "loading_cars": "ავტომობილების ჩატვირთვა...",
@@ -944,13 +994,13 @@ const resources = {
             "вариатор": "ვარიატორი",
             "advantages_main_title": "რატომ ირჩევენ Alians-ს",
             "adv_price_title": "ფასი",
-            "adv_price_desc": "დატოვეთ მოთხოვნა ავტომობილის შერჩევაზე",
+            "adv_price_desc": "პატიოსანი და გამჭვირვალე ღირებულება. ჩვენ ვარჩევთ ავტომობილებს პირდაპირ ჩინეთში, ზედმეტი შუამავლების გარეშე. თქვენ წინასწარ იცით საბოლოო ფასი ფარული გადასახადების გარეშე.",
             "adv_selection_title": "შერჩევა",
-            "adv_selection_desc": "ვპოულობთ ავტომობილს ჩინეთში თქვენი ბიუჯეტით",
+            "adv_selection_desc": "ავტო თქვენი ბიუჯეტისა და მოთხოვნის შესაბამისად. ვარჩევთ ავტომობილებს თქვენი მოთხოვნებით: მარკა, წელი, კომპლექტაცია, ბიუჯეტი. ვმუშაობთ მხოლოდ ჩინეთის შემოწმებულ პლატფორმებთან.",
             "adv_contract_title": "ხელშეკრულება",
-            "adv_contract_desc": "ვაფორმებთ ხელშეკრულებას ყველა პირობით",
+            "adv_contract_desc": "გარიგების იურიდიული უსაფრთხოება. ვაფორმებთ ოფიციალურ ხელშეკრულებას, სადაც გაწერილია ყველა პირობა, ვადები და მხარეთა პასუხისმგებლობა. თქვენ დაცული ხართ თითოეულ ეტაპზე.",
             "adv_delivery_title": "მიწოდება",
-            "adv_delivery_desc": "ვახორციელებთ მიწოდებას და განბაჟებას",
+            "adv_delivery_desc": "მიწოდება და განბაჟება სრული სერვისით. ჩვენ ვაორგანიზებთ ავტომობილის მიწოდებას და სრულად ვუზრუნველყოფთ განბაჟების პროცესს. თქვენ იღებთ ავტოს ზედმეტი საზრუნავის გარეშე.",
             "how_we_work_title": "როგორ ვმუშაობთ",
             "work_process_alt": "სამუშაო პროცესი",
             "step_request_title": "განაცხადი",
@@ -1069,12 +1119,22 @@ const resources = {
                 "title": "ხშირად დასმული კითხვები",
                 "questions": [
                     "საიდან არის ავტომობილები?",
-                    "ახალი თუ გარბენით?",
-                    "რამდენი დრო სჭირდება მიწოდებას?",
-                    "შესაძლებელია თუ არა ავტოს შეკვეთა ინდივიდუალური მოთხოვნით",
-                    "როგორ ხდება გადახდა",
-                    "არის თუ არა გარანტია?"
-                ]
+                    "ახალი თუ მეორადი?",
+                    "რა დროს იკავებს მიწოდება?",
+                    "შესაძლებელია ავტოს ინდივიდუალური შეკვეთა?",
+                    "როგორ ხდება გადახდა?",
+                    "არის თუ არა გარანტია?",
+                    "რომელ ქვეყნებში ხდება მიწოდება?"
+                ],
+                "answers": {
+                    "0": "ყველა ავტომობილი შეირჩევა ჩინეთის ოფიციალურ პლატფორმებსა და აუქციონებზე. ჩვენ ვმუშაობთ პირდაპირ შემოწმებულ მომწოდებლებთან.",
+                    "1": "ხელმისაწვდომია როგორც ახალი, ასევე მინიმალური დარბენის მქონე ავტომობილები. ყიდვამდე ხდება ტექნიკური მდგომარეობის შემოწმება.",
+                    "2": "საშუალოდ მიწოდება იკავებს 14 დღიდან (მოდელის, რეგიონისა და ლოჯისტიკის გათვალისწინებით).",
+                    "3": "დიახ. შეგიძლიათ შეუკვეთოთ ავტომობილი თქვენი ბიუჯეტისა და მოთხოვნების მიხედვით (მარკა, წელი, კომპლექტაცია, ფერი და ა.შ.).",
+                    "4": "ვმუშაობთ ხელშეკრულებით. გადახდა ხდება ეტაპობრივად, მაქსიმალურად გამჭვირვალედ და უსაფრთხოდ.",
+                    "5": "ჩვენ თან ვახლავართ გარიგებას შერჩევიდან ავტომობილის მიღებამდე და ყოველთვის ხაზზე ვართ კლიენტთან.",
+                    "6": "ამჟამად მიწოდება ხორციელდება დსთ-ს ქვეყნებში. დეტალებისთვის დაუკავშირდით მენეჯერს."
+                }
             },
             "contacts": {
                 "title": "დაგვიკავშირდით",
@@ -1151,7 +1211,9 @@ const resources = {
             "quick_search_title": "اختيار سريع للسيارة",
             "placeholder_brandd": "ماركة",
             "placeholder_brand_model": "موديل",
-            "placeholder_price_range": "من 10,000 – إلى 30,000",
+            "placeholder_price_range": "اختر نطاق السعر",
+            "price_up_to_20k": "حتى 20,000 دولار",
+            "price_from_300k": "من 300,000 دولار",
             "btn_show_cars": "عرض السيارات",
             "popular_cars": "سيارات شعبية",
             "loading_cars": "جاري تحميل السيارات...",
@@ -1165,13 +1227,13 @@ const resources = {
             "вариатор": "سي في تي",
             "advantages_main_title": "لماذا تختار Alians",
             "adv_price_title": "السعر",
-            "adv_price_desc": "قدم طلبًا لاختيار السيارة",
+            "adv_price_desc": "تكلفة عادلة وشفافة. نحن نختار السيارات مباشرة من الصين، بدون وسطاء غير ضروريين. ستعرف السعر النهائي مسبقًا بدون أي رسوم خفية.",
             "adv_selection_title": "الاختيار",
-            "adv_selection_desc": "نجد سيارات في الصين تناسب ميزانيتك",
+            "adv_selection_desc": "سيارات تناسب ميزانيتك وطلبك. نختار السيارات وفقًا لمتطلباتك: الماركة، السنة، المواصفات، والميزانية. نحن نعمل فقط مع المنصات الصينية المعتمدة.",
             "adv_contract_title": "العقد",
-            "adv_contract_desc": "نبرم عقدًا ونحدد جميع الشروط",
-            "adv_delivery_title": "التوصيل",
-            "adv_delivery_desc": "نتولى خدمات الشحن والتخليص الجمركي",
+            "adv_contract_desc": "الأمان القانوني للصفقة. نبرم عقدًا رسميًا يحدد جميع الشروط والمواعيد والمسؤوليات. أنت محمي في كل مرحلة.",
+            "adv_delivery_title": "الشحن",
+            "adv_delivery_desc": "الشحن والتخليص الجمركي المتكامل. نقوم بتنظيم شحن السيارة ودعم عملية التخليص الجمركي بالكامل. ستحصل على سيارتك دون أي عناء.",
             "how_we_work_title": "كيف نعمل",
             "work_process_alt": "عملية العمل",
             "step_request_title": "الطلب",
@@ -1290,12 +1352,22 @@ const resources = {
                 "title": "الأسئلة الشائعة",
                 "questions": [
                     "من أين تأتي السيارات؟",
-                    "جديدة أم مستعملة؟",
-                    "كم يستغرق الشحن؟",
-                    "هل من الممكن طلب سيارة بناءً على طلب فردي",
-                    "كيف تتم عملية الدفع",
-                    "هل يوجد ضمان؟"
-                ]
+                    "هل السيارات جديدة أم مستعملة؟",
+                    "كم من الوقت يستغرق التسليم؟",
+                    "هل يمكنني طلب سيارة بمواصفات خاصة؟",
+                    "كيف يتم الدفع؟",
+                    "هل هناك ضمان؟",
+                    "ما هي الدول التي تقومون بالتوصيل إليها؟"
+                ],
+                "answers": {
+                    "0": "يتم اختيار جميع السيارات من المنصات والمزادات الرسمية في الصين. نحن نعمل مباشرة مع موردين ووكلاء معتمدين.",
+                    "1": "تتوفر سيارات جديدة وسيارات مستعملة بمسافات مقطوعة كحد أدنى. يتم فحص الحالة الفنية قبل الشراء.",
+                    "2": "في المتوسط، يستغرق التسليم من 14 يومًا (حسب الموديل والمنطقة والخدمات اللوجستية).",
+                    "3": "نعم. يمكنك طلب سيارة حسب ميزانيتك ومتطلباتك (الماركة، السنة، التجهيزات، اللون، إلخ).",
+                    "4": "نحن نعمل بموجب عقد. يتم الدفع على مراحل، بمنتهى الشفافية والأمان.",
+                    "5": "نحن نرافق الصفقة من الاختيار وحتى استلام السيارة ونبقى دائماً على تواصل مع العميل.",
+                    "6": "في الوقت الحالي، يتم التسليم إلى دول الاتحاد المستقل. يرجى مراجعة المدير لمزيد من التفاصيل."
+                }
             },
             "contacts": {
                 "title": "اتصل بنا",

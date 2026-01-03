@@ -1,7 +1,7 @@
-import React from 'react';
-import { IoCashOutline, IoCarOutline, IoDocumentTextOutline, IoRocketOutline } from 'react-icons/io5';
+import React, { useState } from 'react'; // Добавили useState
+import { IoCashOutline, IoCarOutline, IoDocumentTextOutline, IoRocketOutline, IoCloseOutline } from 'react-icons/io5';
 import './AdvantagesSection.css';
-import { useTranslation } from 'react-i18next'; // Импорт
+import { useTranslation } from 'react-i18next';
 
 const advantagesData = [
     {
@@ -27,7 +27,9 @@ const advantagesData = [
 ];
 
 export const AdvantagesSection = () => {
-    const { t } = useTranslation(); // Инициализация
+    const { t } = useTranslation();
+    // Состояние для хранения выбранной карточки (объекта)
+    const [selectedAdv, setSelectedAdv] = useState(null);
 
     return (
         <section className="advantagesSection">
@@ -35,19 +37,40 @@ export const AdvantagesSection = () => {
 
             <div className="advantagesGrid">
                 {advantagesData.map((item, index) => (
-                    <div className="advantageItem" key={index}>
+                    <div
+                        className="advantageItem"
+                        key={index}
+                        onClick={() => setSelectedAdv(item)} // Открываем модалку при клике
+                        style={{ cursor: 'pointer' }}
+                    >
                         <div className="titleBlock">
                             <div className="iconWrapper">
                                 <item.icon className="advantageIcon" />
                             </div>
-                            {/* Перевод заголовка карточки */}
                             <h3 className="advantageTitle">{t(item.titleKey)}</h3>
                         </div>
-                        {/* Перевод описания карточки */}
                         <p className="advantageDescription">{t(item.descKey)}</p>
                     </div>
                 ))}
             </div>
+
+            {/* --- МОДАЛЬНОЕ ОКНО --- */}
+            {selectedAdv && (
+                <div className="advModalOverlay" onClick={() => setSelectedAdv(null)}>
+                    <div className="advModalContent" onClick={(e) => e.stopPropagation()}>
+                        <button className="advModalClose" onClick={() => setSelectedAdv(null)}>
+                            <IoCloseOutline />
+                        </button>
+
+                        <div className="advModalIconWrapper">
+                            <selectedAdv.icon className="advModalIcon" />
+                        </div>
+
+                        <h3 className="advModalTitle">{t(selectedAdv.titleKey)}</h3>
+                        <p className="advModalDescription">{t(selectedAdv.descKey)}</p>
+                    </div>
+                </div>
+            )}
         </section>
     );
 };

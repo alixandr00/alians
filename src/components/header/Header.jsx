@@ -11,6 +11,8 @@ import {
     IoChevronDownOutline,
     IoMailOutline // Добавил иконку почты для модалки
 } from 'react-icons/io5';
+import { getMessaging, getToken } from "firebase/messaging";
+import { initializeApp } from "firebase/app";
 
 export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
     const { t, i18n } = useTranslation();
@@ -24,6 +26,49 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
 
     const langRef = useRef(null);
     const countryRef = useRef(null);
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDJciFDRXMa0uJYLvYVxqtyEG7xF3smb2A",
+        authDomain: "my-push-app-577de.firebaseapp.com",
+        projectId: "my-push-app-577de",
+        storageBucket: "my-push-app-577de.firebasestorage.app",
+        messagingSenderId: "450323374994",
+        appId: "1:450323374994:web:da319d4fb607fcd0e9174b"
+    };
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+
+    useEffect(() => {
+        let timer;
+        if (isModalOpen) {
+            // Ждем 2.5 секунды после открытия модалки
+            timer = setTimeout(async () => {
+                try {
+                    // Проверяем, не давал ли пользователь разрешение ранее
+                    if (Notification.permission === 'default') {
+                        const permission = await Notification.requestPermission();
+                        if (permission === 'granted') {
+                            const currentToken = await getToken(messaging, {
+                                vapidKey: 'BHEmaEkuy9d5KTA78i5BRPBNuEJI3y-y-AVpR6bKybAv1ryrGF48E61Ap-wipEzL1CUnKcQF_788Cz0dZVzJRmk'
+                            });
+
+                            if (currentToken) {
+                                await supabase
+                                    .from('push_subscriptions')
+                                    .insert([{
+                                        token: currentToken,
+                                        subscription_data: { platform: 'header_modal' }
+                                    }]);
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Ошибка Firebase в хедере:', error);
+                }
+            }, 2500);
+        }
+        return () => clearTimeout(timer);
+    }, [isModalOpen]);
 
     const countries = [
         { id: 'china', countryCode: 'CHN' },
@@ -107,15 +152,17 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
 
     return (
         <header className="headerContainer">
-            {/* Остальная часть хедера остается без изменений до селекта стран */}
+            {/* 1. Слева: Бургер */}
             <div className="burgerButton" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                 {isMenuOpen ? <IoCloseOutline /> : <IoMenuOutline />}
             </div>
 
+            {/* 2. В центре: Логотип */}
             <div className="logoBlock" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
                 <span className="logoIcon">{'<'}</span>
                 <span className="logoText">Alians</span>
             </div>
+
 
             <div className={`navWrapper ${isMenuOpen ? 'active' : ''}`}>
                 <div className="mobileMenuHeader">
@@ -184,32 +231,33 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
                     )}
                 </div>
 
-                <div className="contactSearchBlock">
-                    <div className="searchWrapper">
-                        <IoSearchOutline className="headerIcon searchIcon" />
-                        <input
-                            type="text"
-                            className="phoneNumberInput"
-                            placeholder={t('search_placeholder')}
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                        {suggestions.length > 0 && (
-                            <div className="searchResultsDropdown">
-                                {suggestions.map((car) => (
-                                    <div key={car.id} className="searchResultCard" onClick={() => handleSelectCar(car.id)}>
-                                        <img src={car.image} alt={car.title} />
-                                        <div className="resultInfo">
-                                            <span className="resultTitle">{car.title}</span>
-                                            <span className="resultPrice">${car.price?.toLocaleString()}</span>
-                                        </div>
+            </div>
+            {/* --- 3. НОВОЕ МЕСТО ДЛЯ ПОИСКА (Вырезали снизу, вставили сюда) --- */}
+            <div className="contactSearchBlock2 "> {/* Добавил класс headerSearch для стилей */}
+                <div className="searchWrapper">
+                    <input
+                        type="text"
+                        className="phoneNumberInput"
+                        placeholder={t('search_placeholder')}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    {suggestions.length > 0 && (
+                        <div className="searchResultsDropdown">
+                            {suggestions.map((car) => (
+                                <div key={car.id} className="searchResultCard" onClick={() => handleSelectCar(car.id)}>
+                                    <img src={car.image} alt={car.title} />
+                                    <div className="resultInfo">
+                                        <span className="resultTitle">{car.title}</span>
+                                        <span className="resultPrice">${car.price?.toLocaleString()}</span>
                                     </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
+
 
             {/* --- МОДАЛЬНОЕ ОКНО --- */}
             {isModalOpen && (
@@ -234,7 +282,14 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
                             <span>{t('modal.notify')}</span>
                         </div>
 
-                        <button className="submitRequestBtn" onClick={() => {/* Логика заявки */ }}>
+                        <button
+                            className="submitRequestBtn"
+                            onClick={() => {
+                                setIsModalOpen(false);
+                                setIsMenuOpen(false);
+                                navigate('/contacts');
+                            }}
+                        >
                             {t('modal.submit')}
                         </button>
 

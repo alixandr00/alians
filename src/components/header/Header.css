@@ -1,11 +1,12 @@
 /* Базовый контейнер шапки */
 .headerContainer {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     padding: 20px;
     width: 100%;
     box-sizing: border-box;
+
     position: fixed;
     background-color: #fff;
     z-index: 100;
@@ -26,6 +27,8 @@
     /* Убирает скачки текста */
 }
 
+
+
 .contactSearchBlock {
     display: flex;
     align-items: center;
@@ -35,6 +38,62 @@
     padding: 8px 16px;
     gap: 10px;
     transition: border-color 0.3s;
+}
+
+.contactSearchBlock2 {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    border: 1px solid #eef0f2;
+    border-radius: 12px;
+    padding: 6px 10px;
+    transition: all 0.3s ease;
+    width: 130px;
+    gap: 8px;
+    order: 2;
+    margin-left: -30px;
+}
+
+/* Эффект при клике */
+.contactSearchBlock2:focus-within {
+    border-color: #0dbe5d;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(13, 190, 93, 0.1);
+    /* Мягкое зеленое свечение */
+    width: 140px;
+    /* Поиск изящно расширяется при нажатии */
+}
+
+/* Стиль самой иконки поиска */
+.contactSearchBlock2 .searchIcon {
+    font-size: 16px;
+    color: #a0aec0;
+    flex-shrink: 0;
+    /* Чтобы иконка не сжималась */
+}
+
+/* Настройка инпута внутри */
+.contactSearchBlock2 input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+/* Тот самый красивый плейсхолдер */
+.contactSearchBlock2 input::placeholder {
+    font-size: 11px;
+    color: #a0aec0;
+    font-weight: 400;
+    transition: opacity 0.2s;
+}
+
+/* Скрываем плейсхолдер при фокусе, чтобы не мешал */
+.contactSearchBlock2 input:focus::placeholder {
+    opacity: 0;
 }
 
 .contactSearchBlock:focus-within {
@@ -64,6 +123,7 @@
     font-size: 24px;
     color: #333;
     order: 1;
+
 }
 
 .logoIcon {
@@ -82,6 +142,7 @@
     display: flex;
     align-items: center;
     order: 2;
+    margin-left: 280px;
 }
 
 .navMenu {
@@ -223,11 +284,9 @@
 
     .burgerButton {
         display: block;
-        order: 1;
     }
 
     .logoBlock {
-        order: 2;
         font-size: 20px;
     }
 
@@ -251,7 +310,9 @@
         box-shadow: 10px 0 25px rgba(0, 0, 0, 0.15);
         z-index: 1000;
         overflow-y: auto;
-        /* Если пунктов много — можно скроллить */
+        /* Если пунктов много — можно скр
+        оллить */
+        margin: 0;
     }
 
     .navWrapper.active {
@@ -288,8 +349,10 @@
     }
 
     /* Поиск */
-    .contactSearchBlock {
+    .contactSearchBlock2 {
         order: 3;
+        margin: 0;
+        width: 110px;
     }
 
     .phoneNumberInput {
@@ -387,8 +450,9 @@
 .searchResultsDropdown {
     position: absolute;
     top: 100%;
-    left: 0;
-    width: 100%;
+
+    left: auto;
+    right: 0px;
     min-width: 250px;
     background: white;
     border-radius: 8px;
@@ -471,18 +535,14 @@
 
 @media (max-width: 900px) {
     .headerContainer {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        padding: 15px 20px;
+        display: flex;
     }
 
     .burgerButton {
-        grid-column: 1;
         display: block;
     }
 
     .logoBlock {
-        grid-column: 2;
         justify-self: center;
     }
 
@@ -676,7 +736,7 @@
 .submitRequestBtn {
     width: 100%;
     background-color: #387b64;
-    /* Тот самый серо-зеленый цвет с фото */
+    /* Тот самый темно-зеленый */
     color: white;
     border: none;
     padding: 14px;

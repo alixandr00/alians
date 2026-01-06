@@ -136,7 +136,7 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
     const handleCountrySelect = (country) => {
         setIsCountryOpen(false); // Закрываем выпадающий список стран
 
-        if (country.id === 'china') {
+        if (country.id === 'china' || country.id === 'kgz') {
             // Если выбрали Китай:
             setSelectedCountry(country); // Устанавливаем как активную
             setIsMenuOpen(false);        // Закрываем мобильное меню, если оно открыто

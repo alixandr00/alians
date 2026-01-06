@@ -71,6 +71,7 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
     }, [isModalOpen]);
 
     const countries = [
+        { id: 'kgz', countryCode: 'KGZ' },
         { id: 'china', countryCode: 'CHN' },
         { id: 'korea', countryCode: 'KOR' },
         { id: 'georgia', countryCode: 'GEO' },

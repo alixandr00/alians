@@ -1,11 +1,11 @@
 import React from 'react'
 import './AutoFromChina.css'
-import { HeroSection } from './Herosection'
-import { QuickSearchSection } from './QuickSearchSection'
-import { PopularCarsSection } from './PopularCarsSection'
-import { AdvantagesSection } from './AdvantagesSection'
-import { HowWeWorkSection } from './HowWeWorkSection'
-import { ConsultationFormSection } from './ConsultationFormSection'
+import { HeroSection } from '../HeroSection/Herosection'
+import { QuickSearchSection } from '../QuickSearch/QuickSearchSection'
+import { PopularCarsSection } from '../PopularCars/PopularCarsSection'
+import { AdvantagesSection } from '../Advantages/AdvantagesSection'
+import { HowWeWorkSection } from '../HowWeWork/HowWeWorkSection'
+import { ConsultationFormSection } from '../Consultation/ConsultationFormSection'
 import { CarView360 } from '../CarView360/CarView360'
 // const testImages = Array.from({ length: 24 }, (_, i) => `/test-car/beatle (${i + 1}).png`);
 

@@ -208,6 +208,7 @@ const resources = {
                 "schedule_off": "Вс: выходной"
             },
             "countries": {
+                "kgz": "Авто из Кыргызстана",
                 "china": "Авто из Китая",
                 "korea": "Авто из Кореи",
                 "georgia": "Авто из Грузии",
@@ -444,6 +445,7 @@ const resources = {
                 "schedule_off": "Sun: Closed"
             },
             "countries": {
+                "kgz": "Cars from Kyrgyzstan",
                 "china": "Cars from China",
                 "korea": "Cars from Korea",
                 "georgia": "Cars from Georgia",
@@ -678,6 +680,7 @@ const resources = {
                 "schedule_off": "周日：休息"
             },
             "countries": {
+                "kgz": "来自吉尔吉斯斯坦的汽车",
                 "china": "来自中国的车",
                 "korea": "来自韩国的车",
                 "georgia": "来自格鲁吉亚的车",
@@ -911,6 +914,7 @@ const resources = {
                 "schedule_off": "일요일: 휴무"
             },
             "countries": {
+                "kgz": "키르기스스탄 자동차",
                 "china": "중국 자동차",
                 "korea": "한국 자동차",
                 "georgia": "조지아 자동차",
@@ -1144,6 +1148,7 @@ const resources = {
                 "schedule_off": "კვირა: დასვენება"
             },
             "countries": {
+                "kgz": "ავტომობილები ყირგიზეთიდან",
                 "china": "ავტომობილები ჩინეთიდან",
                 "korea": "ავტომობილები კორეიდან",
                 "georgia": "ავტომობილები საქართველოდან",
@@ -1377,6 +1382,7 @@ const resources = {
                 "schedule_off": "الأحد: عطلة"
             },
             "countries": {
+                "kgz": "سيارات من قرغيزستان",
                 "china": "سيارات من الصين",
                 "korea": "سيارات من كوريا",
                 "georgia": "سيارات من جورجيا",

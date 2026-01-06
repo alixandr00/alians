@@ -9,7 +9,7 @@ import 'swiper/css/navigation';
 import './PopularCarsSection.css';
 
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
-import { CarCard, CarCardSkeleton } from './CarCard'; // Убедитесь, путь правильный
+import { CarCard, CarCardSkeleton } from '../CarCard/CarCard'; // Убедитесь, путь правильный
 import { useTranslation } from 'react-i18next';
 
 // 1. Принимаем selectedCountry как пропс

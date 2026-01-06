@@ -13,11 +13,12 @@ const INITIAL_STATE = {
 
 // Список стран для селекта (ID должны совпадать с теми, что мы делали в Header)
 const COUNTRIES_OPTIONS = [
+    { id: 'kgz', label: 'Кыргызстан' },
     { id: 'china', label: 'Китай' },
     { id: 'korea', label: 'Корея' },
     { id: 'georgia', label: 'Грузия' },
     { id: 'dubai', label: 'Дубай' },
-    { id: 'usa', label: 'Америка' }
+    { id: 'usa', label: 'Америка' },
 ];
 
 export default function AddCarForm({ onCarAdded, editData }) {

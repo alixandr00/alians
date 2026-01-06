@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { supabase } from '../../api/supabaseClient';
-import { CarCard, CarCardSkeleton } from '../AutoFromChina/CarCard';
+import { CarCard, CarCardSkeleton } from '../CarCard/CarCard';
 import './CustomOrder.css';
 import { useTranslation } from 'react-i18next';
 import { row1Brands, row2Brands } from '../../data/CarsData';

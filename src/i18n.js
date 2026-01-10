@@ -223,9 +223,13 @@ const resources = {
                 "submit": "Оставить заявку",
                 "close": "Закрыть"
             },
+            "spec_engine": "Объем двигателя",
+            "unit_liter": "л.",
+            "fuel_electric": "Электро"
 
 
         },
+
 
 
     },
@@ -416,6 +420,9 @@ const resources = {
             "form_placeholder_select_city": "Select city",
             "choose_country": "Country",
             "no_cities": "No cities available",
+            "spec_engine": "Engine Capacity",
+            "unit_liter": "L",
+            "fuel_electric": "Electric",
             "faq": {
                 "title": "Frequently Asked Questions",
                 "questions": [
@@ -651,6 +658,10 @@ const resources = {
             "form_placeholder_select_city": "请选择城市",
             "choose_country": "国家",
             "no_cities": "没有可用的城市",
+            "spec_engine": "发动机排量",
+            "unit_liter": "升",
+            "fuel_electric": "电动",
+            "specs_title": "规格参数",
             "faq": {
                 "title": "常见问题",
                 "questions": [
@@ -694,7 +705,8 @@ const resources = {
                 "notify": "提交申请，一旦该方向可用，我们将立即通知您。",
                 "submit": "提交申请",
                 "close": "关闭"
-            }
+            },
+
         },
 
     },
@@ -885,6 +897,10 @@ const resources = {
             "form_placeholder_select_city": "도시 선택",
             "choose_country": "국가",
             "no_cities": "도시 없음",
+            "spec_engine": "엔진 배기량",
+            "unit_liter": "L",
+            "fuel_electric": "전기차",
+            "specs_title": "상세 사양",
             "faq": {
                 "title": "자주 묻는 질문",
                 "questions": [
@@ -1119,6 +1135,9 @@ const resources = {
             "form_placeholder_select_city": "აირჩიეთ ქალაქი",
             "choose_country": "ქვეყანა",
             "no_cities": "ქალაქები არ არის",
+            "spec_engine": "ძრავის მოცულობა",
+            "unit_liter": "ლ.",
+            "fuel_electric": "ელექტრო",
             "faq": {
                 "title": "ხშირად დასმული კითხვები",
                 "questions": [
@@ -1353,6 +1372,9 @@ const resources = {
             "form_placeholder_select_city": "اختر المدينة",
             "choose_country": "الدولة",
             "no_cities": "لا توجد مدن متاحة",
+            "spec_engine": "سعة المحرك",
+            "unit_liter": "لتر",
+            "fuel_electric": "كهربائي",
             "faq": {
                 "title": "الأسئلة الشائعة",
                 "questions": [

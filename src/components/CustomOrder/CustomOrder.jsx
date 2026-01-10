@@ -401,6 +401,18 @@ export const CustomOrder = ({ searchTerm }) => {
                                                     </span>
                                                 </div>
                                             </div>
+                                            {/* Добавь это внутрь <div className="specsGridProfessional"> */}
+                                            <div className="specCard">
+                                                <div className="specText">
+                                                    {/* Ключ 'spec_engine' должен быть в твоих JSON файлах */}
+                                                    <span className="specLabel">{t('spec_engine')}</span>
+                                                    <span className="specValue">
+                                                        {selectedCar.engine === '0' || selectedCar.engine === 0
+                                                            ? t('fuel_electric')
+                                                            : `${selectedCar.engine} ${t('unit_liter')}`}
+                                                    </span>
+                                                </div>
+                                            </div>
                                             <div className="specCard">
                                                 <div className="specText">
                                                     <span className="specLabel">{t('filter_fuel')}</span>

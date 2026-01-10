@@ -1,12 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
 import { supabase } from '../../api/supabaseClient';
 import './AddCarForm.css';
-import { BRANDS_MODELS } from '../../data/CarsData';
+import { BRANDS_MODELS, BRAND_ENGINES } from '../../data/CarsData';
 
 // 1. Добавляем поле country в начальное состояние
 const INITIAL_STATE = {
     title: '', brand: '', price: '', year: '',
-    transmission: 'Автомат', fuel: 'Бензин',
+    transmission: 'Автомат', fuel: 'Бензин', engine: '',
     mileage: '', description: '', specs: '', color: 'white',
     country: '' // Новое поле
 };
@@ -39,6 +39,7 @@ export default function AddCarForm({ onCarAdded, editData }) {
                 title: editData.title.replace(editData.brand, '').trim(),
                 price: editData.price || '',
                 year: editData.year || '',
+                engine: editData.engine || '',
                 transmission: editData.transmission || 'Автомат',
                 fuel: editData.fuel || 'Бензин',
                 mileage: editData.mileage || '',
@@ -63,8 +64,24 @@ export default function AddCarForm({ onCarAdded, editData }) {
         }
     }, [editData]);
 
+
     const availableModels = useMemo(() => {
-        return car.brand ? BRANDS_MODELS[car.brand] : [];
+        // Если бренд не выбран или объекта с данными нет — возвращаем пустой массив
+        if (!car.brand || !BRANDS_MODELS) return [];
+
+        // Берем массив моделей напрямую по имени бренда
+        const models = BRANDS_MODELS[car.brand];
+
+        // Проверяем, что это действительно массив, чтобы .map() не выдал ошибку
+        return Array.isArray(models) ? models : [];
+    }, [car.brand]);
+    const availableEngines = useMemo(() => {
+        if (!car.brand || !BRAND_ENGINES) return [];
+
+        // Ищем список для бренда, если нет — берем Default, если и его нет — пустой массив
+        const engines = BRAND_ENGINES[car.brand] || BRAND_ENGINES['Default'] || [];
+
+        return Array.isArray(engines) ? engines : [];
     }, [car.brand]);
 
     const handleWheel = (e) => {
@@ -131,6 +148,7 @@ export default function AddCarForm({ onCarAdded, editData }) {
                 brand: car.brand,
                 price: Number(car.price),
                 year: Number(car.year),
+                engine: car.engine,
                 mileage: Number(car.mileage),
                 fuel: car.fuel,
                 transmission: car.transmission,
@@ -188,11 +206,17 @@ export default function AddCarForm({ onCarAdded, editData }) {
                     <select
                         className="form-select"
                         value={car.brand}
-                        onChange={e => setCar({ ...car, brand: e.target.value, title: '' })}
+                        // При смене марки обязательно сбрасываем модель и объем двигателя
+                        onChange={e => setCar({ ...car, brand: e.target.value, title: '', engine: '' })}
                         required
                     >
                         <option value="">Выберите марку</option>
-                        {Object.keys(BRANDS_MODELS).sort().map(b => <option key={b} value={b}>{b}</option>)}
+                        {/* Берем все ключи (названия брендов) и сортируем их */}
+                        {Object.keys(BRANDS_MODELS).sort().map(brandName => (
+                            <option key={brandName} value={brandName}>
+                                {brandName}
+                            </option>
+                        ))}
                     </select>
                 </div>
             </div>
@@ -209,6 +233,23 @@ export default function AddCarForm({ onCarAdded, editData }) {
                     >
                         <option value="">{car.brand ? "Выберите модель" : "Сначала марку"}</option>
                         {availableModels.map(m => <option key={m} value={m}>{m}</option>)}
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label className="form-label">Объем двигателя</label>
+                    <select
+                        className="form-select"
+                        value={car.engine}
+                        onChange={e => setCar({ ...car, engine: e.target.value })}
+                        required={car.fuel !== 'Электро'}
+                        disabled={!car.brand}
+                    >
+                        <option value="">Выберите объем</option>
+                        {availableEngines.map((val, index) => (
+                            <option key={`${val}-${index}`} value={val}>
+                                {val === '0' || val === 0 ? 'Электро' : `${val} л.`}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div className="form-group">
@@ -270,7 +311,8 @@ export default function AddCarForm({ onCarAdded, editData }) {
                         onChange={e => setCar({ ...car, transmission: e.target.value })}
                     >
                         <option value="Автомат">Автомат</option>
-                        <option value="Механика">Механика</option>
+                        <option value="Робот">Робот</option>
+                        <option value="Вариатор">Вариатор</option>
                     </select>
                 </div>
             </div>

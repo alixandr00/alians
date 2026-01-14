@@ -450,7 +450,6 @@
 .searchResultsDropdown {
     position: absolute;
     top: 100%;
-
     left: auto;
     right: 0px;
     min-width: 250px;
@@ -458,9 +457,26 @@
     border-radius: 8px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    overflow: hidden;
     margin-top: 10px;
     border: 1px solid #eee;
+
+    /* --- ДОБАВЬ ЭТИ СТРОКИ --- */
+    max-height: 300px;
+    /* Высота, после которой появится скролл */
+    overflow-y: auto;
+    /* Включает вертикальную прокрутку */
+    -webkit-overflow-scrolling: touch;
+    /* Плавный скролл на iPhone */
+}
+
+/* Чтобы скроллбар выглядел аккуратно (тоненькая полоска) */
+.searchResultsDropdown::-webkit-scrollbar {
+    width: 4px;
+}
+
+.searchResultsDropdown::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
 }
 
 .searchResultCard {

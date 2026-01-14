@@ -1,17 +1,38 @@
 import { useState, useMemo, useEffect } from 'react';
 import { supabase } from '../../api/supabaseClient';
 import './AddCarForm.css';
-import { BRANDS_MODELS, BRAND_ENGINES } from '../../data/CarsData';
+import { BRANDS_MODELS, BRAND_ENGINES, COLORS_DATA } from '../../data/CarsData';
 
-// 1. Добавляем поле country в начальное состояние
+// 1. Опции, сгруппированные по категориям (как на Mashina.kg)
+const CAR_OPTIONS_GROUPS = {
+    "Безопасность": [
+        "ABS", "ESP", "Подушка безопасности водителя", "Подушки безопасности боковые",
+        "Датчик давления в шинах", "Иммобилайзер", "Сигнализация", "Центральный замок"
+    ],
+    "Комфорт": [
+        "Кондиционер", "Климат-контроль", "Круиз-контроль", "Камера 360°",
+        "Камера заднего вида", "Парктроники", "Электростеклоподъемники",
+        "Подогрев сидений", "Датчик дождя", "Бесключевой доступ"
+    ],
+    "Салон": [
+        "Кожа", "Алькантара", "Люк", "Панорамная крыша", "Мультируль",
+        "Тонировка", "Подогрев руля", "Вентиляция сидений"
+    ],
+    "Мультимедиа": [
+        "Apple CarPlay", "Android Auto", "Bluetooth", "Навигация", "Премиальная акустика"
+    ],
+    "Обзор": [
+        "Ксенон", "Светодиодные фары", "Противотуманные фары", "Омыватель фар", "Адаптивное освещение"
+    ]
+};
+
 const INITIAL_STATE = {
     title: '', brand: '', price: '', year: '',
     transmission: 'Автомат', fuel: 'Бензин', engine: '',
-    mileage: '', description: '', specs: '', color: 'white',
-    country: '' // Новое поле
+    mileage: '', description: '', specs: [], // Теперь это массив
+    color: 'white', country: ''
 };
 
-// Список стран для селекта (ID должны совпадать с теми, что мы делали в Header)
 const COUNTRIES_OPTIONS = [
     { id: 'kgz', label: 'Кыргызстан' },
     { id: 'china', label: 'Китай' },
@@ -29,7 +50,7 @@ export default function AddCarForm({ onCarAdded, editData }) {
     const [existingMainImage, setExistingMainImage] = useState('');
     const [galleryImages, setGalleryImages] = useState([]);
     const [existingGallery, setExistingGallery] = useState([]);
-
+    const [isColorOpen, setIsColorOpen] = useState(false);
     const [inputKey, setInputKey] = useState(Date.now());
 
     useEffect(() => {
@@ -45,8 +66,9 @@ export default function AddCarForm({ onCarAdded, editData }) {
                 mileage: editData.mileage || '',
                 description: editData.description || '',
                 color: editData.color || 'white',
-                specs: Array.isArray(editData.specs) ? editData.specs.join(', ') : '',
-                country: editData.country || '' // 2. Загружаем страну при редактировании
+                // Исправлено: преобразуем в массив, если в базе вдруг строка
+                specs: Array.isArray(editData.specs) ? editData.specs : [],
+                country: editData.country || ''
             });
             setExistingMainImage(editData.image || '');
             setExistingGallery(editData.images || []);
@@ -64,28 +86,32 @@ export default function AddCarForm({ onCarAdded, editData }) {
         }
     }, [editData]);
 
-
     const availableModels = useMemo(() => {
-        // Если бренд не выбран или объекта с данными нет — возвращаем пустой массив
         if (!car.brand || !BRANDS_MODELS) return [];
-
-        // Берем массив моделей напрямую по имени бренда
         const models = BRANDS_MODELS[car.brand];
-
-        // Проверяем, что это действительно массив, чтобы .map() не выдал ошибку
         return Array.isArray(models) ? models : [];
     }, [car.brand]);
+
     const availableEngines = useMemo(() => {
         if (!car.brand || !BRAND_ENGINES) return [];
-
-        // Ищем список для бренда, если нет — берем Default, если и его нет — пустой массив
         const engines = BRAND_ENGINES[car.brand] || BRAND_ENGINES['Default'] || [];
-
         return Array.isArray(engines) ? engines : [];
     }, [car.brand]);
 
     const handleWheel = (e) => {
         e.target.blur();
+    };
+
+    // Функция для работы с чекбоксами комплектации
+    const handleOptionToggle = (optionName) => {
+        setCar(prev => {
+            const currentSpecs = Array.isArray(prev.specs) ? prev.specs : [];
+            if (currentSpecs.includes(optionName)) {
+                return { ...prev, specs: currentSpecs.filter(opt => opt !== optionName) };
+            } else {
+                return { ...prev, specs: [...currentSpecs, optionName] };
+            }
+        });
     };
 
     const removeGalleryImage = async (urlToRemove) => {
@@ -104,7 +130,6 @@ export default function AddCarForm({ onCarAdded, editData }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Проверка: выбрана ли страна
         if (!car.country) {
             alert("Пожалуйста, выберите страну происхождения авто!");
             return;
@@ -154,11 +179,11 @@ export default function AddCarForm({ onCarAdded, editData }) {
                 transmission: car.transmission,
                 description: car.description,
                 image: finalMainImageUrl,
-                specs: car.specs ? car.specs.split(',').map(s => s.trim()) : [],
+                specs: car.specs, // Это уже массив строк
                 is_popular: isPopular,
                 images: totalGallery,
                 color: car.color,
-                country: car.country // 3. Отправляем страну в базу
+                country: car.country
             };
 
             let result;
@@ -185,7 +210,6 @@ export default function AddCarForm({ onCarAdded, editData }) {
             <h2 className="form-title">{editData ? `Редактирование: ${editData.title}` : 'Новый автомобиль'}</h2>
 
             <div className="form-row two-col">
-                {/* 4. НОВЫЙ СЕЛЕКТ ДЛЯ СТРАНЫ */}
                 <div className="form-group">
                     <label className="form-label">Страна происхождения</label>
                     <select
@@ -206,22 +230,18 @@ export default function AddCarForm({ onCarAdded, editData }) {
                     <select
                         className="form-select"
                         value={car.brand}
-                        // При смене марки обязательно сбрасываем модель и объем двигателя
                         onChange={e => setCar({ ...car, brand: e.target.value, title: '', engine: '' })}
                         required
                     >
                         <option value="">Выберите марку</option>
-                        {/* Берем все ключи (названия брендов) и сортируем их */}
                         {Object.keys(BRANDS_MODELS).sort().map(brandName => (
-                            <option key={brandName} value={brandName}>
-                                {brandName}
-                            </option>
+                            <option key={brandName} value={brandName}>{brandName}</option>
                         ))}
                     </select>
                 </div>
             </div>
 
-            <div className="form-row two-col">
+            <div className="form-row three-col">
                 <div className="form-group">
                     <label className="form-label">Модель</label>
                     <select
@@ -298,6 +318,7 @@ export default function AddCarForm({ onCarAdded, editData }) {
                         <option value="Бензин">Бензин</option>
                         <option value="Электро">Электро</option>
                         <option value="Гибрид">Гибрид</option>
+                        <option value="Дизель">Дизель</option>
                     </select>
                 </div>
             </div>
@@ -311,9 +332,35 @@ export default function AddCarForm({ onCarAdded, editData }) {
                         onChange={e => setCar({ ...car, transmission: e.target.value })}
                     >
                         <option value="Автомат">Автомат</option>
+                        <option value="Механика">Механика</option>
                         <option value="Робот">Робот</option>
                         <option value="Вариатор">Вариатор</option>
                     </select>
+                </div>
+                <div className="form-group" style={{ position: 'relative' }}>
+                    <label className="form-label">Цвет автомобиля</label>
+                    <div
+                        className="form-select"
+                        onClick={() => setIsColorOpen(!isColorOpen)}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', background: '#fff' }}
+                    >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <div style={{ width: '16px', height: '16px', borderRadius: '50%', backgroundColor: COLORS_DATA.find(c => c.id === car.color)?.hex || '#fff', border: '1px solid #ccc' }} />
+                            <span>{COLORS_DATA.find(c => c.id === car.color)?.name || 'Выберите цвет'}</span>
+                        </div>
+                        <span style={{ transform: isColorOpen ? 'rotate(180deg)' : 'rotate(0)', transition: '0.2s' }}>▼</span>
+                    </div>
+                    {isColorOpen && (
+                        <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 100, background: '#fff', border: '1px solid #ddd', borderRadius: '8px', marginTop: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', maxHeight: '250px', overflowY: 'auto', padding: '8px' }}>
+                            {COLORS_DATA.map(c => (
+                                <div key={c.id} onClick={() => { setCar({ ...car, color: c.id }); setIsColorOpen(false); }} className="color-option-item">
+                                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: c.hex, border: '1px solid #ddd' }} />
+                                    <span style={{ flex: 1, fontSize: '14px' }}>{c.name}</span>
+                                    {car.color === c.id && <span style={{ color: '#007bff' }}>✓</span>}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -326,56 +373,30 @@ export default function AddCarForm({ onCarAdded, editData }) {
                 />
             </div>
 
-            <div className="form-group" style={{ marginTop: '15px' }}>
-                <label className="form-label">Опции (через запятую)</label>
-                <input
-                    type="text"
-                    className="form-input"
-                    placeholder="Пример: Панорама, Кожа, 360 камера"
-                    value={car.specs}
-                    onChange={e => setCar({ ...car, specs: e.target.value })}
-                />
-            </div>
-
-            <div className="form-group" style={{ marginBottom: '20px' }}>
-                <label className="form-label">Цвет автомобиля</label>
-                <div style={{ display: 'flex', gap: '12px', marginTop: '10px', flexWrap: 'wrap' }}>
-                    {[
-                        { id: 'white', hex: '#FFFFFF', name: 'Белый' },
-                        { id: 'black', hex: '#000000', name: 'Черный' },
-                        { id: 'silver', hex: '#C0C0C0', name: 'Серебро' },
-                        { id: 'blue', hex: '#2196F3', name: 'Синий' },
-                        { id: 'red', hex: '#F44336', name: 'Красный' },
-                        { id: 'green', hex: '#4CAF50', name: 'Зеленый' }
-                    ].map(c => (
-                        <div
-                            key={c.id}
-                            onClick={() => setCar({ ...car, color: c.id })}
-                            style={{
-                                width: '35px',
-                                height: '35px',
-                                borderRadius: '50%',
-                                backgroundColor: c.hex,
-                                border: car.color === c.id ? '3px solid #007bff' : '1px solid #ddd',
-                                cursor: 'pointer',
-                                transition: '0.2s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}
-                            title={c.name}
-                        >
-                            {car.color === c.id && (
-                                <span style={{ color: c.id === 'white' ? '#000' : '#fff', fontSize: '14px' }}>✓</span>
-                            )}
+            {/* НОВАЯ СЕКЦИЯ: КОМПЛЕКТАЦИЯ ЧЕКБОКСАМИ (Mashina.kg Style) */}
+            <div className="specs-section">
+                <h3 className="section-subtitle">Комплектация</h3>
+                {Object.entries(CAR_OPTIONS_GROUPS).map(([groupName, options]) => (
+                    <div key={groupName} className="specs-group">
+                        <h4 className="specs-group-title">{groupName}</h4>
+                        <div className="specs-grid">
+                            {options.map(option => (
+                                <label key={option} className="spec-checkbox-label">
+                                    <input
+                                        type="checkbox"
+                                        checked={car.specs.includes(option)}
+                                        onChange={() => handleOptionToggle(option)}
+                                    />
+                                    <span>{option}</span>
+                                </label>
+                            ))}
                         </div>
-                    ))}
-                </div>
+                    </div>
+                ))}
             </div>
 
             <div className="photo-upload-section">
                 <h4 className="section-subtitle">Фотографии</h4>
-
                 <div className="main-photo-preview">
                     {existingMainImage && (
                         <div style={{ textAlign: 'center' }}>

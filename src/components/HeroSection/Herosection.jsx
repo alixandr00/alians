@@ -22,7 +22,7 @@ export const HeroSection = () => {
                         {t('btn_pick_car')}
                     </Link>
                     <a
-                        href="https://wa.me/996221222125"
+                        href="https://wa.me/996551460902"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="buttonSecondary"

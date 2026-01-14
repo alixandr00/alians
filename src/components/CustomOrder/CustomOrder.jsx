@@ -24,6 +24,7 @@ export const CustomOrder = ({ searchTerm }) => {
     const [isPickerOpen, setIsPickerOpen] = useState(false);
     const [touchStart, setTouchStart] = useState(null);
     const [touchEnd, setTouchEnd] = useState(null);
+    const [isSpecsOpen, setIsSpecsOpen] = useState(false);
 
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [selectedModels, setSelectedModels] = useState([]);
@@ -247,8 +248,8 @@ export const CustomOrder = ({ searchTerm }) => {
     const toggleColor = (colorId) => {
         setSelectedColors(prev =>
             prev.includes(colorId)
-                ? prev.filter(c => c !== colorId)
-                : [...prev, colorId]
+                ? prev.filter(c => c !== colorId) // Удаляем, если уже есть
+                : [...prev, colorId]              // Добавляем, если нет
         );
     };
 
@@ -422,6 +423,33 @@ export const CustomOrder = ({ searchTerm }) => {
                                                 </div>
                                             </div>
                                         </div>
+                                        {/* Секция дополнительных опций */}
+                                        {selectedCar.specs && selectedCar.specs.length > 0 && (
+                                            <div className="options-container-centered">
+                                                <button
+                                                    className={`toggle-specs-btn-clean ${isSpecsOpen ? 'active' : ''}`}
+                                                    onClick={() => setIsSpecsOpen(!isSpecsOpen)}
+                                                >
+                                                    <span>{isSpecsOpen ? t('hide_options') : t('show_more_options')}</span>
+                                                    <span className="arrow-icon">▼</span>
+                                                </button>
+
+                                                {isSpecsOpen && (
+                                                    <div className="specs-tags-list-centered">
+                                                        {selectedCar.specs.map((spec, index) => {
+                                                            const cleanKey = spec.toLowerCase().trim().replace(/\s+/g, '_').replace(/°/g, '');
+                                                            const translationKey = `option_${cleanKey}`;
+
+                                                            return (
+                                                                <span key={index} className="spec-tag-item">
+                                                                    {t(translationKey) !== translationKey ? t(translationKey) : spec}
+                                                                </span>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                     {selectedCar.description && (
                                         <div className="detailDescription">

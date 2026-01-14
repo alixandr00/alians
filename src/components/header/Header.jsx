@@ -9,24 +9,39 @@ import {
     IoMenuOutline,
     IoCloseOutline,
     IoChevronDownOutline,
-    IoMailOutline // Добавил иконку почты для модалки
+    IoMailOutline,
+    IoCarSportOutline
 } from 'react-icons/io5';
 import { getMessaging, getToken } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 
-export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
+// Импорт твоих данных (путь должен быть верным)
+import { row1Brands, row2Brands } from '../../data/CarsData';
+
+export const Header = ({ onCountrySelect }) => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
 
+    // Объединяем базы брендов для поиска
+    const allBrandsData = [...row1Brands, ...row2Brands];
+
+    // --- STATES ---
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLangOpen, setIsLangOpen] = useState(false);
     const [isCountryOpen, setIsCountryOpen] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false); // Состояние для модалки
-    const [suggestions, setSuggestions] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
+    // --- SEARCH STATES ---
+    const [searchTerm, setSearchTerm] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+
+    // --- REFS ---
     const langRef = useRef(null);
     const countryRef = useRef(null);
+    const searchRef = useRef(null);
 
+    // --- FIREBASE CONFIG & LOGIC (Твой код) ---
     const firebaseConfig = {
         apiKey: "AIzaSyDJciFDRXMa0uJYLvYVxqtyEG7xF3smb2A",
         authDomain: "my-push-app-577de.firebaseapp.com",
@@ -35,16 +50,17 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
         messagingSenderId: "450323374994",
         appId: "1:450323374994:web:da319d4fb607fcd0e9174b"
     };
+
+    // Инициализируем только один раз вне рендера или внутри useEffect, 
+    // но здесь оставим как у тебя, чтобы не ломать логику
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(app);
 
     useEffect(() => {
         let timer;
         if (isModalOpen) {
-            // Ждем 2.5 секунды после открытия модалки
             timer = setTimeout(async () => {
                 try {
-                    // Проверяем, не давал ли пользователь разрешение ранее
                     if (Notification.permission === 'default') {
                         const permission = await Notification.requestPermission();
                         if (permission === 'granted') {
@@ -70,6 +86,66 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
         return () => clearTimeout(timer);
     }, [isModalOpen]);
 
+    // --- CLICK OUTSIDE HANDLER ---
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (langRef.current && !langRef.current.contains(event.target)) setIsLangOpen(false);
+            if (countryRef.current && !countryRef.current.contains(event.target)) setIsCountryOpen(false);
+            if (searchRef.current && !searchRef.current.contains(event.target)) setShowSuggestions(false);
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // --- SEARCH LOGIC (Бренд -> Модели) ---
+    useEffect(() => {
+        const query = searchTerm.trim().toLowerCase();
+
+        if (!query) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setSuggestions([]);
+            return;
+        }
+
+        // 1. Проверяем точное совпадение с именем бренда
+        const exactBrand = allBrandsData.find(b => b.name.toLowerCase() === query);
+
+        if (exactBrand) {
+            // Если ввели бренд (или кликнули на него) -> показываем МОДЕЛИ
+            const models = exactBrand.models.map(m => ({
+                type: 'model',
+                brandName: exactBrand.name,
+                name: m,
+                image: exactBrand.icon // Картинка бренда для модели
+            }));
+            setSuggestions(models);
+        } else {
+            // 2. Иначе ищем БРЕНДЫ по буквам
+            const brands = allBrandsData
+                .filter(b => b.name.toLowerCase().includes(query))
+                .map(b => ({
+                    type: 'brand',
+                    name: b.name,
+                    image: b.icon
+                }));
+            setSuggestions(brands);
+        }
+    }, [searchTerm]);
+
+    const handleSelectSuggestion = (item) => {
+        if (item.type === 'brand') {
+            // Выбрали бренд -> ставим его имя в поиск, чтобы useEffect показал модели
+            setSearchTerm(item.name);
+        } else {
+            // Выбрали модель -> переходим
+            navigate(`/catalog?brand=${item.brandName}&model=${item.name}`);
+            setSearchTerm('');
+            setShowSuggestions(false);
+            setIsMenuOpen(false);
+        }
+    };
+
+    // --- DATA ---
     const countries = [
         { id: 'kgz', countryCode: 'KGZ' },
         { id: 'china', countryCode: 'CHN' },
@@ -78,7 +154,6 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
         { id: 'dubai', countryCode: 'ARE' },
         { id: 'usa', countryCode: 'USA' }
     ];
-
     const [selectedCountry, setSelectedCountry] = useState(countries[0]);
 
     const languages = [
@@ -89,107 +164,52 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
         { code: 'ka', label: 'ქართული', country: 'GEO' },
         { code: 'ar', label: 'العربية', country: 'ARE' }
     ];
-
     const currentLanguage = languages.find(l => l.code === i18n.language) || languages[0];
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (langRef.current && !langRef.current.contains(event.target)) setIsLangOpen(false);
-            if (countryRef.current && !countryRef.current.contains(event.target)) setIsCountryOpen(false);
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    // Логика поиска (без изменений)
-    useEffect(() => {
-        const fetchSuggestions = async () => {
-            const trimmedSearch = searchTerm.trim();
-            if (!trimmedSearch) {
-                setSuggestions([]);
-                return;
-            }
-            const { data, error } = await supabase
-                .from('car-cards')
-                .select('id, title, image, price')
-                .ilike('title', `${trimmedSearch}%`)
-                .limit(5);
-
-            if (!error && data) setSuggestions(data);
-        };
-        const timer = setTimeout(() => fetchSuggestions(), 300);
-        return () => clearTimeout(timer);
-    }, [searchTerm]);
-
-    const handleSelectCar = (carId) => {
-        setSuggestions([]);
-        setSearchTerm('');
-        navigate('/catalog', { state: { selectedCarId: carId } });
-    };
-
-    const changeLanguage = (lng) => {
-        i18n.changeLanguage(lng);
-        setIsLangOpen(false);
-    };
-
-    // ОБНОВЛЕННАЯ ФУНКЦИЯ ВЫБОРА СТРАНЫ
-    const handleCountrySelect = (country) => {
-        setIsCountryOpen(false); // Закрываем выпадающий список стран
-
+    const handleCountrySelectAction = (country) => {
+        setIsCountryOpen(false);
         if (country.id === 'china' || country.id === 'kgz') {
-            // Если выбрали Китай:
-            setSelectedCountry(country); // Устанавливаем как активную
-            setIsMenuOpen(false);        // Закрываем мобильное меню, если оно открыто
-            navigate('/');               // Переходим на главную
-
-            if (onCountrySelect) {
-                onCountrySelect(country.id);
-            }
+            setSelectedCountry(country);
+            if (onCountrySelect) onCountrySelect(country.id);
+            navigate('/');
+            setIsMenuOpen(false);
         } else {
-            // Если выбрали любую другую страну — показываем модалку
             setIsModalOpen(true);
         }
     };
 
     return (
         <header className="headerContainer">
-            {/* 1. Слева: Бургер */}
+            {/* БУРГЕР */}
             <div className="burgerButton" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                 {isMenuOpen ? <IoCloseOutline /> : <IoMenuOutline />}
             </div>
 
-            {/* 2. В центре: Логотип */}
+            {/* ЛОГОТИП */}
             <div className="logoBlock" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
                 <span className="logoIcon">{'<'}</span>
                 <span className="logoText">Alians</span>
             </div>
 
-
+            {/* ВЫЕЗЖАЮЩЕЕ МЕНЮ */}
             <div className={`navWrapper ${isMenuOpen ? 'active' : ''}`}>
+                {/* ЗАГОЛОВОК МОБИЛЬНОГО МЕНЮ + КНОПКА ЗАКРЫТЬ */}
                 <div className="mobileMenuHeader">
                     <span className="logoText">{t('menu')}</span>
                     <IoCloseOutline className="closeMenuIcon" onClick={() => setIsMenuOpen(false)} />
                 </div>
 
                 <nav className="navMenu">
+                    {/* ВЫБОР СТРАНЫ */}
                     <div className="countrySelectWrapper" ref={countryRef}>
-                        <div
-                            className={`countrySelectBtn ${isCountryOpen ? 'active' : ''}`}
-                            onClick={() => setIsCountryOpen(!isCountryOpen)}
-                        >
+                        <div className={`countrySelectBtn ${isCountryOpen ? 'active' : ''}`} onClick={() => setIsCountryOpen(!isCountryOpen)}>
                             <span className="navLink activeLink">{t(`countries.${selectedCountry.id}`)}</span>
                             <IoChevronDownOutline className={`arrowIcon ${isCountryOpen ? 'rotate' : ''}`} />
                         </div>
-
                         {isCountryOpen && (
                             <div className="countryDropdownList">
                                 {countries.map((c) => (
-                                    <div // Заменил NavLink на div, чтобы клик обрабатывался только нашей функцией
-                                        key={c.id}
-                                        className={`countryOptionItem ${selectedCountry.id === c.id ? 'current' : ''}`}
-                                        onClick={() => handleCountrySelect(c)}
-                                        style={{ cursor: 'pointer' }}
-                                    >
+                                    <div key={c.id} className={`countryOptionItem ${selectedCountry.id === c.id ? 'current' : ''}`} onClick={() => handleCountrySelectAction(c)}>
                                         <Flag code={c.countryCode} className="optionFlagImg" />
                                         <span>{t(`countries.${c.id}`)}</span>
                                     </div>
@@ -205,22 +225,17 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
                     <NavLink to="/auth" className="navLink" onClick={() => setIsMenuOpen(false)}>{t('nav_login')}</NavLink>
                 </nav>
 
-                {/* Селект языка (без изменений) */}
+                {/* ВЫБОР ЯЗЫКА */}
                 <div className="customLangWrapper" ref={langRef}>
                     <div className={`langSelectBtn ${isLangOpen ? 'active' : ''}`} onClick={() => setIsLangOpen(!isLangOpen)}>
                         <Flag code={currentLanguage.country} className="selectedFlagImg" />
                         <span className="selectedText">{currentLanguage.code.toUpperCase()}</span>
                         <IoChevronDownOutline className={`arrowIcon ${isLangOpen ? 'rotate' : ''}`} />
                     </div>
-
                     {isLangOpen && (
                         <div className="langDropdownList">
                             {languages.map((lang) => (
-                                <div
-                                    key={lang.code}
-                                    className={`langOptionItem ${i18n.language === lang.code ? 'current' : ''}`}
-                                    onClick={() => changeLanguage(lang.code)}
-                                >
+                                <div key={lang.code} className={`langOptionItem ${i18n.language === lang.code ? 'current' : ''}`} onClick={() => { i18n.changeLanguage(lang.code); setIsLangOpen(false); }}>
                                     <div className="langOptionContent">
                                         <Flag code={lang.country} className="optionFlagImg" />
                                         <span className="optionLabelText">{lang.label}</span>
@@ -231,26 +246,41 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
                         </div>
                     )}
                 </div>
-
             </div>
-            {/* --- 3. НОВОЕ МЕСТО ДЛЯ ПОИСКА (Вырезали снизу, вставили сюда) --- */}
-            <div className="contactSearchBlock2 "> {/* Добавил класс headerSearch для стилей */}
+
+            {/* --- ПОИСК (Используем твои классы contactSearchBlock2) --- */}
+            <div className="contactSearchBlock2" ref={searchRef}>
                 <div className="searchWrapper">
+                    <IoSearchOutline className="searchIcon" />
                     <input
                         type="text"
                         className="phoneNumberInput"
-                        placeholder={t('search_placeholder')}
+                        placeholder={t('search_placeholder') || "Поиск..."}
                         value={searchTerm}
+                        onFocus={() => setShowSuggestions(true)}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    {suggestions.length > 0 && (
+
+                    {showSuggestions && suggestions.length > 0 && (
                         <div className="searchResultsDropdown">
-                            {suggestions.map((car) => (
-                                <div key={car.id} className="searchResultCard" onClick={() => handleSelectCar(car.id)}>
-                                    <img src={car.image} alt={car.title} />
+                            {suggestions.map((item, idx) => (
+                                <div
+                                    key={idx}
+                                    className="searchResultCard"
+                                    onClick={() => handleSelectSuggestion(item)}
+                                >
+                                    {/* Если image - это URL или путь, отображаем. Если нет - заглушку */}
+                                    {typeof item.image === 'string' ? (
+                                        <img src={item.image} alt="" className="searchItemImg" />
+                                    ) : (
+                                        <IoCarSportOutline style={{ fontSize: '24px', marginRight: '10px', color: '#888' }} />
+                                    )}
+
                                     <div className="resultInfo">
-                                        <span className="resultTitle">{car.title}</span>
-                                        <span className="resultPrice">${car.price?.toLocaleString()}</span>
+                                        <span className="resultTitle">{item.name}</span>
+                                        <span className="resultPrice" style={{ fontSize: '11px', color: '#27ae60' }}>
+                                            {item.type === 'brand' ? t('search.select_brand') : t('search.go_to_model')}
+                                        </span>
                                     </div>
                                 </div>
                             ))}
@@ -259,41 +289,23 @@ export const Header = ({ searchTerm, setSearchTerm, onCountrySelect }) => {
                 </div>
             </div>
 
-
-            {/* --- МОДАЛЬНОЕ ОКНО --- */}
+            {/* --- МОДАЛКА (При недоступной стране) --- */}
             {isModalOpen && (
                 <div className={`modalOverlay ${i18n.language === 'ar' ? 'rtl' : ''}`} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
                     <div className="unavailableModal">
                         <button className="modalCloseX" onClick={() => setIsModalOpen(false)}>
                             <IoCloseOutline />
                         </button>
-
                         <h2 className="modalTitle">{t('modal.title')}</h2>
-
-                        <p className="modalText">
-                            {t('modal.text')}
-                        </p>
-
-                        <p className="modalSubText">
-                            {t('modal.subtext')}
-                        </p>
-
+                        <p className="modalText">{t('modal.text')}</p>
+                        <p className="modalSubText">{t('modal.subtext')}</p>
                         <div className="modalNotifyBlock">
                             <IoMailOutline className="mailIcon" />
                             <span>{t('modal.notify')}</span>
                         </div>
-
-                        <button
-                            className="submitRequestBtn"
-                            onClick={() => {
-                                setIsModalOpen(false);
-                                setIsMenuOpen(false);
-                                navigate('/contacts');
-                            }}
-                        >
+                        <button className="submitRequestBtn" onClick={() => { setIsModalOpen(false); navigate('/contacts'); }}>
                             {t('modal.submit')}
                         </button>
-
                         <button className="closeModalBtn" onClick={() => setIsModalOpen(false)}>
                             {t('modal.close')}
                         </button>

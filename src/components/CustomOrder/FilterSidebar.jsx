@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { row1Brands, row2Brands } from '../../data/CarsData';
+import { IoChevronDownOutline } from 'react-icons/io5';
 
 export const FilterSidebar = ({
     selectedBrands, toggleBrand,
@@ -9,21 +10,50 @@ export const FilterSidebar = ({
     priceRange, setPriceRange,
     yearRange, setYearRange,
     fuelType, setFuelType,
-    selectedColors, toggleColor,
+    selectedColors,
+    toggleColor,
     handleApplyFilters, resetFilters,
     transmission, setTransmission
 }) => {
     const { t } = useTranslation();
+    const [isColorOpen, setIsColorOpen] = useState(false);
+    const colorRef = useRef(null);
 
     const availableColors = [
-        { id: 'white', hex: '#FFFFFF', name: 'Белый' },
-        { id: 'black', hex: '#000000', name: 'Черный' },
-        { id: 'silver', hex: '#C0C0C0', name: 'Серебристый' },
-        { id: 'blue', hex: '#2196F3', name: 'Синий' },
-        { id: 'red', hex: '#F44336', name: 'Красный' },
-        { id: 'green', hex: '#4CAF50', name: 'Зеленый' },
+        { id: 'white', hex: '#FFFFFF', name: t('color_white') || 'Белый' },
+        { id: 'black', hex: '#000000', name: t('color_black') || 'Черный' },
+        { id: 'silver', hex: '#C0C0C0', name: t('color_silver') || 'Серебристый' },
+        { id: 'gray', hex: '#808080', name: t('color_gray') || 'Серый' },
+        { id: 'blue', hex: '#2196F3', name: t('color_blue') || 'Синий' },
+        { id: 'darkblue', hex: '#00008B', name: t('color_darkblue') || 'Темно-синий' },
+        { id: 'red', hex: '#F44336', name: t('color_red') || 'Красный' },
+        { id: 'burgundy', hex: '#800020', name: t('color_burgundy') || 'Бордовый' },
+        { id: 'green', hex: '#4CAF50', name: t('color_green') || 'Зеленый' },
+        { id: 'brown', hex: '#A52A2A', name: t('color_brown') || 'Коричневый' },
+        { id: 'beige', hex: '#F5F5DC', name: t('color_beige') || 'Бежевый' },
+        { id: 'gold', hex: '#FFD700', name: t('color_gold') || 'Золотистый' },
     ];
 
+    // Логика текста в кнопке
+    const getButtonText = () => {
+        if (!selectedColors || selectedColors.length === 0) {
+            return t('select_color_placeholder') || 'Выберите цвет';
+        }
+        if (selectedColors.length === 1) {
+            const color = availableColors.find(c => c.id === selectedColors[0]);
+            return color ? color.name : '';
+        }
+        // Если выбрано больше одного
+        return `${t('filter_selected') || 'Выбрано'}: ${selectedColors.length}`;
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (colorRef.current && !colorRef.current.contains(e.target)) setIsColorOpen(false);
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
     return (
         <aside className="filterSidebar">
             <h3 className="filterMainTitle">{t('filter_title')}</h3>
@@ -123,49 +153,58 @@ export const FilterSidebar = ({
                 </div>
             </div>
 
-            {/* ЦВЕТ (НОВЫЙ БЛОК) */}
             <div className="filterBlockWhite">
                 <label>{t('filter_color') || 'Цвет кузова'}</label>
-                <div className="colorGrid">
-                    {/* Кнопка сброса всех цветов */}
-                    <button
-                        className={`colorCircle allColors ${selectedColors.length === 0 ? 'active' : ''}`}
-                        onClick={() => resetFilters()} // Или создай отдельную очистку цветов
-                        title="Все цвета"
+                <div className="customColorSelect" ref={colorRef}>
+                    <div
+                        className={`colorSelectBtn ${isColorOpen ? 'active' : ''}`}
+                        onClick={() => setIsColorOpen(!isColorOpen)}
                     >
-                        ✕
-                    </button>
-
-                    {availableColors.map(color => (
-                        <button
-                            key={color.id}
-                            className={`colorCircle ${selectedColors.includes(color.id) ? 'active' : ''}`}
-                            style={{
-                                backgroundColor: color.hex,
-                                display: 'flex',          // Добавляем для центровки птички
-                                alignItems: 'center',     // Центровка по вертикали
-                                justifyContent: 'center',    // Центровка по горизонтали
-                                border: color.id === 'white' ? '1px solid #ddd' : 'none', // Чтобы белый не сливался
-                                cursor: 'pointer',
-                                position: 'relative'
-                            }}
-                            onClick={() => toggleColor(color.id)}
-                            title={color.name}
-                        >
-                            {/* ПТИЧКА */}
-                            {selectedColors.includes(color.id) && (
-                                <span style={{
-                                    color: (color.id === 'white' || color.id === 'silver') ? '#000' : '#fff',
-                                    fontSize: '14px',
-                                    fontWeight: 'bold',
-                                    lineHeight: '1'
-                                }}>
-                                    ✓
-                                </span>
+                        <div className="selectedColorsPreview">
+                            {/* Показываем кружок только если выбран ровно 1 цвет */}
+                            {selectedColors.length === 1 && (
+                                <div
+                                    className="miniColorCircle"
+                                    style={{
+                                        backgroundColor: availableColors.find(c => c.id === selectedColors[0])?.hex,
+                                        border: selectedColors[0] === 'white' ? '1px solid #ccc' : 'none',
+                                        marginRight: '8px'
+                                    }}
+                                />
                             )}
-                        </button>
-                    ))}
+                            <span className="selectedTextName">{getButtonText()}</span>
+                        </div>
+                        <IoChevronDownOutline className={`arrowIcon ${isColorOpen ? 'rotate' : ''}`} />
+                    </div>
 
+                    {isColorOpen && (
+                        <div className="colorDropdownList">
+                            {availableColors.map(color => {
+                                const isSelected = selectedColors.includes(color.id);
+                                return (
+                                    <div
+                                        key={color.id}
+                                        className={`colorOption ${isSelected ? 'selected' : ''}`}
+                                        onClick={() => toggleColor(color.id)}
+                                    >
+                                        <div className="optionColorRow">
+                                            <div
+                                                className="colorCircleSmall"
+                                                style={{
+                                                    backgroundColor: color.hex,
+                                                    border: color.id === 'white' ? '1px solid #ddd' : 'none'
+                                                }}
+                                            />
+                                            <span>{color.name}</span>
+                                        </div>
+                                        <div className={`multiCheck ${isSelected ? 'checked' : ''}`}>
+                                            {isSelected && '✓'}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -210,8 +249,6 @@ export const FilterSidebar = ({
                     ))}
                 </div>
             </div>
-
-
 
             <div className="filterFooterRow">
                 <button className="mainApplyBtn" onClick={handleApplyFilters}>{t('btn_show')}</button>

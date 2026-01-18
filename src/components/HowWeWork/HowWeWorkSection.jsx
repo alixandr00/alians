@@ -1,8 +1,9 @@
 import React from 'react';
 import './HowWeWorkSection.css';
-import { IoPersonOutline, IoCarOutline, IoDocumentTextOutline } from 'react-icons/io5';
+// Добавил IoBusOutline для этапа доставки
+import { IoPersonOutline, IoCarOutline, IoDocumentTextOutline, IoBusOutline } from 'react-icons/io5';
 import ProcessImage from '../../assets/SOK6363-762x456.jpg';
-import { useTranslation } from 'react-i18next'; // Импорт хука
+import { useTranslation } from 'react-i18next';
 
 const processSteps = [
     {
@@ -20,10 +21,16 @@ const processSteps = [
         titleKey: 'step_contract_title',
         descKey: 'step_contract_desc',
     },
+    // НОВЫЙ ЭТАП
+    {
+        icon: IoBusOutline,
+        titleKey: 'step_delivery_title',
+        descKey: 'step_delivery_desc',
+    },
 ];
 
 export const HowWeWorkSection = () => {
-    const { t } = useTranslation(); // Инициализация
+    const { t } = useTranslation();
 
     return (
         <section className="howWeWorkSection">

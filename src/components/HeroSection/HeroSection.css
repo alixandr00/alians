@@ -46,7 +46,7 @@
 }
 
 .heroTitle {
-    font-size: 44px;
+    font-size: 35px;
     font-weight: 700;
     line-height: 1.1;
     margin-bottom: 20px;
@@ -98,6 +98,8 @@
         /* Текст внизу */
     }
 
+
+
     .heroCarImage {
         width: 100%;
         height: 100%;
@@ -123,9 +125,9 @@
     }
 
     .heroTitle {
-        font-size: 26px;
+        font-size: 24px;
         /* Уменьшаем размер шрифта заголовка */
-        max-width: 60%;
+        max-width: 70%;
         /* Позволяем занимать всю ширину */
         line-height: 1.2;
     }
@@ -152,4 +154,27 @@
         /* Кнопки одинаковой ширины */
         text-align: center;
     }
+}
+
+/* Добавь это в HeroSection.css */
+
+.heroCountries {
+    font-size: 1.2rem;
+    /* Чуть крупнее обычного текста */
+    font-weight: 600;
+    /* Полужирный шрифт */
+    /* Зеленый цвет (под стиль кнопок) или сделай #4a5568 (серый) */
+    margin-top: 10px;
+    /* Отступ сверху от заголовка */
+    margin-bottom: 10px;
+    /* Отступ снизу до подзаголовка */
+    line-height: 1.5;
+}
+
+/* Адаптив для мобильных (если нужно уменьшить шрифт) */
+@media (max-width: 768px) {
+    .heroCountries {
+        font-size: 1rem;
+    }
+
 }

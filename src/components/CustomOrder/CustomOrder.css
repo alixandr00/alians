@@ -379,27 +379,75 @@
     color: #999;
 }
 
+/* --- Стили для Пагинации --- */
+
+/* Контейнер пагинации в одну строку со скроллом */
 .pagination {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    /* Элементы начинаются слева */
+    flex-wrap: nowrap;
+    /* ЗАПРЕЩАЕМ перенос на новую строку */
+    overflow-x: auto;
+    /* Включаем горизонтальный скролл */
+
     gap: 10px;
-    margin-top: 30px;
+    width: 100%;
+    padding: 10px 15px 20px;
+    /* Отступы внутри (снизу побольше для удобства) */
+    margin-top: 20px;
+
+    /* Магия для плавного скролла на iPhone/Android */
+    -webkit-overflow-scrolling: touch;
+
+    /* Скрываем полосу прокрутки (Scrollbar) для чистого вида */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
 }
 
+/* Скрываем полосу прокрутки в Chrome/Safari/Edge */
+.pagination::-webkit-scrollbar {
+    display: none;
+}
+
+/* Стили кнопки */
 .pageBtn {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    background: #fff;
+    /* Важно! Запрещаем кнопке сжиматься, если места мало */
+    flex-shrink: 0;
+
+    min-width: 45px;
+    /* Чуть шире для удобного нажатия */
+    height: 45px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    /* Более современные скругления */
+
+    font-size: 16px;
+    font-weight: 600;
+    color: #4a5568;
+
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.2s ease;
+
+    /* Тень для объема */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .pageBtn.active {
-    background: #387b64;
-    color: #fff;
-    border-color: #387b64;
+    background-color: #10b981;
+    color: white;
+    border-color: #10b981;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    transform: scale(1.05);
+    /* Активная кнопка чуть крупнее */
 }
 
 /* =========================================

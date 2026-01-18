@@ -3,20 +3,24 @@ import CarImage from '../../assets/Audi Q5 2021 3.webp';
 import './HeroSection.css';
 import { Link } from 'react-router-dom';
 import { RiWhatsappFill } from "react-icons/ri";
-import { useTranslation } from 'react-i18next'; // Импортируем хук
+import { useTranslation } from 'react-i18next';
 
 export const HeroSection = () => {
-    const { t } = useTranslation(); // Инициализируем
+    const { t } = useTranslation();
 
     return (
         <section className="heroSection">
             <div className="heroContent">
                 <h1 className="heroTitle">{t('hero_title')}</h1>
+
+                <p className="heroCountries">
+                    {t('hero_countries')}
+                </p>
+
                 <p className="heroSubtitle">
                     {t('hero_subtitle')}
                 </p>
 
-                {/* Кнопки */}
                 <div className="heroButtons">
                     <Link to="/catalog" className="buttonPrimary">
                         {t('btn_pick_car')}
@@ -35,7 +39,6 @@ export const HeroSection = () => {
                 </div>
             </div>
 
-            {/* Изображение */}
             <div className="heroImageContainer">
                 <img src={CarImage} alt={t('hero_car_alt')} className="heroCarImage" />
             </div>
